@@ -1,33 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Ubuntu Mono", monospace;
+  color: white;
+  background-color: #1a1a1a;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  text-decoration: underline;
 }
 a:hover {
-  color: #535bf2;
+  color: #227cf1;
+  transition: color 0.25s;
 }
 
-body {
+html, body {
+  height: 100%;
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+}
+
+.layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  background-color: #222;
+  color: white;
+  text-align: center;
+  justify-content: center;
+  padding: 1em 0;
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 h1 {
@@ -35,34 +45,96 @@ h1 {
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h2 {
+  font-size: 2em;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+h3 {
+  font-size: 1.6em;
+}
+
+hr {
+  width: 100%;
+  margin: 0.25em 0;
+  border-color: #777;
+}
+
+input {
+  background-color: #333;
+  border: 1px solid #333;
+  border-radius: 0.2em;
+  color: white;
+  padding: 0.4em;
+  font-family: inherit;
+}
+
+input:focus {
+  outline: none;
+}
+
+input::placeholder {
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+
+button {
+  background-color: #333;
+  border-radius: 0.2em;
+  font-family: inherit;
+  text-align: center;
+  padding: 0.4em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3a3a3a;
+  scale: 1.02;
+  transition: background-color 0.25s, scale 0.15s;
+}
+
+.SidebarButtons {
+  background-color: #333;
+  border-radius: 0.2em;
+  font-size: 1.05em;
+  font-family: inherit;
+  text-align: left;
+  padding: 0.4em 0.8em;
+  width: 100%;
+  cursor: pointer;
+}
+
+.SidebarButtons:hover {
+  background-color: #3a3a3a;
+  scale: 1.02;
+  transition: background-color 0.25s, scale 0.15s;
+}
+
+.sidebar {
+  position: relative;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  width: 13em;
+  flex-shrink: 0;
+  border-right: 1px solid #353535;
+  background-color: #252525;
+}
+
+.image-grid {
+  display: grid;
+  padding: 0.65em;
+  border-radius: 0.2em;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5em;
+  height: 45vh; 
+  width: 100%;
+  overflow-y: auto;
+}
+
+.image-grid img {
+  width: 100%;
+  border-radius: 0.5em;
+  height: auto;
+  object-fit: cover;
 }

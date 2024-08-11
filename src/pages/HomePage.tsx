@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '../components/Button';
 import Banner from '../components/Banner';
 import Layout from '../components/Layout';
 
-const BACKEND_URL = `https://backend.bookracy.org`;
+const BACKEND_URL = 'https://backend.bookracy.org';
 
-// hackish debounce logic
+// debounce function
 function debounce(func, delay) {
   let timeoutId;
   return (...args) => {
@@ -19,7 +19,7 @@ function debounce(func, delay) {
 }
 
 async function fetchSearchResults(query) {
-  console.log(`Fetching results for query: ${query}`); 
+  console.log(`Fetching results for query: ${query}`);
   try {
     const response = await fetch(`${BACKEND_URL}/api/books?query=${query}`);
 
@@ -28,97 +28,43 @@ async function fetchSearchResults(query) {
     }
 
     const data = await response.json();
-    console.log('Fetched data:', data); 
+    console.log('Fetched data:', data);
 
-    // handle null results
-    const resultsContainer = document.getElementById('results');
-    resultsContainer.innerHTML = '';
-
-    if (data.results.length > 0) {
-      document.getElementById('searchContainer').classList.add('scrolled');
-    } else {
-      document.getElementById('searchContainer').classList.remove('scrolled');
-    }
-
-    data.results.forEach(item => {
-      const card = document.createElement('div');
-      card.classList.add('card', 'loading');
-
-      const title = item.title || 'Unknown Title';
-      let author;
-      if (Array.isArray(item.authors)) {
-        author = item.authors.join(', ');
-      } else if (typeof item.authors === 'string') {
-        author = item.authors;
-      } else {
-        author = 'Unknown Author';
-      }
-
-      const coverImage = item.book_image || 'https://via.placeholder.com/200x300?text=No+Image';
-      card.innerHTML = `
-        <div class="loader"></div>
-        <img src="${coverImage}" alt="${title}">
-        <h3>${title}</h3>
-        <p>${author}</p>
-      `;
-      resultsContainer.appendChild(card);
-
-      const img = card.querySelector('img');
-      img.onload = () => {
-        card.classList.remove('loading');
-        card.classList.add('loaded');
-      };
-
-      card.addEventListener('click', () => openModal(item));
-    });
+    return data.results || [];
   } catch (error) {
     console.error('Fetch error:', error);
-    document.getElementById('results').innerHTML = 'Failed to fetch results. Please try again later.';
+    return [];
   }
 }
 
-function openModal(item) {
-  const modal = document.getElementById('bookModal');
-  document.getElementById('modalImage').src = item.book_image || 'https://via.placeholder.com/200x300?text=No+Image';
-  document.getElementById('modalTitle').innerText = item.title || 'Unknown Title';
-  document.getElementById('modalAuthor').innerText = `Author: ${item.authors ? (Array.isArray(item.authors) ? item.authors.join(', ') : item.authors) : 'Unknown Author'}`;
-  document.getElementById('modalDescription').innerText = `Description: ${item.description || 'No description available.'}`;
-  document.getElementById('downloadBtn').href = item.link || '#';
-  modal.style.display = 'flex';
-}
+const HomePage = () => {
+  const [results, setResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [modalData, setModalData] = useState(null);
 
-const HomePage: React.FC = () => {
-  useEffect(() => {
-    const modal = document.getElementById('bookModal');
-    modal.style.display = 'none';
-
-    const span = document.getElementsByClassName('close')[0];
-    span.onclick = () => {
-      modal.style.display = 'none';
-    };
-
-    window.onclick = (event) => {
-      if (event.target == modal) {
-        modal.style.display = 'none';
-      }
-    };
-
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', debounce((event) => {
-      const query = event.target.value;
+  const handleSearch = useCallback(
+    debounce(async (query) => {
       if (query) {
-        fetchSearchResults(query);
+        const fetchedResults = await fetchSearchResults(query);
+        setResults(fetchedResults);
       } else {
-        document.getElementById('results').innerHTML = '';
-        document.getElementById('searchContainer').classList.remove('scrolled');
+        setResults([]);
       }
-    }, 900));
+    }, 900),
+    []
+  );
 
-    return () => {
-      searchInput.removeEventListener('input', debounce);
-    };
-  }, []);
-  // yea that was chatgpt what abt it 
+  useEffect(() => {
+    handleSearch(searchQuery);
+  }, [searchQuery, handleSearch]);
+
+  const openModal = (item) => {
+    setModalData(item);
+  };
+
+  const closeModal = () => {
+    setModalData(null);
+  };
 
   return (
     <Layout>
@@ -134,19 +80,51 @@ const HomePage: React.FC = () => {
           </div>
           To get started, either search below or navigate the site using the sidebar.
         </p>
-        <input id="searchInput" type="text" className="input w-5/12 my-3" placeholder="Search for books, comics, or manga..." />
-        <div id="results" className="results"></div>
-      </Banner>
-      <div id="bookModal" className="modal">
-        <span className="close">&times;</span>
-        <div className="modal-content">
-          <img id="modalImage" src="" alt="Book Cover" />
-          <h3 id="modalTitle"></h3>
-          <p id="modalAuthor"></p>
-          <p id="modalDescription"></p>
-          <a id="downloadBtn" href="#" className="button">Download</a>
+        <input
+          id="searchInput"
+          type="text"
+          className="input w-5/12 my-3"
+          placeholder="Search for books, comics, or manga..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <div id="results" className="results">
+          {results.length > 0 ? (
+            results.map((item) => (
+              <div
+                key={item.id}
+                className="card"
+                onClick={() => openModal(item)}
+              >
+                <img
+                  src={item.book_image || 'https://via.placeholder.com/200x300?text=No+Image'}
+                  alt={item.title || 'Unknown Title'}
+                />
+                <h3>{item.title || 'Unknown Title'}</h3>
+                <p>{Array.isArray(item.authors) ? item.authors.join(', ') : item.authors || 'Unknown Author'}</p>
+              </div>
+            ))
+          ) : (
+            <p>No results found</p>
+          )}
         </div>
-      </div>
+      </Banner>
+      {modalData && (
+        <div id="bookModal" className="modal">
+          <span className="close" onClick={closeModal}>&times;</span>
+          <div className="modal-content">
+            <img
+              id="modalImage"
+              src={modalData.book_image || 'https://via.placeholder.com/200x300?text=No+Image'}
+              alt={modalData.title || 'Unknown Title'}
+            />
+            <h3 id="modalTitle">{modalData.title || 'Unknown Title'}</h3>
+            <p id="modalAuthor">Author: {Array.isArray(modalData.authors) ? modalData.authors.join(', ') : modalData.authors || 'Unknown Author'}</p>
+            <p id="modalDescription">Description: {modalData.description || 'No description available.'}</p>
+            <a id="downloadBtn" href={modalData.link || '#'} className="button">Download</a>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

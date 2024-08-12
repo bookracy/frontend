@@ -6,7 +6,7 @@ interface BannerProps {
 
 const Banner: React.FC<BannerProps> = ({ children }) => {
   return (
-    <div className="bg-[#252525] text-white rounded-sm p-4">
+    <div className="bg-[#252525] text-white p-4">
       {children}
     </div>
   );

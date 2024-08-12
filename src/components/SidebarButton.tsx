@@ -10,7 +10,7 @@ interface SidebarButtonsProps {
   onClick?: () => void;
 }
 
-const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, children }) => {
+const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, children, onClick }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => setIsOpen(!isOpen);
@@ -18,11 +18,11 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, children }) 
   return (
     <>
       {to ? (
-        <Link to={to} className="SidebarButtons no-underline hover:text-white">
+        <Link to={to} className="SidebarButtons no-underline" onClick={onClick}>
           {label}
         </Link>
       ) : (
-        <button className="SidebarButtons flex justify-between items-center" onClick={toggleOpen}>
+        <button className="SidebarButtons flex justify-between items-center" onClick={() => { toggleOpen(); if (onClick) onClick(); }}>
           {label}
           <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} />
         </button>

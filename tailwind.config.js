@@ -21,13 +21,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        mono: ['"Ubuntu Mono"', 'monospace'],
+        mono: 'monospace',
       },
-    },
-    fontFamily: {
-      sans: ['"Ubuntu Mono"', 'monospace'],
-      serif: ['"Ubuntu Mono"', 'monospace'],
-      mono: ['"Ubuntu Mono"', 'monospace'],
     },
   },
   plugins: [],

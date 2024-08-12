@@ -84,25 +84,6 @@ input::placeholder {
   font-style: italic;
 }
 
-textarea {
-  background-color: #333;
-  border: 1px solid #333;
-  border-radius: 0.2em;
-  color: white;
-  padding: 0.4em;
-  font-family: inherit;
-}
-
-textarea:focus {
-  outline: none;
-  background-color: #3a3a3a;
-  transition: background-color 0.25s;
-}
-
-textarea::placeholder {
-  color: #a0a0a0;
-  font-style: italic;
-}
 
 button {
   background-color: #333;

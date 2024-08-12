@@ -5,33 +5,29 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#1a1a1a',
-        text: {
-          primary: '#fff',
-          secondary: '#aaa',
-        },
-        banner: {
-          primary: '#252525',
-          secondary: '#2f2f2f',
-        },
+        primary: '#1A1A1A',
         sidebar: {
-          primary: '#252525',
-          button: '#333',
-          buttonHover: '#3a3a3a',
+          primary: '#3A3A3A',
+          button: '#292929',
+          text: '#FFFFFF',
         },
         card: {
-          primary: '#333',
+          primary: '#292929',
+          text: '#FFFFFF',
         },
         button: {
-          primary: '#333',
-          hover: '#3a3a3a',
-          accent: '#7948ea',
-          accentHover: '#8a5fec',
+          primary: '#292929',
+          text: '#FFFFFF',
         },
       },
       fontFamily: {
-        mono: ['monospace'],
+        mono: ['"Ubuntu Mono"', 'monospace'],
       },
+    },
+    fontFamily: {
+      sans: ['"Ubuntu Mono"', 'monospace'],
+      serif: ['"Ubuntu Mono"', 'monospace'],
+      mono: ['"Ubuntu Mono"', 'monospace'],
     },
   },
   plugins: [],

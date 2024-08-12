@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Button from "../components/Button";
 import Banner from "../components/Banner";
 import Layout from "../components/Layout";
@@ -26,7 +26,8 @@ const Contact = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
           />
-          <textarea
+          <input
+            type="text"
             className="input w-9/12 h-32"
             placeholder="Email content..."
             value={body}

@@ -9,9 +9,6 @@ const Footer: React.FC = () => {
           <Link to="/">
             [Home]
           </Link>
-          <Link to="/about">
-            [About]
-          </Link>
           <Link to="/featured">
             [Featured]
           </Link>

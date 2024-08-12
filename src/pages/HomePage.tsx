@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Banner from "../components/Banner";
@@ -68,6 +70,10 @@ const HomePage = () => {
     setModalData(null);
   };
 
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
+
   return (
     <Layout>
       <Banner>
@@ -82,14 +88,25 @@ const HomePage = () => {
           </div>
           To get started, either search below or navigate the site using the sidebar.
         </p>
-        <input
-          id="searchInput"
-          type="text"
-          className="input w-5/12 my-3"
-          placeholder="Search for books, comics, or manga..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        <div className="relative w-5/12 my-3">
+          <input
+            id="searchInput"
+            type="text"
+            className="input w-full"
+            placeholder="Search for books, comics, or manga..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              className="absolute bg-transparent hover:bg-transparent hover:scale-110 right-0 top-0 mr-3"
+              onClick={clearSearch}
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          )}
+        </div>
         <div className="flex flex-col gap-3">
           {results.length > 0 ? (
             results.map((item) => (
@@ -116,10 +133,10 @@ const HomePage = () => {
                   </div>
                   <div className="flex items-center justify-center">
                     <Button 
-                      className="bg-[#7948ea] hover:bg-[#8a5fec] w-[9em] h-[2.5em] flex items-center justify-center" 
+                      className="bg-button-accent hover:bg-button-accentHover w-[9em] h-[2.5em] flex items-center justify-center" 
                       onClick={() => window.open(item.link || "#", "_blank")}
                     >
-              Download
+                      Download
                     </Button>
                   </div>
                 </div>

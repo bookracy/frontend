@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  font-family: "Ubuntu Mono", monospace;
+  font-family: monospace;
+  font-size: 1.15em;
   color: white;
   background-color: #1a1a1a;
 }
@@ -30,11 +31,11 @@ html, body {
 }
 
 .footer {
-  background-color: #222;
+  background-color: #252525;
   color: white;
   text-align: center;
   justify-content: center;
-  padding: 1em 0;
+  padding: 0.7em 0;
   position: relative;
   width: 100%;
   flex-shrink: 0;
@@ -51,6 +52,10 @@ h2 {
 
 h3 {
   font-size: 1.6em;
+}
+
+h4 {
+  font-size: 1.3em;
 }
 
 hr {
@@ -70,6 +75,8 @@ input {
 
 input:focus {
   outline: none;
+  background-color: #3a3a3a;
+  transition: background-color 0.25s;
 }
 
 input::placeholder {
@@ -111,12 +118,11 @@ button:hover {
 }
 
 .sidebar {
-  position: relative;
+  position: sticky;
   top: 0;
   left: 0;
   overflow-y: auto;
   width: 13em;
-  flex-shrink: 0;
   border-right: 1px solid #353535;
   background-color: #252525;
 }
@@ -137,4 +143,10 @@ button:hover {
   border-radius: 0.5em;
   height: auto;
   object-fit: cover;
+}
+
+.card {
+  background-color: #333;
+  border-radius: 0.2em;
+  padding: 0.5em;
 }

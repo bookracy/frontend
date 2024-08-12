@@ -22,5 +22,7 @@ export default tseslint.config({
       'warn',
       { allowConstantExport: true },
     ],
+    'quotes': ['error', 'double'], // Enforce double quotes
+    'indent': ['error', 2], // Enforce 2-space tabs
   },
 })

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Button from '../components/Button';
-import Banner from '../components/Banner';
-import Layout from '../components/Layout';
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import Banner from "../components/Banner";
+import Layout from "../components/Layout";
 
-const BACKEND_URL = 'https://backend.bookracy.org';
+const BACKEND_URL = "https://backend.bookracy.org";
 
 // debounce function
 function debounce(func, delay) {
@@ -24,23 +25,24 @@ async function fetchSearchResults(query) {
     const response = await fetch(`${BACKEND_URL}/api/books?query=${query}`);
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
 
     const data = await response.json();
-    console.log('Fetched data:', data);
+    console.log("Fetched data:", data);
 
     return data.results || [];
   } catch (error) {
-    console.error('Fetch error:', error);
+    console.error("Fetch error:", error);
     return [];
   }
 }
 
 const HomePage = () => {
   const [results, setResults] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [modalData, setModalData] = useState(null);
+  const navigate = useNavigate();
 
   const handleSearch = useCallback(
     debounce(async (query) => {
@@ -75,8 +77,8 @@ const HomePage = () => {
           <br />
           <div className="flex flex-row gap-4 my-4">
             <a href="/contact">[Contact]</a>
-            <a href="/discord">[Discord]</a>
-            <a href="/api">[API]</a>
+            <a href="https://discord.gg/X5kCn84KaQ">[Discord]</a>
+            <a href="/about">[About]</a>
           </div>
           To get started, either search below or navigate the site using the sidebar.
         </p>
@@ -88,43 +90,52 @@ const HomePage = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <div id="results" className="results">
+        <div className="flex flex-col gap-3">
           {results.length > 0 ? (
             results.map((item) => (
               <div
                 key={item.id}
-                className="card"
+                className="card flex flex-row gap-4"
                 onClick={() => openModal(item)}
               >
-                <img
-                  src={item.book_image || 'https://via.placeholder.com/200x300?text=No+Image'}
-                  alt={item.title || 'Unknown Title'}
-                />
-                <h3>{item.title || 'Unknown Title'}</h3>
-                <p>{Array.isArray(item.authors) ? item.authors.join(', ') : item.authors || 'Unknown Author'}</p>
+                <div className="flex justify-between w-full">
+                  <div className="flex flex-row gap-3">
+                    <img
+                      id="modalImage"
+                      src={item.book_image || "src/assets/placeholder.png"}
+                      alt={item.title || "Unknown Title"}
+                      width="150"
+                    />
+                    <div>
+                      <h4>
+                        {item.title ? (item.title.length > 46 ? item.title.substring(0, 46) + "..." : item.title) : "Unknown Title"}
+                      </h4>
+                      <p>Author: {Array.isArray(item.authors) ? item.authors.join(", ") : item.authors || "Unknown Author"}</p>
+                      <p>Description: {item.description || "No description available."}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <Button 
+                      className="bg-[#7948ea] hover:bg-[#8a5fec] w-[9em] h-[2.5em] flex items-center justify-center" 
+                      onClick={() => window.open(item.link || "#", "_blank")}
+                    >
+              Download
+                    </Button>
+                  </div>
+                </div>
               </div>
             ))
           ) : (
-            <p>No results found</p>
+            /* null */
+            <div className="flex flex-col gap-1">
+              <img src="src/assets/apple_cat.png" width="200"/>
+              <p>
+                ^ Apple Cat. 🍎🐱
+              </p>
+            </div>
           )}
         </div>
       </Banner>
-      {modalData && (
-        <div id="bookModal" className="modal">
-          <span className="close" onClick={closeModal}>&times;</span>
-          <div className="modal-content">
-            <img
-              id="modalImage"
-              src={modalData.book_image || 'https://via.placeholder.com/200x300?text=No+Image'}
-              alt={modalData.title || 'Unknown Title'}
-            />
-            <h3 id="modalTitle">{modalData.title || 'Unknown Title'}</h3>
-            <p id="modalAuthor">Author: {Array.isArray(modalData.authors) ? modalData.authors.join(', ') : modalData.authors || 'Unknown Author'}</p>
-            <p id="modalDescription">Description: {modalData.description || 'No description available.'}</p>
-            <a id="downloadBtn" href={modalData.link || '#'} className="button">Download</a>
-          </div>
-        </div>
-      )}
     </Layout>
   );
 };

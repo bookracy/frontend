@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import Footer from './Footer';
+import React, { ReactNode } from "react";
+import Footer from "./Footer";
 
 interface BannerProps {
   children: ReactNode;
@@ -9,7 +9,7 @@ interface BannerProps {
 const Layout: React.FC<BannerProps> = ({ children, className }) => {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className={`flex-grow m-2 text-white ${className}`}>
+      <div className={`flex-grow text-white ${className}`}>
         {children}
       </div>
       <Footer />

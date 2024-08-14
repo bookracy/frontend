@@ -1,7 +1,7 @@
 import React from "react";
-import Layout from "../components/Layout";
+import { Layout } from "src/components/Layout";
 
-const Featured: React.FC = () => {
+export const Featured: React.FC = () => {
   return (
     <Layout>
       <h1>Featured Page</h1>
@@ -9,5 +9,3 @@ const Featured: React.FC = () => {
     </Layout>
   );
 }
-
-export default Featured;

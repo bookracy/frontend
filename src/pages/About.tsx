@@ -1,7 +1,7 @@
 import React from "react";
-import Layout from "../components/Layout";
+import { Layout } from "src/components/Layout";
 
-const About: React.FC = () => {
+export const About: React.FC = () => {
   return (
     <Layout>
       <h1>About Page</h1>
@@ -9,5 +9,3 @@ const About: React.FC = () => {
     </Layout>
   );
 }
-
-export default About;

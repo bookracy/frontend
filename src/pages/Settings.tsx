@@ -1,8 +1,8 @@
 import React from "react";
-import Layout from "../components/Layout";
-import useSettingsStore from "../stores/settingsStore";
+import { Layout } from "src/components/Layout";
+import { useSettingsStore } from "src/stores/settingsStore";
 
-const Settings: React.FC = () => {
+export const Settings: React.FC = () => {
   const { theme, setTheme, booksPerSearch, setBooksPerSearch } = useSettingsStore();
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,5 +30,3 @@ const Settings: React.FC = () => {
     </Layout>
   );
 };
-
-export default Settings;

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import SidebarButtons from "./SidebarButton";
+import { SidebarButtons } from "src/components/SidebarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {Button} from "src/components/Button";
 
-const Sidebar: React.FC = () => {
+export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showHamburger, setShowHamburger] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -37,19 +38,17 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {!isOpen && (
-        <div className="bg-[#fff]">
-          <button 
-            className={`hamburger md:hidden ${showHamburger ? "opacity-100" : "opacity-0"} p-2 ml-3 text-2xl`} 
-            onClick={toggleSidebar}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </button>
-        </div>
+        <Button 
+          className={`hamburger md:hidden ${showHamburger ? "opacity-100" : "opacity-0"} p-2 ml-3 text-2xl`} 
+          onClick={toggleSidebar}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </Button>
       )}
 
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <Link to="/" className="flex justify-center items-center mb-4 mt-1" onClick={handleNavigation}>
-          <img src="src/assets/logo_header.png" className="mx-4 hover:scale-105 transition-transform duration-150" alt="Banner" />
+          <img src="src/assets/logo_header.svg" className="mx-4 my-2 hover:scale-105 transition-transform duration-150" alt="Banner" />
         </Link>
 
         <div className="flex flex-col gap-2 mx-2 items-center flex-grow">
@@ -71,5 +70,3 @@ const Sidebar: React.FC = () => {
     </>
   );
 };
-
-export default Sidebar;

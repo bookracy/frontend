@@ -5,9 +5,7 @@ interface SettingsState {
   setBooksPerSearch: (books: number) => void;
 }
 
-const useSettingsStore = create<SettingsState>((set) => ({
+export const useSettingsStore = create<SettingsState>((set) => ({
   booksPerSearch: 11,
   setBooksPerSearch: (books) => set({ booksPerSearch: books }),
 }));
-
-export default useSettingsStore;

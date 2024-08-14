@@ -10,7 +10,7 @@ interface SidebarButtonsProps {
   onClick?: () => void;
 }
 
-const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, children, onClick }) => {
+export const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, children, onClick }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => setIsOpen(!isOpen);
@@ -35,5 +35,3 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, children, on
     </>
   );
 };
-
-export default SidebarButtons;

@@ -190,7 +190,7 @@ button {
   text-align: center;
 }
 
-button:hover, button:focus {
+button:hover {
   background-color: var(--button-hover-bg-color);
   scale: 1.02;
 }
@@ -246,9 +246,8 @@ button:hover, button:focus {
 /* Card */
 .card {
   background-color: var(--card-bg-color);
-  border-radius: 0.2em;
+  border-radius: 0.4em;
   padding: 0.6em;
-  margin-top: 0.5em;
 }
 
 @media (max-width: 768px) {
@@ -271,15 +270,12 @@ button:hover, button:focus {
   .hamburger {
     display: block;
     position: fixed;
-    top: 1rem;
-    left: 1rem;
+    top: 0.5rem;
     z-index: 1001;
-    background: none;
+    background: var(--button-bg-color);
     border: none;
     color: var(--text-color);
     font-size: 1.6rem; /* Smaller size for hamburger icon */
-    padding: 0.5rem;
-    margin-left: 0.8rem;
   }
 
   .hamburger-space {

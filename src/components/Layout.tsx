@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
-import Footer from "./Footer";
+import { Footer } from "src/components/Footer";
 
 interface BannerProps {
   children: ReactNode;
   className?: string;
 }
 
-const Layout: React.FC<BannerProps> = ({ children, className }) => {
+export const Layout: React.FC<BannerProps> = ({ children, className }) => {
   return (
     <div className="app">
       <div className={`main-content ${className}`}>
@@ -17,4 +17,3 @@ const Layout: React.FC<BannerProps> = ({ children, className }) => {
   );
 };
 
-export default Layout;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Button from "../components/Button";
-import Banner from "../components/Banner";
-import Layout from "../components/Layout";
+import { Button } from "src/components/Button";
+import { Banner } from "src/components/Banner";
+import { Layout } from "src/components/Layout";
 
-const Contact = () => {
+export const Contact = () => {
   const [body, setBody] = useState("");
   const [subject, setSubject] = useState("");
   const handleSubmit = (e: React.FormEvent) => {
@@ -40,5 +40,3 @@ const Contact = () => {
     </Layout>
   );
 };
-
-export default Contact;

@@ -1,7 +1,7 @@
 import React from "react";
-import Layout from "../components/Layout";
+import { Layout } from "src/components/Layout";
 
-const Upload: React.FC = () => {
+export const Upload: React.FC = () => {
   return (
     <Layout>
       <h1>Upload Page</h1>
@@ -9,5 +9,3 @@ const Upload: React.FC = () => {
     </Layout>
   );
 }
-
-export default Upload;

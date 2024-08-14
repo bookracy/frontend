@@ -1,7 +1,7 @@
 import React from "react";
-import Layout from "../components/Layout";
+import { Layout } from "src/components/Layout";
 
-const Random: React.FC = () => {
+export const Random: React.FC = () => {
   return (
     <Layout>
       <h1>Random Page</h1>
@@ -9,5 +9,3 @@ const Random: React.FC = () => {
     </Layout>
   );
 }
-
-export default Random;

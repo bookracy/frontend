@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Footer: React.FC = () => {
+export const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="flex flex-col md:flex-row justify-between mx-4">
@@ -33,5 +33,3 @@ const Footer: React.FC = () => {
     </footer>
   );
 }
-
-export default Footer;

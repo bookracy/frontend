@@ -1,5 +1,9 @@
 import React from "react";
 import { Hyperlink } from "@/components/Hyperlink";
+import github_logo from "@/assets/github_logo.png";
+import discord_logo from "@/assets/discord_logo.png";
+import twitter_logo from "@/assets/twitter_logo.png";
+import email_logo from "@/assets/email_logo.png";
 
 export const Footer: React.FC = () => {
   return (
@@ -24,21 +28,21 @@ export const Footer: React.FC = () => {
         </div>
         <div className="flex justify-center md:justify-end gap-3 mt-4 md:mt-0">
           <Hyperlink href="https://github.com/bookracy" title="Visit our GitHub" ariaLabel="GitHub">
-            <img src="src/assets/github_logo.png" width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="GitHub Logo" />
+            <img src={github_logo} width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="GitHub Logo" />
           </Hyperlink>
           <Hyperlink href="/discord" title="Join our Discord" ariaLabel="Discord">
-            <img src="src/assets/discord_logo.png" width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="Discord Logo" />
+            <img src={discord_logo} width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="Discord Logo" />
           </Hyperlink>
           <Hyperlink href="https://x.com/bookracy" title="Follow us on Twitter" ariaLabel="Twitter">
-            <img src="src/assets/twitter_logo.png" width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="Twitter Logo" />
+            <img src={twitter_logo} width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="Twitter Logo" />
           </Hyperlink>
           <Hyperlink href="/contact" title="Send us an Email" ariaLabel="Email">
-            <img src="src/assets/email_logo.png" width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="Email Logo" />
+            <img src={email_logo} width="24px" height="auto" className="hover:scale-110 transition 0.15s" alt="Email Logo" />
           </Hyperlink>
         </div>
       </div>
       <div className="text-center mt-4">
-        <p>&copy; {new Date().getFullYear()} Bookracy.</p>
+        <p>&copy; {new Date().getFullYear()} Bookracy</p>
       </div>
     </footer>
   );

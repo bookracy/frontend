@@ -4,6 +4,7 @@ import { SidebarButtons } from "@/components/SidebarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@/components/Button";
+import logo_header from "@/assets/logo_header.svg";
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +49,7 @@ export const Sidebar: React.FC = () => {
 
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <Clicklink href="/" className="flex justify-center items-center mx-3 mb-4 mt-2" onClick={handleNavigation}>
-          <img src="src/assets/logo_header.svg" className="hover:scale-105 transition-transform duration-150" alt="Banner" />
+          <img src={logo_header} className="hover:scale-105 transition-transform duration-150" alt="Banner" />
         </Clicklink>
 
         <div className="flex flex-col gap-2 mx-2 items-center flex-grow">

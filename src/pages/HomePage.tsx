@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Hyperlink } from "@/components/Hyperlink";
 import debounce from "lodash/debounce";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { Button } from "@/components/Button";
@@ -131,9 +132,9 @@ export const HomePage: React.FC = () => {
           Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
         </p>
         <div className="flex flex-row gap-4 my-4">
-          <a href="/contact" title="Contact us for more information">[Contact]</a>
-          <a href="https://discord.gg/X5kCn84KaQ" title="Join our Discord community">[Discord]</a>
-          <a href="/about" title="Learn more about us">[About]</a>
+          <Hyperlink href="/contact">[Contact]</Hyperlink>
+          <Hyperlink href="/discord">[Discord]</Hyperlink>
+          <Hyperlink href="/about">[About]</Hyperlink>
         </div>
         <p className="text-white">
           To get started, either search below or navigate the site using the sidebar.

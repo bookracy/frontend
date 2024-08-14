@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Clicklink } from "?/components/Hyperlink";
-import { SidebarButtons } from "?/components/SidebarButton";
+import { Clicklink } from "@/components/Hyperlink";
+import { SidebarButtons } from "@/components/SidebarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "?/components/Button";
+import { Button } from "@/components/Button";
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

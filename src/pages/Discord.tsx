@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Layout } from "?/components/Layout";
-import { Banner } from "?/components/Banner";
-import { Clicklink } from "?/components/Hyperlink";
+import { Layout } from "@/components/Layout";
+import { Banner } from "@/components/Banner";
+import { Clicklink } from "@/components/Hyperlink";
 
 export const Discord: React.FC = () => {
   const [countdown, setCountdown] = useState(5);

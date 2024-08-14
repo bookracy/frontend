@@ -1,15 +1,15 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { Sidebar } from "?/components/Sidebar";
-import { HomePage } from "?/pages/HomePage";
-import { Featured } from "?/pages/Featured";
-import { Random } from "?/pages/Random";
-import { Settings } from "?/pages/Settings";
-import { Upload } from "?/pages/Upload";
-import { Contact } from "?/pages/Contact";
-import { Account } from "?/pages/Account";
-import { About } from "?/pages/About";
-import { Discord } from "?/pages/Discord";
+import { Sidebar } from "@/components/Sidebar";
+import { HomePage } from "@/pages/HomePage";
+import { Featured } from "@/pages/Featured";
+import { Random } from "@/pages/Random";
+import { Settings } from "@/pages/Settings";
+import { Upload } from "@/pages/Upload";
+import { Contact } from "@/pages/Contact";
+import { Account } from "@/pages/Account";
+import { About } from "@/pages/About";
+import { Discord } from "@/pages/Discord";
 
 export const App: React.FC = () => {
   return (

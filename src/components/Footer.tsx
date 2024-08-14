@@ -1,5 +1,5 @@
 import React from "react";
-import { Hyperlink } from "?/components/Hyperlink";
+import { Hyperlink } from "@/components/Hyperlink";
 
 export const Footer: React.FC = () => {
   return (

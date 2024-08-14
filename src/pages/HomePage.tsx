@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import debounce from "lodash/debounce";
-import { useSettingsStore } from "?/stores/settingsStore";
-import { Button } from "?/components/Button";
-import { Banner } from "?/components/Banner";
-import { Layout } from "?/components/Layout";
-import { TransparentButton } from "?/components/TransparentButton";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { Button } from "@/components/Button";
+import { Banner } from "@/components/Banner";
+import { Layout } from "@/components/Layout";
+import { TransparentButton } from "@/components/TransparentButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { Hyperlink } from "?/components/Hyperlink";
 
 const BACKEND_URL = "https://backend.bookracy.org";
 
@@ -51,7 +50,6 @@ export const HomePage: React.FC = () => {
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [modalData, setModalData] = useState<SearchResultItem | null>(null);
   const { booksPerSearch } = useSettingsStore();
   const [buttonText, setButtonText] = useState("Download");
   const navigate = useNavigate();
@@ -101,13 +99,6 @@ export const HomePage: React.FC = () => {
     handleSearch(searchQuery);
   }, [searchQuery, handleSearch]);
 
-  const openModal = (item: SearchResultItem) => {
-    setModalData(item);
-  };
-
-  const closeModal = () => {
-    setModalData(null);
-  };
 
   const toggleResultsVisibility = () => {
     setIsVisible(!isVisible);
@@ -125,15 +116,18 @@ export const HomePage: React.FC = () => {
   return (
     <Layout>
       <Banner>
-        <h1 className="text-2xl text-white">Welcome to <strong>Bookracy</strong>📚</h1>
+        <h1 className="text-2xl text-white">
+          Welcome to <strong>Bookracy</strong>📚
+        </h1>
         <p className="mt-2 text-white">
           Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
-          <br />
-          <div className="flex flex-row gap-4 my-4">
-            <Hyperlink href="/contact">[Contact]</Hyperlink>
-            <Hyperlink href="/discord">[Discord]</Hyperlink>
-            <Hyperlink href="/about">[About]</Hyperlink>
-          </div>
+        </p>
+        <div className="flex flex-row gap-4 my-4">
+          <a href="/contact">[Contact]</a>
+          <a href="https://discord.gg/X5kCn84KaQ">[Discord]</a>
+          <a href="/about">[About]</a>
+        </div>
+        <p className="text-white">
           To get started, either search below or navigate the site using the sidebar.
         </p>
         <div className="relative w-5/12 my-3">
@@ -164,7 +158,7 @@ export const HomePage: React.FC = () => {
                 <div className="flex justify-end">
                   <TransparentButton onClick={toggleResultsVisibility}>
                     <FontAwesomeIcon
-                      icon={!isVisible && faChevronDown || faChevronUp}
+                      icon={!isVisible ? faChevronDown : faChevronUp}
                       className="mx-4 my-1"
                     />
                   </TransparentButton>
@@ -178,15 +172,12 @@ export const HomePage: React.FC = () => {
                         <FontAwesomeIcon icon={faTimes} />
                       </TransparentButton>
                     </div>
-                    <p>
+                    <div>
                       Hi! you're one of the first people to use Bookracy. 
-                      We are still very much in development and I have no life so please share suggestions in the discord. 
-                      Bookracy is also looking for developers, join the discord server and feel free to DM me to help. 
+                      We are still very much in development, so please share suggestions in the discord. 
+                      Bookracy is also looking for developers; join the discord server and feel free to DM me to help. 
                       btw chat this is a news widget
-                    </p>
-                    <Button onClick={() => navigate("/discord")}>
-                      Join Discord
-                    </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex justify-between">
@@ -198,22 +189,19 @@ export const HomePage: React.FC = () => {
                   <div
                     key={item.id}
                     className="card flex flex-row"
-                    onClick={() => openModal(item)}
                   >
                     <div className="flex justify-between w-full">
                       <div className="flex flex-row gap-3">
                         <img
+                          id="modalImage"
                           className="rounded"
+                          src={item.book_image || "src/assets/placeholder.png"}
+                          alt={item.title || "Unknown Title"}
                           width="150"
-                          src={item.book_image}
-                          alt={item.title}
-                          onError={(e) => {
-                            e.currentTarget.src = "src/assets/placeholder.png";
-                          }}
                         />
                         <div>
                           <h4>
-                            {item.title ? (item.title.length > 46 ? item.title.substring(0, 46) + "..." : item.title) : "Unknown Title"}
+                            {item.title ? (item.title.length > 46 ? `${item.title.substring(0, 46)}...` : item.title) : "Unknown Title"}
                           </h4>
                           <p>Author: {Array.isArray(item.authors) ? item.authors.join(", ") : item.authors || "Unknown Author"}</p>
                           <p>Description: {item.description || "No description available."}</p>

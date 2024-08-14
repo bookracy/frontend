@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Clicklink } from "?/components/Hyperlink";
+import { Clicklink } from "@/components/Hyperlink";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 

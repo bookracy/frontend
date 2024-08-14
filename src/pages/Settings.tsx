@@ -1,13 +1,9 @@
 import React from "react";
-import { Layout } from "src/components/Layout";
-import { useSettingsStore } from "src/stores/settingsStore";
+import { Layout } from "?/components/Layout";
+import { useSettingsStore } from "?/stores/settingsStore";
 
 export const Settings: React.FC = () => {
-  const { theme, setTheme, booksPerSearch, setBooksPerSearch } = useSettingsStore();
-
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTheme(e.target.value);
-  };
+  const { booksPerSearch, setBooksPerSearch } = useSettingsStore();
 
   const handleBooksPerSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBooksPerSearch(parseInt(e.target.value, 10));

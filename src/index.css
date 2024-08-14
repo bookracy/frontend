@@ -67,9 +67,12 @@ h4 { font-size: 1.6em; }
 
 /* Links */
 a {
-  color: inherit;
   text-decoration: underline;
-  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: #227cf1;
+  transition: color 0.25s;
 }
 
 /* Layout */

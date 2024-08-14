@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { SidebarButtons } from "src/components/SidebarButton";
+import { Clicklink } from "?/components/Hyperlink";
+import { SidebarButtons } from "?/components/SidebarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import {Button} from "src/components/Button";
+import { Button } from "?/components/Button";
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +47,9 @@ export const Sidebar: React.FC = () => {
       )}
 
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
-        <Link to="/" className="flex justify-center items-center mb-4 mt-1" onClick={handleNavigation}>
-          <img src="src/assets/logo_header.svg" className="mx-4 my-2 hover:scale-105 transition-transform duration-150" alt="Banner" />
-        </Link>
+        <Clicklink href="/" className="flex justify-center items-center mx-3 mb-4 mt-2" onClick={handleNavigation}>
+          <img src="src/assets/logo_header.svg" className="hover:scale-105 transition-transform duration-150" alt="Banner" />
+        </Clicklink>
 
         <div className="flex flex-col gap-2 mx-2 items-center flex-grow">
           <SidebarButtons label="Featured ⭐" to="/featured" onClick={handleNavigation}>Featured ⭐</SidebarButtons>

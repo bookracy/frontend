@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import debounce from "lodash/debounce";
-import { useSettingsStore } from "src/stores/settingsStore";
-import { Button } from "src/components/Button";
-import { Banner } from "src/components/Banner";
-import { Layout } from "src/components/Layout";
-import { TransparentButton } from "src/components/TransparentButton";
+import { useSettingsStore } from "?/stores/settingsStore";
+import { Button } from "?/components/Button";
+import { Banner } from "?/components/Banner";
+import { Layout } from "?/components/Layout";
+import { TransparentButton } from "?/components/TransparentButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { Hyperlink } from "?/components/Hyperlink";
 
 const BACKEND_URL = "https://backend.bookracy.org";
 
@@ -52,6 +54,16 @@ export const HomePage: React.FC = () => {
   const [modalData, setModalData] = useState<SearchResultItem | null>(null);
   const { booksPerSearch } = useSettingsStore();
   const [buttonText, setButtonText] = useState("Download");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [currentQuery, setCurrentQuery] = useState<string>("");
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search).get("query");
+    if (query) {
+      setCurrentQuery(query);
+    }
+  }, [location.search]);
 
   const handleDownloadClick = async (itemLink: string) => {
     setButtonText("Getting link...");
@@ -66,21 +78,23 @@ export const HomePage: React.FC = () => {
 
   const handleSearch = useCallback(
     debounce(async (query: string) => {
-      if (query) {
+      if (query && query !== currentQuery) {
         setLoading(true);
         setIsVisible(false);
         setTimeout(async () => {
           const fetchedResults = await fetchSearchResults(query, booksPerSearch);
+          console.log("Fetched results:", fetchedResults);
           setResults(fetchedResults);
           setLoading(false);
           setIsVisible(true);
+          navigate(`/search/${query}`);
         }, 2000);
       } else {
         setResults([]);
         setIsVisible(false);
       }
     }, 900),
-    [fetchSearchResults, booksPerSearch, setResults]
+    [fetchSearchResults, booksPerSearch, setResults, navigate, currentQuery]
   );
 
   useEffect(() => {
@@ -116,9 +130,9 @@ export const HomePage: React.FC = () => {
           Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
           <br />
           <div className="flex flex-row gap-4 my-4">
-            <a href="/contact">[Contact]</a>
-            <a href="https://discord.gg/X5kCn84KaQ">[Discord]</a>
-            <a href="/about">[About]</a>
+            <Hyperlink href="/contact">[Contact]</Hyperlink>
+            <Hyperlink href="/discord">[Discord]</Hyperlink>
+            <Hyperlink href="/about">[About]</Hyperlink>
           </div>
           To get started, either search below or navigate the site using the sidebar.
         </p>
@@ -170,6 +184,9 @@ export const HomePage: React.FC = () => {
                       Bookracy is also looking for developers, join the discord server and feel free to DM me to help. 
                       btw chat this is a news widget
                     </p>
+                    <Button onClick={() => navigate("/discord")}>
+                      Join Discord
+                    </Button>
                   </div>
                 ) : (
                   <div className="flex justify-between">
@@ -186,11 +203,13 @@ export const HomePage: React.FC = () => {
                     <div className="flex justify-between w-full">
                       <div className="flex flex-row gap-3">
                         <img
-                          id="modalImage"
                           className="rounded"
-                          src={item.book_image || "src/assets/placeholder.png"}
-                          alt={item.title || "Unknown Title"}
                           width="150"
+                          src={item.book_image}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src = "src/assets/placeholder.png";
+                          }}
                         />
                         <div>
                           <h4>

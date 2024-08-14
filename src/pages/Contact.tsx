@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "src/components/Button";
-import { Banner } from "src/components/Banner";
-import { Layout } from "src/components/Layout";
+import { Button } from "?/components/Button";
+import { Banner } from "?/components/Banner";
+import { Layout } from "?/components/Layout";
 
 export const Contact = () => {
   const [body, setBody] = useState("");

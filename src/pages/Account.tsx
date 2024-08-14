@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout } from "src/components/Layout";
+import { Layout } from "?/components/Layout";
 
 export const Account: React.FC = () => {
   return (

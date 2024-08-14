@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Clicklink } from "?/components/Hyperlink";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
@@ -18,9 +18,9 @@ export const SidebarButtons: React.FC<SidebarButtonsProps> = ({ to, label, child
   return (
     <>
       {to ? (
-        <Link to={to} className="SidebarButtons no-underline" onClick={onClick}>
+        <Clicklink href={to} className="SidebarButtons no-underline hover:text-inherit" onClick={() => onClick}>
           {label}
-        </Link>
+        </Clicklink>
       ) : (
         <button className="SidebarButtons flex justify-between items-center" onClick={() => { toggleOpen(); if (onClick) onClick(); }}>
           {label}

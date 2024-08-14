@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Footer } from "src/components/Footer";
+import { Footer } from "?/components/Footer";
 
 interface BannerProps {
   children: ReactNode;

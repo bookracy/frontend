@@ -1,14 +1,15 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { Sidebar } from "src/components/Sidebar";
-import { HomePage } from "src/pages/HomePage";
-import { Featured } from "src/pages/Featured";
-import { Random } from "src/pages/Random";
-import { Settings } from "src/pages/Settings";
-import { Upload } from "src/pages/Upload";
-import { Contact } from "src/pages/Contact";
-import { Account } from "src/pages/Account";
-import { About } from "src/pages/About";
+import { Sidebar } from "?/components/Sidebar";
+import { HomePage } from "?/pages/HomePage";
+import { Featured } from "?/pages/Featured";
+import { Random } from "?/pages/Random";
+import { Settings } from "?/pages/Settings";
+import { Upload } from "?/pages/Upload";
+import { Contact } from "?/pages/Contact";
+import { Account } from "?/pages/Account";
+import { About } from "?/pages/About";
+import { Discord } from "?/pages/Discord";
 
 export const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ export const App: React.FC = () => {
           <Route path="/account" element={<Account />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/discord" element={<Discord />} />
         </Routes>
       </div>
     </div>

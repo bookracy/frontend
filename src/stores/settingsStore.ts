@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type Theme = "dark" | "light";
 
@@ -14,14 +15,22 @@ interface SettingsStoreState {
   setTheme: (theme: Theme) => void;
 }
 
-export const useSettingsStore = create<SettingsStoreState>((set) => ({
-  booksPerSearch: 11,
-  language: "en",
-  backendURL: "https://backend.bookracy.org",
-  theme: "dark",
+export const useSettingsStore = create<SettingsStoreState>()(
+  persist(
+    (set) => ({
+      booksPerSearch: 11,
+      language: "en",
+      backendURL: "https://backend.bookracy.org",
+      theme: "dark",
 
-  setBooksPerSearch: (books) => set({ booksPerSearch: books }),
-  setLanguage: (language) => set({ language }),
-  setBackendURL: (url) => set({ backendURL: url }),
-  setTheme: (theme) => set({ theme }),
-}));
+      setBooksPerSearch: (books) => set({ booksPerSearch: books }),
+      setLanguage: (language) => set({ language }),
+      setBackendURL: (url) => set({ backendURL: url }),
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: "BR::settings",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);

@@ -1,0 +1,17 @@
+User-agent: *
+Disallow: /api/
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: *
+
+Disallow: /scraper/
+Disallow: /crawler/
+Disallow: /bot/

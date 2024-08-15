@@ -7,7 +7,9 @@ import { Banner } from "@/components/Banner";
 import { Layout } from "@/components/Layout";
 import { TransparentButton } from "@/components/TransparentButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import loadingImage from "@/assets/loading.png";
+import placeholderImage from "@/assets/placeholder.png";
+import { faTimes, faChevronDown, faChevronUp, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const BACKEND_URL = "https://backend.bookracy.org";
 
@@ -20,31 +22,32 @@ interface SearchResultItem {
   link?: string;
 }
 
-interface FetchResult {
-  results: SearchResultItem[];
-}
-
-async function fetchSearchResults(query: string, booksPerSearch: number): Promise<SearchResultItem[]> {
-  console.log(`Fetching results for query: ${query}`);
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/books?query=${query}&limit=${booksPerSearch}`);
-    console.log(`${BACKEND_URL}/api/books?query=${query}&limit=${booksPerSearch}`)
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+// Optimized fetch function with caching
+const fetchSearchResults = (() => {
+  const cache: { [key: string]: SearchResultItem[] } = {};
+  return async (query: string, booksPerSearch: number): Promise<SearchResultItem[]> => {
+    const cacheKey = `${query}-${booksPerSearch}`;
+    if (cache[cacheKey]) {
+      return cache[cacheKey];
     }
-
-    const data: FetchResult = await response.json();
-    console.log("Fetched data:", data);
-
-    return data.results || [];
-  } catch (error) {
-    console.error("Fetch error:", error);
-    return [];
-  }
-}
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/books?query=${query}&limit=${booksPerSearch}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data: { results: SearchResultItem[] } = await response.json();
+      cache[cacheKey] = data.results || [];
+      return cache[cacheKey];
+    } catch (error) {
+      console.error("Fetch error:", error);
+      return [];
+    }
+  };
+})();
 
 export const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [newsWidget, setNewsWidget] = useState(true);
   const [results, setResults] = useState<SearchResultItem[]>([]);
@@ -52,16 +55,50 @@ export const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { booksPerSearch } = useSettingsStore();
   const [buttonText, setButtonText] = useState("Download");
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [currentQuery, setCurrentQuery] = useState<string>("");
 
-  useEffect(() => {
-    const query = new URLSearchParams(location.search).get("query");
+  // Function to handle updating the URL when a search query is entered
+  const updateURL = (query: string) => {
     if (query) {
-      setCurrentQuery(query);
+      navigate(`/search/${encodeURIComponent(query)}`);
+    } else {
+      navigate("/");
     }
-  }, [location.search]);
+  };
+
+  // Function to handle the actual search operation
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleSearch = useCallback(
+    debounce(async (query: string) => {
+      if (!query) {
+        setResults([]);
+        setIsVisible(false);
+        return;
+      }
+      setLoading(true);
+      try {
+        const fetchedResults = await fetchSearchResults(query, booksPerSearch);
+        setResults(fetchedResults);
+        setIsVisible(true);
+      } finally {
+        setLoading(false);
+      }
+    }, 300),
+    [booksPerSearch]
+  );
+
+  // Effect to handle search query updates
+  useEffect(() => {
+    const query = decodeURIComponent(location.pathname.split("/search/")[1] || "");
+    setSearchQuery(query);
+    handleSearch(query);
+  }, [location.pathname, handleSearch]);
+
+  // Handle input change and update both the search state and the URL
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    updateURL(query);
+  };
 
   const handleDownloadClick = async (itemLink: string) => {
     setButtonText("Getting link...");
@@ -74,43 +111,14 @@ export const HomePage: React.FC = () => {
     setButtonText("Download");
   };
 
-  const handleSearch = useCallback(
-    debounce(async (query: string) => {
-      if (query && query !== currentQuery) {
-        setLoading(true);
-        setIsVisible(false);
-        setTimeout(async () => {
-          const fetchedResults = await fetchSearchResults(query, booksPerSearch);
-          console.log("Fetched results:", fetchedResults);
-          setResults(fetchedResults);
-          setLoading(false);
-          setIsVisible(true);
-          navigate(`/search/${query}`);
-        }, 2000);
-      } else {
-        setResults([]);
-        setIsVisible(false);
-      }
-    }, 900),
-    [fetchSearchResults, booksPerSearch, setResults, navigate, currentQuery]
-  );
+  const toggleResultsVisibility = () => setIsVisible((prev) => !prev);
 
-  useEffect(() => {
-    handleSearch(searchQuery);
-  }, [searchQuery, handleSearch]);
-
-
-  const toggleResultsVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-
-  const toggleNewsWidget = () => {
-    setNewsWidget(!newsWidget);
-  };
+  const toggleNewsWidget = () => setNewsWidget((prev) => !prev);
 
   const clearSearch = () => {
     setSearchQuery("");
     setResults([]);
+    updateURL("");
   };
 
   return (
@@ -123,21 +131,22 @@ export const HomePage: React.FC = () => {
           Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
         </p>
         <div className="flex flex-row gap-4 my-4">
-          <a href="/contact">[Contact]</a>
-          <a href="https://discord.gg/X5kCn84KaQ">[Discord]</a>
-          <a href="/about">[About]</a>
+          <a href="/contact" title="Contact us for more information">[Contact]</a>
+          <a href="https://discord.gg/X5kCn84KaQ" title="Join our Discord community">[Discord]</a>
+          <a href="/about" title="Learn more about us">[About]</a>
         </div>
         <p className="text-white">
           To get started, either search below or navigate the site using the sidebar.
         </p>
-        <div className="relative w-5/12 my-3">
+        <div className="relative w-full sm:w-9/12 lg:w-5/12 my-3">
+          <FontAwesomeIcon icon={faSearch} className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             id="searchInput"
             type="text"
-            className="input w-full"
+            className="input w-full pl-10"
             placeholder="Search for books, comics, or manga..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleInputChange}
           />
           {searchQuery && (
             <button
@@ -151,7 +160,7 @@ export const HomePage: React.FC = () => {
         </div>
         <div className="flex flex-col gap-3">
           {loading ? (
-            <img src="src/assets/loading.png" width="50" className="animate-spin mx-4" />
+            <img src={loadingImage} width="50" className="animate-spin mx-4" alt="Loading..." />
           ) : (
             <div className="results-container bg-dropdown-primary rounded-[0.2em] flex flex-col gap-3 p-2">
               {searchQuery ? (
@@ -195,9 +204,12 @@ export const HomePage: React.FC = () => {
                         <img
                           id="modalImage"
                           className="rounded"
-                          src={item.book_image || "src/assets/placeholder.png"}
+                          src={item.book_image || `${placeholderImage}`}
                           alt={item.title || "Unknown Title"}
                           width="150"
+                          onError={(e) => {
+                            e.currentTarget.src = placeholderImage; // Set the placeholder if the image fails to load
+                          }}
                         />
                         <div>
                           <h4>

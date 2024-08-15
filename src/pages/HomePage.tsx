@@ -11,40 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import loadingImage from "@/assets/loading.png";
 import placeholderImage from "@/assets/placeholder.png";
 import { faTimes, faChevronDown, faChevronUp, faSearch } from "@fortawesome/free-solid-svg-icons";
-
-const BACKEND_URL = "https://backend.bookracy.org";
-
-interface SearchResultItem {
-  id: string;
-  title: string;
-  book_image?: string;
-  authors: string[] | string;
-  description?: string;
-  link?: string;
-}
-
-// Optimized fetch function with caching
-const fetchSearchResults = (() => {
-  const cache: { [key: string]: SearchResultItem[] } = {};
-  return async (query: string, booksPerSearch: number): Promise<SearchResultItem[]> => {
-    const cacheKey = `${query}-${booksPerSearch}`;
-    if (cache[cacheKey]) {
-      return cache[cacheKey];
-    }
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/books?query=${query}&limit=${booksPerSearch}`);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data: { results: SearchResultItem[] } = await response.json();
-      cache[cacheKey] = data.results || [];
-      return cache[cacheKey];
-    } catch (error) {
-      console.error("Fetch error:", error);
-      return [];
-    }
-  };
-})();
+import { fetchSearchResults, SearchResultItem } from "@/stores/Search"; // Import the function and interface
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();

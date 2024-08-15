@@ -8,8 +8,11 @@ interface SettingsState {
 }
 
 const settingsStore = createStore<SettingsState>((set) => ({
-  booksPerSearch: 11,
-  setBooksPerSearch: (books) => set({ booksPerSearch: Math.max(1, books) }),
+  booksPerSearch: parseInt(localStorage.getItem("booksPerSearch") || "10", 10),
+  setBooksPerSearch: (books) => {
+    localStorage.setItem("booksPerSearch", books.toString());
+    set({ booksPerSearch: Math.max(1, books) });
+  },
   theme: "light",
   setTheme: (theme) => set({ theme }),
 }));

@@ -191,11 +191,11 @@ export const HomePage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="flex justify-between">
-                    <h4>No results found...</h4>
+                    <h4>No results found... How about Searching for Bones!</h4>
                   </div>
                 ))}
               {isVisible && (
-                results.map((item) => (
+                results.slice(0, booksPerSearch).map((item) => (
                   <div
                     key={item.id}
                     className="card flex flex-row"

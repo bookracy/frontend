@@ -33,8 +33,7 @@ export const Settings: React.FC = () => {
           <FontAwesomeIcon icon={faPaintBrush} className="mr-2" />
           Theme
         </label>
-        <select id="theme" value={theme} onChange={handleThemeChange} className="input w-full p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 text-black">
-          <option value="light">Light</option>
+        <select id="theme" value={theme} onChange={handleThemeChange} disabled aria-disabled={true} className="input w-full p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 text-black">
           <option value="dark">Dark</option>
         </select>
       </div>

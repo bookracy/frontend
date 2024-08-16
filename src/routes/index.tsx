@@ -37,11 +37,14 @@ function Index() {
     <div>
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl">
-          📚 Welcome to <strong>Bookracy</strong> 📚
+          Welcome to <strong>Bookracy</strong> 📚
         </h1>
-        <p>Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.</p>
+        <p>
+          Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
+          <br />
+          To get started, either search below or navigate the site using the sidebar.
+        </p>
 
-        <p className="text-white">To get started, either search below or navigate the site using the sidebar.</p>
 
         <Input
           placeholder="Search for books..."

@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { useLayoutStore } from "@/stores/layout";
 import { Link } from "@tanstack/react-router";
 import { Menu } from "./menu";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 import LogoHeader from "@/assets/logo_header.svg";
+import LogoHeaderDark from "@/assets/logo_header_dark.svg";
 import Logo from "@/assets/logo.svg";
 
 interface SidebarToggleProps {
@@ -25,6 +27,7 @@ function SidebarToggle({ isOpen, setIsOpen }: SidebarToggleProps) {
 }
 
 export function Sidebar() {
+  const theme = useSettingsStore((state) => state.theme);
   const sidebar = useLayoutStore((state) => state.sidebar);
 
   return (
@@ -32,8 +35,12 @@ export function Sidebar() {
       <SidebarToggle isOpen={sidebar.isOpen} setIsOpen={sidebar.setIsOpen} />
       <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
         <Button className={cn("mb-1 transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")} variant="link" asChild>
-          <Link to="/" className="flex items-center gap-2" search={{ q: "" }}>
-            <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-10" />
+          <Link to="/" className="flex items-center gap-2 m-1" search={{ q: "" }}>
+            {theme === "dark" ? (
+              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13" />
+            ) : (
+              <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13" />
+            )}
           </Link>
         </Button>
         <Menu isOpen={sidebar?.isOpen} />

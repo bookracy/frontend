@@ -64,29 +64,29 @@ export function BookItem(props: BookItemProps) {
 
   return (
     <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
-      <CardContent className="p-4 md:p-6">
+      <CardContent className="p-6 mx-2">
         <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           <div className="w-full md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
               <img
                 src={props.book_image ?? PlaceholderImage}
                 alt={props.title}
-                className="rounded-lg object-cover hover:opacity-80 transition-opacity duration-300"
+                className="rounded-lg object-cover hover:scale-110 transition-transform duration-300"
               />
             </AspectRatio>
           </div>
           <div className="flex flex-1 flex-col justify-between">
             <div>
               <h2 className="text-2xl font-bold mb-2">{props.title}</h2>
-              <p className="text-md text-gray-700">By {props.authors}</p>
-              <p className="text-sm text-gray-600 mt-2">{props.book_content}</p>
-              <p className="text-sm text-gray-600 mt-2">Language: {props.book_lang}</p>
+              <p className="text-md text-gray-400">By {props.authors}</p>
+              <p className="text-sm text-gray-400 mt-2">{props.book_content}</p>
+              <p className="text-sm text-gray-400 mt-2">Language: {props.book_lang}</p>
             </div>
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap gap-5 mt-6">
               <Button 
                 disabled={!props.link} 
                 onClick={() => saveAs(props.link)} 
-                className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
+                className="flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faDownload} className="text-lg" /> 
                 Download ({props.book_size})
@@ -94,7 +94,7 @@ export function BookItem(props: BookItemProps) {
               {isEpub && (
                 <Button 
                   onClick={handleOpenReader} 
-                  className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700"
+                  className="flex items-center gap-2"
                 >
                   <FontAwesomeIcon icon={faBookOpen} className="text-lg" /> 
                   Read Online

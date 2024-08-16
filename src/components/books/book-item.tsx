@@ -40,7 +40,6 @@ export function BookItem(props: BookItemProps) {
               {isEpub && (
                 <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2" variant="confirm">
                   <BookOpen className="text-lg" />
-
                   Read Online
                 </Button>
               )}

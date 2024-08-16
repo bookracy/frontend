@@ -18,7 +18,7 @@ declare module "@tanstack/react-router" {
   }
 }
 
-function App() {
+export function App() {
   const theme = useSettingsStore((state) => state.theme);
 
   useEffect(() => {

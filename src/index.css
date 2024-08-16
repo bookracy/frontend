@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
 
 :root {
   --font-family: monospace;
@@ -301,3 +303,53 @@ button:hover {
     scroll-behavior: auto !important;
   }
 }
+
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.epub-container {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.epub-container div {
+  font-family: inherit !important;
+}
+
+.flip-mode {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.flip-mode .ReactReader {
+  transition: transform 0.6s ease;
+}
+
+.scroll-mode .ReactReader {
+  overflow-y: auto;
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+button:focus, button:hover {
+  transform: scale(1.05);
+}
+
+input[type="text"] {
+  outline: none;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #007bff;
+}
+
+

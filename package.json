@@ -8,8 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
-    "format": "prettier --check . --ignore-path ./.gitignore",
-    "format:fix": "prettier --write . --ignore-path ./.gitignore",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview"
   },

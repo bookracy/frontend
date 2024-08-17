@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useGetBooksQuery } from "@/api/search/search";
 import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
-import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settingsStore";
@@ -38,49 +37,49 @@ function Index() {
 
   return (
     <div>
-        <h1 className="text-2xl">
-          Welcome to <strong>Bookracy</strong> 📚
-        </h1>
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <p>
-              Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
-              <br />
-              To get started, either search below or navigate the site using the sidebar.
-            </p>
-            <NavLink to="/about">About Us</NavLink>
-          </div>
-
-          <Input
-            className="w-3/4 md:w-4/6 focus-visible:shadow-md transition-shadow duration-300"
-            placeholder="Search for books, comics, or manga..."
-            value={q}
-            onChange={(e) =>
-              navigate({
-                search: {
-                  q: e.target.value,
-                },
-              })
-            }
-          />
-
-          {isLoading && (
-            <div className="flex flex-col gap-4">
-              {Array.from({ length: booksPerSearch }).map((_, i) => (
-                <SkeletonBookItem key={i} />
-              ))}
-            </div>
-          )}
-          {error && <p>Error: {error.message}</p>}
-
-          {data && (
-            <div className="flex flex-col gap-4">
-              {data.results.map((book) => (
-                <BookItem key={book.md5} {...book} />
-              ))}
-            </div>
-          )}
+      <h1 className="text-2xl">
+        Welcome to <strong>Bookracy</strong> 📚
+      </h1>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <p>
+            Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
+            <br />
+            To get started, either search below or navigate the site using the sidebar.
+          </p>
+          <NavLink to="/about">About Us</NavLink>
         </div>
+
+        <Input
+          className="w-3/4 transition-shadow duration-300 focus-visible:shadow-md md:w-4/6"
+          placeholder="Search for books, comics, or manga..."
+          value={q}
+          onChange={(e) =>
+            navigate({
+              search: {
+                q: e.target.value,
+              },
+            })
+          }
+        />
+
+        {isLoading && (
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: booksPerSearch }).map((_, i) => (
+              <SkeletonBookItem key={i} />
+            ))}
+          </div>
+        )}
+        {error && <p>Error: {error.message}</p>}
+
+        {data && (
+          <div className="flex flex-col gap-4">
+            {data.results.map((book) => (
+              <BookItem key={book.md5} {...book} />
+            ))}
+          </div>
+        )}
       </div>
+    </div>
   );
 }

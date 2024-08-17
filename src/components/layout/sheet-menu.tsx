@@ -7,10 +7,14 @@ import { Menu } from "./menu";
 import { useLayoutStore } from "@/stores/layout";
 
 import LogoHeader from "@/assets/logo_header.svg";
+import LogoHeaderDark from "@/assets/logo_header_dark.svg";
 import Logo from "@/assets/logo.svg";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 export function SheetMenu() {
   const sidebar = useLayoutStore((state) => state.sidebar);
+  const theme = useSettingsStore((state) => state.theme);
+
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
@@ -22,7 +26,7 @@ export function SheetMenu() {
         <SheetHeader>
           <Button className="flex items-center justify-center pb-2 pt-1" variant="link" asChild>
             <Link to="/" className="flex items-center gap-2" search={{ q: "" }}>
-              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-10" />
+              {theme === "dark" ? <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13" /> : <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13" />}
             </Link>
           </Button>
         </SheetHeader>

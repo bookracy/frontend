@@ -37,8 +37,7 @@ function Index() {
   });
 
   return (
-    <Card>
-      <CardHeader>
+    <div>
         <h1 className="text-2xl">
           Welcome to <strong>Bookracy</strong> 📚
         </h1>
@@ -53,6 +52,7 @@ function Index() {
           </div>
 
           <Input
+            className="w-3/4 md:w-4/6 focus-visible:shadow-md transition-shadow duration-300"
             placeholder="Search for books, comics, or manga..."
             value={q}
             onChange={(e) =>
@@ -65,7 +65,7 @@ function Index() {
           />
 
           {isLoading && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-4">
               {Array.from({ length: booksPerSearch }).map((_, i) => (
                 <SkeletonBookItem key={i} />
               ))}
@@ -74,14 +74,13 @@ function Index() {
           {error && <p>Error: {error.message}</p>}
 
           {data && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-4">
               {data.results.map((book) => (
                 <BookItem key={book.md5} {...book} />
               ))}
             </div>
           )}
         </div>
-      </CardHeader>
-    </Card>
+      </div>
   );
 }

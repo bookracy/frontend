@@ -96,7 +96,7 @@ export function EpubReader(props: EpubReaderProps) {
 
   useEffect(() => {
     if (renditionRef.current) {
-      renditionRef.current.themes.override("background", theme === "dark" ? "#000" : "#fff");
+      renditionRef.current.themes.override("background", theme === "dark" ? "#050505" : "#fff");
       renditionRef.current.themes.override("color", theme === "dark" ? "#fff" : "#000");
     }
   }, [theme]);

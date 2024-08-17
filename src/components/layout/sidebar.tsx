@@ -37,9 +37,9 @@ export function Sidebar() {
         <Button className={cn("mb-1 transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")} variant="link" asChild>
           <Link to="/" className="m-1 flex items-center gap-2" search={{ q: "" }}>
             {theme === "dark" ? (
-              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13 transition-transform duration-200 hover:scale-110" />
+              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13 transition-transform duration-200 hover:scale-[105%]" />
             ) : (
-              <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13 transition-transform duration-200 hover:scale-110" />
+              <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13 transition-transform duration-200 hover:scale-[105%]" />
             )}
           </Link>
         </Button>

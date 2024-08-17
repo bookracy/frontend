@@ -36,7 +36,7 @@ const darkReaderTheme: IReactReaderStyle = {
   },
   readerArea: {
     ...ReactReaderStyle.readerArea,
-    backgroundColor: "#000",
+    backgroundColor: "#111",
     color: "#ccc",
     transition: undefined,
   },

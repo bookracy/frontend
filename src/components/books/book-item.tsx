@@ -20,25 +20,25 @@ export function BookItem(props: BookItemProps) {
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="p-4 md:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/4 mx-2">
             <AspectRatio ratio={5 / 8} className="flex items-center">
-              <img src={props.book_image ?? PlaceholderImage} alt={props.title} className="rounded-lg object-cover transition-opacity duration-300 hover:opacity-80" />
+              <img src={props.book_image ?? PlaceholderImage} alt={props.title} className="rounded-lg object-cover transition-transform duration-300 hover:scale-110" />
             </AspectRatio>
           </div>
           <div className="flex flex-1 flex-col justify-between">
             <div>
               <h2 className="mb-2 text-2xl font-bold">{props.title}</h2>
-              <p className="text-md text-gray-700">By {props.authors}</p>
-              <p className="mt-2 text-sm text-gray-600">{props.book_content}</p>
-              <p className="mt-2 text-sm text-gray-600">Language: {props.book_lang}</p>
+              <p className="text-md dark:text-gray-400">By {props.authors}</p>
+              <p className="mt-2 text-sm dark:text-gray-400">{props.book_content}</p>
+              <p className="mt-2 text-sm dark:text-gray-400">Language: {props.book_lang}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700">
+              <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">
                 <DownloadIcon className="text-lg" />
                 Download ({props.book_size})
               </Button>
               {isEpub && (
-                <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2" variant="confirm">
+                <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2">
                   <BookOpen className="text-lg" />
                   Read Online
                 </Button>

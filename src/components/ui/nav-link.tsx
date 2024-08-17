@@ -1,9 +1,11 @@
-import * as React from "react"
-import { Link } from "@tanstack/react-router";
+import * as React from "react";
+import { Link, RoutePaths } from "@tanstack/react-router";
 import { ReactNode } from "react";
+import { routeTree } from "@/routeTree.gen";
 
 interface NavLinkProps {
-  to: string;
+  to: RoutePaths<typeof routeTree> | (string & {});
+  target?: string;
   children: ReactNode;
 }
 
@@ -11,17 +13,17 @@ function isExternalLink(url: string): boolean {
   return /^(https?:)?\/\//.test(url);
 }
 
-export function NavLink({ to, children }: NavLinkProps) {
+export function NavLink({ to, target, children }: NavLinkProps) {
   if (isExternalLink(to)) {
     return (
-      <a href={to} className="text-blue-500 hover:text-blue-600 transiton-color duration-100 inline-block">
+      <a href={to} target={target} className="transiton-color inline-block text-blue-500 duration-100 hover:text-blue-600">
         {children}
       </a>
     );
   }
 
   return (
-    <Link to={to} className="text-blue-500 hover:text-blue-600 transiton-color duration-100 inline-block">
+    <Link to={to} target={target} className="transiton-color inline-block text-blue-500 duration-100 hover:text-blue-600">
       {children}
     </Link>
   );

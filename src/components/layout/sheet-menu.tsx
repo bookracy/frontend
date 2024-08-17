@@ -1,5 +1,5 @@
 import { MenuIcon } from "lucide-react";
-import React from "react"
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetHeader, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link } from "@tanstack/react-router";

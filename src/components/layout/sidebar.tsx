@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react";
-import React from "react"
+import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useLayoutStore } from "@/stores/layout";
@@ -35,11 +35,11 @@ export function Sidebar() {
       <SidebarToggle isOpen={sidebar.isOpen} setIsOpen={sidebar.setIsOpen} />
       <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
         <Button className={cn("mb-1 transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")} variant="link" asChild>
-          <Link to="/" className="flex items-center gap-2 m-1" search={{ q: "" }}>
+          <Link to="/" className="m-1 flex items-center gap-2" search={{ q: "" }}>
             {theme === "dark" ? (
-              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13 hover:scale-110 transition-transform duration-200" />
+              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13 transition-transform duration-200 hover:scale-110" />
             ) : (
-              <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13 hover:scale-110 transition-transform duration-200" />
+              <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13 transition-transform duration-200 hover:scale-110" />
             )}
           </Link>
         </Button>

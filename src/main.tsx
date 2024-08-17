@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import { StrictMode, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
@@ -30,7 +30,7 @@ export function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
       <RouterProvider router={router} />
       <Toaster />
     </QueryClientProvider>

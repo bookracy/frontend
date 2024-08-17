@@ -7,6 +7,7 @@
 # Bookracy [Library](https://bookracy.org)
 
 ### A Shadow Library for the Digital Age
+
 Explore a vast collection of books, articles, and documents – easily accessible on any device.
 
 [![Discord server](https://img.shields.io/discord/1195734228319617024.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/bookracy)
@@ -21,20 +22,20 @@ Explore a vast collection of books, articles, and documents – easily accessibl
 [![Bookracy Stable](https://img.shields.io/github/release/bookracy/frontend.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/bookracy/frontend/releases)
 [![Bookracy Beta](https://img.shields.io/github/v/release/bookracy/frontend-lite.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/bookracy/frontend-lite/releases)
 
-*Compatible with all modern browsers.*
+_Compatible with all modern browsers._
 
 </div>
 
 ## Features
 
-* Browse and download a wide range of books and documents.
-* Customizable reading experience with adjustable fonts, themes, and more.
-* Sync across devices to access your library from anywhere.
-* Tag and organize your personal collection.
-* Regular updates to the catalog with new additions.
-* Offline access to your downloads.
-* Advanced search filters for easy discovery.
-* Plus much more...
+- Browse and download a wide range of books and documents.
+- Customizable reading experience with adjustable fonts, themes, and more.
+- Sync across devices to access your library from anywhere.
+- Tag and organize your personal collection.
+- Regular updates to the catalog with new additions.
+- Offline access to your downloads.
+- Advanced search filters for easy discovery.
+- Plus much more...
 
 ## Getting Started
 
@@ -49,24 +50,24 @@ Ensure you have the following installed on your local machine:
 
 1. Clone the repository:
 
-    '''sh
-    git clone https://github.com/bookracy/frontend.git
-    cd frontend
-    '''
+   '''sh
+   git clone https://github.com/bookracy/frontend.git
+   cd frontend
+   '''
 
 2. Install dependencies using PNPM:
 
-    '''sh
-    pnpm install
-    '''
+   '''sh
+   pnpm install
+   '''
 
 3. Create a `.env` file based on the `.env.example` provided:
 
-    '''sh
-    cp .env.example .env
-    '''
+   '''sh
+   cp .env.example .env
+   '''
 
-    Update the `.env` file with your configuration settings.
+   Update the `.env` file with your configuration settings.
 
 ### Running the Application
 

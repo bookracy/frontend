@@ -1,3 +1,4 @@
+import React from "react";
 import { Ellipsis } from "lucide-react";
 
 import { cn } from "@/lib/utils";

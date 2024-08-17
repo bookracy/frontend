@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useGetBooksQuery } from "@/api/search/search";
 import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,7 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { useLayoutStore } from "@/stores/layout"; // Make sure to import this
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { NavLink } from "@/components/ui/nav-link";
-import { cn } from "@/lib/utils"; 
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -48,24 +49,24 @@ function Index() {
           <br />
           To get started, either search below or navigate the site using the sidebar.
         </p>
-        <NavLink to="/about">
-          About Us
-        </NavLink>
+        <NavLink to="/about">About Us</NavLink>
 
-        <div className={cn("sticky left-[40px] top-[8px] z-50 w-[400px]", {
-          "left-[200px]": sidebar.isOpen,
-        })}>
+        <div
+          className={cn("sticky left-[40px] top-[8px] z-50 w-[400px]", {
+            "left-[200px]": sidebar.isOpen,
+          })}
+        >
           <Input
-          placeholder="Search for books, comics, or manga..."
-          value={q}
-          onChange={(e) =>
-            navigate({
-              search: {
-                q: e.target.value,
-              },
-            })
-          }
-        />
+            placeholder="Search for books, comics, or manga..."
+            value={q}
+            onChange={(e) =>
+              navigate({
+                search: {
+                  q: e.target.value,
+                },
+              })
+            }
+          />
         </div>
 
         {isLoading && (

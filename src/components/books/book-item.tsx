@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { SearchResultItem } from "@/api/search/types";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
@@ -20,7 +20,7 @@ export function BookItem(props: BookItemProps) {
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="p-4 md:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
-          <div className="w-full md:w-1/4 mx-2">
+          <div className="mx-2 w-full md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
               <img src={props.book_image ?? PlaceholderImage} alt={props.title} className="rounded-lg object-cover transition-transform duration-300 hover:scale-110" />
             </AspectRatio>

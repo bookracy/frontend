@@ -1,3 +1,4 @@
+import React from "react"
 import { Link } from "@tanstack/react-router";
 import { MailPlus } from "lucide-react";
 import GitHubLogo from "@/assets/github_logo.svg";

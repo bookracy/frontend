@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { AArrowDown, AArrowUp, ClipboardCheck, DownloadIcon, X, Clipboard } from "lucide-react";

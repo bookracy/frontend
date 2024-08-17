@@ -65,7 +65,7 @@ function Index() {
           />
 
           {isLoading && (
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {Array.from({ length: booksPerSearch }).map((_, i) => (
                 <SkeletonBookItem key={i} />
               ))}
@@ -74,7 +74,7 @@ function Index() {
           {error && <p>Error: {error.message}</p>}
 
           {data && (
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {data.results.map((book) => (
                 <BookItem key={book.md5} {...book} />
               ))}

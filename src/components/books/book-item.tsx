@@ -20,13 +20,9 @@ export function BookItem(props: BookItemProps) {
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="p-4 md:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
-          <div className="mx-2 w-full md:w-1/4">
-            <AspectRatio ratio={5 / 8} className="flex items-center">
-              <img
-                src={props.book_image ?? PlaceholderImage}
-                alt={props.title}
-                className="rounded-lg object-cover transition-shadow transition-transform duration-300 duration-500 hover:scale-110 hover:shadow-xl"
-              />
+          <div className="mx-2 w-[100px]">
+            <AspectRatio ratio={1 / 2} className="flex items-center">
+              <img src={props.book_image ?? PlaceholderImage} alt={props.title} className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl" />
             </AspectRatio>
           </div>
           <div className="flex flex-1 flex-col justify-between">

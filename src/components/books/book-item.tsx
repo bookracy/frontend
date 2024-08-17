@@ -22,11 +22,13 @@ export function BookItem(props: BookItemProps) {
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
           <div className="mx-2 w-[130px]">
             <AspectRatio ratio={1 / 2} className="flex items-center">
-              <img 
-                src={props.book_image ?? PlaceholderImage} 
-                alt={props.title} 
-                className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl" 
-                onError={(e) => { e.currentTarget.src = PlaceholderImage; }} 
+              <img
+                src={props.book_image ?? PlaceholderImage}
+                alt={props.title}
+                className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
+                onError={(e) => {
+                  e.currentTarget.src = PlaceholderImage;
+                }}
                 onClick={() => open(props.book_image, "_blank")}
               />
             </AspectRatio>

@@ -24,7 +24,7 @@ type Group = {
 export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Group[] {
   return [
     {
-      groupLabel: "",
+      groupLabel: "General",
       menus: [
         {
           href: "/featured",
@@ -33,11 +33,6 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           icon: Star,
           submenus: [],
         },
-      ],
-    },
-    {
-      groupLabel: "",
-      menus: [
         {
           href: "/random",
           label: "Random",
@@ -45,11 +40,6 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           icon: Pickaxe,
           submenus: [],
         },
-      ],
-    },
-    {
-      groupLabel: "",
-      menus: [
         {
           href: "/upload",
           label: "Upload",

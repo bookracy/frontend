@@ -10,118 +10,118 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as UploadImport } from './routes/upload'
-import { Route as SettingsImport } from './routes/settings'
-import { Route as RandomImport } from './routes/random'
-import { Route as FeaturedImport } from './routes/featured'
-import { Route as ContactImport } from './routes/contact'
-import { Route as AccountImport } from './routes/account'
-import { Route as AboutImport } from './routes/about'
-import { Route as IndexImport } from './routes/index'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as UploadImport } from "./routes/upload";
+import { Route as SettingsImport } from "./routes/settings";
+import { Route as RandomImport } from "./routes/random";
+import { Route as FeaturedImport } from "./routes/featured";
+import { Route as ContactImport } from "./routes/contact";
+import { Route as AccountImport } from "./routes/account";
+import { Route as AboutImport } from "./routes/about";
+import { Route as IndexImport } from "./routes/index";
 
 // Create/Update Routes
 
 const UploadRoute = UploadImport.update({
-  path: '/upload',
+  path: "/upload",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const SettingsRoute = SettingsImport.update({
-  path: '/settings',
+  path: "/settings",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const RandomRoute = RandomImport.update({
-  path: '/random',
+  path: "/random",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const FeaturedRoute = FeaturedImport.update({
-  path: '/featured',
+  path: "/featured",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const ContactRoute = ContactImport.update({
-  path: '/contact',
+  path: "/contact",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AccountRoute = AccountImport.update({
-  path: '/account',
+  path: "/account",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AboutRoute = AboutImport.update({
-  path: '/about',
+  path: "/about",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
-  path: '/',
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountImport
-      parentRoute: typeof rootRoute
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactImport
-      parentRoute: typeof rootRoute
-    }
-    '/featured': {
-      id: '/featured'
-      path: '/featured'
-      fullPath: '/featured'
-      preLoaderRoute: typeof FeaturedImport
-      parentRoute: typeof rootRoute
-    }
-    '/random': {
-      id: '/random'
-      path: '/random'
-      fullPath: '/random'
-      preLoaderRoute: typeof RandomImport
-      parentRoute: typeof rootRoute
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsImport
-      parentRoute: typeof rootRoute
-    }
-    '/upload': {
-      id: '/upload'
-      path: '/upload'
-      fullPath: '/upload'
-      preLoaderRoute: typeof UploadImport
-      parentRoute: typeof rootRoute
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/about": {
+      id: "/about";
+      path: "/about";
+      fullPath: "/about";
+      preLoaderRoute: typeof AboutImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/account": {
+      id: "/account";
+      path: "/account";
+      fullPath: "/account";
+      preLoaderRoute: typeof AccountImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/contact": {
+      id: "/contact";
+      path: "/contact";
+      fullPath: "/contact";
+      preLoaderRoute: typeof ContactImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/featured": {
+      id: "/featured";
+      path: "/featured";
+      fullPath: "/featured";
+      preLoaderRoute: typeof FeaturedImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/random": {
+      id: "/random";
+      path: "/random";
+      fullPath: "/random";
+      preLoaderRoute: typeof RandomImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/settings": {
+      id: "/settings";
+      path: "/settings";
+      fullPath: "/settings";
+      preLoaderRoute: typeof SettingsImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/upload": {
+      id: "/upload";
+      path: "/upload";
+      fullPath: "/upload";
+      preLoaderRoute: typeof UploadImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -136,7 +136,7 @@ export const routeTree = rootRoute.addChildren({
   RandomRoute,
   SettingsRoute,
   UploadRoute,
-})
+});
 
 /* prettier-ignore-end */
 

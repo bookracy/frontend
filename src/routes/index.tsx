@@ -49,13 +49,10 @@ function Index() {
               <br />
               To get started, either search below or navigate the site using the sidebar.
             </p>
-            <NavLink to="/about">
-              About Us
-            </NavLink>
+            <NavLink to="/about">About Us</NavLink>
           </div>
 
-
-            <Input
+          <Input
             placeholder="Search for books, comics, or manga..."
             value={q}
             onChange={(e) =>
@@ -67,22 +64,22 @@ function Index() {
             }
           />
 
-        {isLoading && (
-          <div className="flex flex-col gap-4">
-            {Array.from({ length: booksPerSearch }).map((_, i) => (
-              <SkeletonBookItem key={i} />
-            ))}
-          </div>
-        )}
-        {error && <p>Error: {error.message}</p>}
+          {isLoading && (
+            <div className="flex flex-col gap-4">
+              {Array.from({ length: booksPerSearch }).map((_, i) => (
+                <SkeletonBookItem key={i} />
+              ))}
+            </div>
+          )}
+          {error && <p>Error: {error.message}</p>}
 
-        {data && (
-          <div className="flex flex-col gap-4">
-            {data.results.map((book) => (
-              <BookItem key={book.md5} {...book} />
-            ))}
-          </div>
-        )}
+          {data && (
+            <div className="flex flex-col gap-4">
+              {data.results.map((book) => (
+                <BookItem key={book.md5} {...book} />
+              ))}
+            </div>
+          )}
         </div>
       </CardHeader>
     </Card>

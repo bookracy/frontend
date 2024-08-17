@@ -16,7 +16,7 @@ function Upload() {
             <CardTitle>Coming soon! ⏱️</CardTitle>
             <CardDescription className="flex flex-col gap-8">
               Sorry, Bookracy is a work in progress and this feature is not yet available. Come back later and maybe it will be 😉
-              <Link to="/?q=">
+              <Link to="/" search={{ q: "" }}>
                 <Button className="w-full">Go Back</Button>
               </Link>
             </CardDescription>

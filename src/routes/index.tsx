@@ -1,13 +1,12 @@
 import * as React from "react";
 import { useGetBooksQuery } from "@/api/search/search";
 import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
+import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { useLayoutStore } from "@/stores/layout"; // Make sure to import this
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { NavLink } from "@/components/ui/nav-link";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -28,7 +27,6 @@ function Index() {
 
   const booksPerSearch = useSettingsStore((state) => state.booksPerSearch);
   const language = useSettingsStore((state) => state.language);
-  const sidebar = useLayoutStore((state) => state.sidebar);
 
   const debouncedQ = useDebounce(q, 500);
 
@@ -39,24 +37,25 @@ function Index() {
   });
 
   return (
-    <div>
-      <div className="flex flex-col gap-4">
+    <Card>
+      <CardHeader>
         <h1 className="text-2xl">
           Welcome to <strong>Bookracy</strong> 📚
         </h1>
-        <p>
-          Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
-          <br />
-          To get started, either search below or navigate the site using the sidebar.
-        </p>
-        <NavLink to="/about">About Us</NavLink>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <p>
+              Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
+              <br />
+              To get started, either search below or navigate the site using the sidebar.
+            </p>
+            <NavLink to="/about">
+              About Us
+            </NavLink>
+          </div>
 
-        <div
-          className={cn("sticky left-[40px] top-[8px] z-50 w-[400px]", {
-            "left-[200px]": sidebar.isOpen,
-          })}
-        >
-          <Input
+
+            <Input
             placeholder="Search for books, comics, or manga..."
             value={q}
             onChange={(e) =>
@@ -67,7 +66,6 @@ function Index() {
               })
             }
           />
-        </div>
 
         {isLoading && (
           <div className="flex flex-col gap-4">
@@ -85,7 +83,8 @@ function Index() {
             ))}
           </div>
         )}
-      </div>
-    </div>
+        </div>
+      </CardHeader>
+    </Card>
   );
 }

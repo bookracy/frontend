@@ -22,7 +22,7 @@ export function BookItem(props: BookItemProps) {
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
           <div className="mx-2 w-full md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
-              <img src={props.book_image ?? PlaceholderImage} alt={props.title} className="rounded-lg object-cover transition-transform duration-300 hover:scale-110" />
+              <img src={props.book_image ?? PlaceholderImage} alt={props.title} className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 transition-shadow duration-500 hover:shadow-xl" />
             </AspectRatio>
           </div>
           <div className="flex flex-1 flex-col justify-between">
@@ -32,7 +32,7 @@ export function BookItem(props: BookItemProps) {
               <p className="mt-2 text-sm dark:text-gray-400">{props.book_content}</p>
               <p className="mt-2 text-sm dark:text-gray-400">Language: {props.book_lang}</p>
             </div>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-5">
               <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">
                 <DownloadIcon className="text-lg" />
                 Download ({props.book_size})

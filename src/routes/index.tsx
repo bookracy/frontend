@@ -3,7 +3,9 @@ import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { useLayoutStore } from "@/stores/layout"; // Make sure to import this
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { cn } from "@/lib/utils"; 
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -24,6 +26,7 @@ function Index() {
 
   const booksPerSearch = useSettingsStore((state) => state.booksPerSearch);
   const language = useSettingsStore((state) => state.language);
+  const sidebar = useLayoutStore((state) => state.sidebar);
 
   const debouncedQ = useDebounce(q, 500);
 
@@ -45,8 +48,10 @@ function Index() {
           To get started, either search below or navigate the site using the sidebar.
         </p>
 
-
-        <Input
+        <div className={cn("sticky left-[40px] top-[8px] z-50 w-[400px]", {
+          "left-[200px]": sidebar.isOpen,
+        })}>
+          <Input
           placeholder="Search for books..."
           value={q}
           onChange={(e) =>
@@ -57,6 +62,7 @@ function Index() {
             })
           }
         />
+        </div>
 
         {isLoading && (
           <div className="flex flex-col gap-4">

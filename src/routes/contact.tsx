@@ -17,7 +17,6 @@ function Contact() {
             <CardDescription className="flex flex-col gap-8">
               Bookracy is an open-source project driven by the community. The project is maintained by a group of developers and sending an email below will reach the maintainers (if checked).
               <br />
-              DMCA takedown requests will be ignored. If you have a DMCA request, please contact the hosting provider.
               <Button onClick={() => window.open("mailto:dev@bookracy.org", "_blank")}>Email Us</Button>
             </CardDescription>
           </CardHeader>

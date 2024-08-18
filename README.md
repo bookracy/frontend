@@ -50,22 +50,22 @@ Ensure you have the following installed on your local machine:
 
 1. Clone the repository:
 
-   '''sh
+   ```sh
    git clone https://github.com/bookracy/frontend.git
    cd frontend
-   '''
+   ```
 
 2. Install dependencies using PNPM:
 
-   '''sh
+   ```sh
    pnpm install
-   '''
+   ```
 
 3. Create a `.env` file based on the `.env.example` provided:
 
-   '''sh
+   ```sh
    cp .env.example .env
-   '''
+   ```
 
    Update the `.env` file with your configuration settings.
 
@@ -73,9 +73,9 @@ Ensure you have the following installed on your local machine:
 
 Start the development server:
 
-'''sh
+```sh
 pnpm dev
-'''
+```
 
 The application will be available at `http://localhost:3000`.
 
@@ -83,9 +83,9 @@ The application will be available at `http://localhost:3000`.
 
 To build the project for production:
 
-'''sh
+```sh
 pnpm build
-'''
+```
 
 This will create an optimized build in the `dist` directory.
 
@@ -93,9 +93,9 @@ This will create an optimized build in the `dist` directory.
 
 To run tests:
 
-'''sh
+```sh
 pnpm test
-'''
+```
 
 ## Contributing
 

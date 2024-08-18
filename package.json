@@ -30,6 +30,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "epubjs": "^0.3.93",
+    "input-otp": "^1.2.4",
     "lucide-react": "^0.427.0",
     "ofetch": "^1.3.4",
     "react": "^18.3.1",

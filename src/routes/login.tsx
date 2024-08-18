@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
+  InputOTPSeparator,
 } from "@/components/ui/input-otp"
+import { useIsMobile } from '@/hooks/use-ismobile';
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/login")({
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const [code, setCode] = useState("");
+  const { isMobile } = useIsMobile();
 
   return (
     <div className="flex h-full w-full justify-center items-center">
@@ -25,30 +27,53 @@ function Login() {
             <CardTitle>Login</CardTitle>
             <CardDescription className="flex flex-col gap-3">
               <Label>12 Digit Code</Label>
-              <div className="flex items-center justify-center">
+              {isMobile ? (
                 <InputOTP maxLength={12} onChange={(code: string) => setCode(code)}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                    <InputOTPSlot index={6} />
-                    <InputOTPSlot index={7} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={8} />
-                    <InputOTPSlot index={9} />
-                    <InputOTPSlot index={10} />
-                    <InputOTPSlot index={11} />
-                  </InputOTPGroup>
+                  <div className="flex flex-wrap gap-2 justify-center items-center">
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={6} />
+                      <InputOTPSlot index={7} />
+                      <InputOTPSlot index={8} />
+                      <InputOTPSlot index={9} />
+                      <InputOTPSlot index={10} />
+                      <InputOTPSlot index={11} />
+                    </InputOTPGroup>
+                  </div>
                 </InputOTP>
-              </div>
+              ) : (
+                <InputOTP maxLength={12} onChange={(code: string) => setCode(code)}>
+                  <div className="flex flex-wrap gap-2 justify-center items-center">
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                      <InputOTPSlot index={6} />
+                      <InputOTPSlot index={7} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={8} />
+                      <InputOTPSlot index={9} />
+                      <InputOTPSlot index={10} />
+                      <InputOTPSlot index={11} />
+                    </InputOTPGroup>
+                  </div>
+                </InputOTP>
+              )}
               <Button disabled={code.replace(/\s/g, "").length !== 12}>Continue</Button>
             </CardDescription>
           </div>

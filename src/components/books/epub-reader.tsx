@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { AArrowDown, AArrowUp, ClipboardCheck, DownloadIcon, X, Clipboard } from "lucide-react";
@@ -96,7 +96,7 @@ export function EpubReader(props: EpubReaderProps) {
 
   useEffect(() => {
     if (renditionRef.current) {
-      renditionRef.current.themes.override("background", theme === "dark" ? "#050505" : "#fff");
+      renditionRef.current.themes.override("background", theme === "dark" ? "#000" : "#fff");
       renditionRef.current.themes.override("color", theme === "dark" ? "#fff" : "#000");
     }
   }, [theme]);

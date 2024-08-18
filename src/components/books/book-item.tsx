@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SearchResultItem } from "@/api/search/types";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
@@ -20,16 +20,16 @@ export function BookItem(props: BookItemProps) {
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="p-4 md:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
-          <div className="mx-2 w-[130px]">
-            <AspectRatio ratio={1 / 2} className="flex items-center">
+          <div className="mx-2 w-full md:w-1/4">
+            <AspectRatio ratio={5 / 8} className="flex items-center">
               <img
                 src={props.book_image ?? PlaceholderImage}
                 alt={props.title}
-                className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
+                className="rounded-lg object-cover transition-transform duration-300 hover:scale-110"
                 onError={(e) => {
-                  e.currentTarget.src = PlaceholderImage;
+                  const target = e.target as HTMLImageElement;
+                  target.src = PlaceholderImage;
                 }}
-                onClick={() => open(props.book_image, "_blank")}
               />
             </AspectRatio>
           </div>
@@ -40,7 +40,7 @@ export function BookItem(props: BookItemProps) {
               <p className="mt-2 text-sm dark:text-gray-400">{props.book_content}</p>
               <p className="mt-2 text-sm dark:text-gray-400">Language: {props.book_lang}</p>
             </div>
-            <div className="mt-4 flex flex-wrap gap-5">
+            <div className="mt-4 flex flex-wrap gap-2">
               <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">
                 <DownloadIcon className="text-lg" />
                 Download ({props.book_size})

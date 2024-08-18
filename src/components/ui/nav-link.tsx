@@ -23,8 +23,10 @@ export function NavLink({ to, target, children }: NavLinkProps) {
   }
 
   return (
-    <Link to={to} target={target} className="transiton-color inline-block text-blue-500 duration-100 hover:text-blue-600" rel="noreferrer">
-      {children}
-    </Link>
+    <div>
+      <Link to={to} target={target} className="transiton-color inline-block text-blue-500 duration-100 hover:text-blue-600" rel="noreferrer">
+        {children}
+      </Link>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ function Login() {
               <CardDescription className="flex flex-col gap-3">
                 <Label>12 Digit Code</Label>
                 <div className="flex items-center justify-center">
-                  <InputOTP maxLength={12} onChange={(code) => setCode(code)}>
+                  <InputOTP maxLength={12} onChange={(code: string) => setCode(code)}>
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />

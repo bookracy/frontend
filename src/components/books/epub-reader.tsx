@@ -97,7 +97,7 @@ export function EpubReader(props: EpubReaderProps) {
   useEffect(() => {
     if (renditionRef.current) {
       renditionRef.current.themes.override("background", theme === "dark" ? "#050505" : "#fff");
-      renditionRef.current.themes.override("color", theme === "dark" ? "#fff" : "#000");
+      renditionRef.current.themes.override("color", theme === "dark" ? "#fff" : "#050505");
     }
   }, [theme]);
 
@@ -149,8 +149,8 @@ export function EpubReader(props: EpubReaderProps) {
               locationChanged={(newLocation) => setLocation(newLocation)}
               readerStyles={theme === "dark" ? darkReaderTheme : lightReaderTheme}
               getRendition={(rendition) => {
-                rendition.themes.override("color", theme === "dark" ? "#fff" : "#000");
-                rendition.themes.override("background", theme === "dark" ? "#000" : "#fff");
+                rendition.themes.override("color", theme === "dark" ? "#fff" : "#050505");
+                rendition.themes.override("background", theme === "dark" ? "#050505" : "#fff");
                 renditionRef.current = rendition;
               }}
             />

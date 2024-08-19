@@ -1,4 +1,4 @@
-import { useGetBooksQuery } from "@/api/search/search";
+import { useGetBooksQuery } from "@/api/backend/search/search";
 import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settingsStore";

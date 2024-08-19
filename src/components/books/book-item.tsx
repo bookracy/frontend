@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SearchResultItem } from "@/api/search/types";
+import { SearchResultItem } from "@/api/backend/search/types";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { saveAs } from "@/lib/saveAs";

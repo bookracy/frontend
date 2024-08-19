@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { AArrowDown, AArrowUp, ClipboardCheck, DownloadIcon, X, Clipboard } from "lucide-react";
+import { AArrowDown, AArrowUp, DownloadIcon, X } from "lucide-react";
 import { ThemeToggle } from "../layout/theme-toggle";
 import { IReactReaderStyle, ReactReader, ReactReaderStyle } from "react-reader";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { saveAs } from "@/lib/saveAs";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import Rendition from "epubjs/types/rendition";
+import { ClipBoardButton } from "../layout/clipboard-button";
 
 interface EpubReaderProps {
   title: string;
@@ -69,7 +68,6 @@ const darkReaderTheme: IReactReaderStyle = {
 export function EpubReader(props: EpubReaderProps) {
   const [location, setLocation] = useState<string | number>(0);
   const [fontSize, setFontSize] = useState(16);
-  const [clickedOnClipBoard, setClickedOnClipBoard] = useState(false);
   const theme = useSettingsStore((state) => state.theme);
   const renditionRef = useRef<Rendition | null>(null);
 
@@ -81,17 +79,6 @@ export function EpubReader(props: EpubReaderProps) {
       }
       return newSize;
     });
-  };
-
-  const handleShare = () => {
-    navigator.clipboard.writeText(props.link ?? "");
-    setClickedOnClipBoard(true);
-
-    toast.success("Link copied to clipboard");
-
-    setTimeout(() => {
-      setClickedOnClipBoard(false);
-    }, 2000);
   };
 
   useEffect(() => {
@@ -114,19 +101,7 @@ export function EpubReader(props: EpubReaderProps) {
           <div className="flex items-center justify-between border-b p-4">
             <h2 className="flex-1 truncate text-lg font-semibold">{props.title}</h2>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleShare}>
-                <ClipboardCheck
-                  className={cn("rotate-90 scale-0 transition-transform duration-500 ease-in-out", {
-                    "rotate-0 scale-100": clickedOnClipBoard,
-                  })}
-                />
-                <Clipboard
-                  className={cn("scale-1000 absolute rotate-0 transition-transform duration-500 ease-in-out", {
-                    "-rotate-90 scale-0": clickedOnClipBoard,
-                  })}
-                />
-                <span className="sr-only">Switch Theme</span>
-              </Button>
+              <ClipBoardButton content={props.link ?? ""} />
               <Button onClick={() => saveAs(props.link)} variant="outline" size="icon">
                 <DownloadIcon className="text-xl" />
               </Button>

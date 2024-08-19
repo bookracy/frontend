@@ -29,7 +29,7 @@ export const useLayoutStore = create<LayoutStoreState>()(
       },
     }),
     {
-      name: "layout",
+      name: "BR::layout",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ isOpen: state.sidebar.isOpen }),
     },

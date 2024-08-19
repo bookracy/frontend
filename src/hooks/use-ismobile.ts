@@ -6,9 +6,7 @@ export function useIsMobile(horizontal?: boolean) {
 
   useEffect(() => {
     function onResize() {
-      const value = horizontal
-        ? window.innerHeight < 600
-        : window.innerWidth < 1024;
+      const value = horizontal ? window.innerHeight < 600 : window.innerWidth < 1024;
       const isChanged = isMobileCurrent.current !== value;
       if (!isChanged) return;
 

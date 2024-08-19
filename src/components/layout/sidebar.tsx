@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useLayoutStore } from "@/stores/layout";
 import { Link } from "@tanstack/react-router";
 import { Menu } from "./menu";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/stores/settings";
 
 import LogoHeader from "@/assets/logo_header.svg";
 import LogoHeaderDark from "@/assets/logo_header_dark.svg";

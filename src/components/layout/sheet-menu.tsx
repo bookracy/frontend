@@ -9,7 +9,7 @@ import { useLayoutStore } from "@/stores/layout";
 import LogoHeader from "@/assets/logo_header.svg";
 import LogoHeaderDark from "@/assets/logo_header_dark.svg";
 import Logo from "@/assets/logo.svg";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/stores/settings";
 
 export function SheetMenu() {
   const sidebar = useLayoutStore((state) => state.sidebar);

@@ -32,10 +32,9 @@ function Register() {
     mutationKey: ["signup"],
     mutationFn: generateUser,
     onSuccess: (data) => {
-      setUuid(data.uuid.replace(/\s/g, ""));
+      setUuid(data.code.replace(/\s/g, ""));
     },
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
       toast.error("Failed to create user", { duration: 10000 });
     },
   });
@@ -68,7 +67,7 @@ function Register() {
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-2">
                 <Label>Generated Identifier</Label>
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center gap-2">
                   <Input value={uuid} readOnly />
                   <ClipBoardButton content={uuid} />
                 </div>

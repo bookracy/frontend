@@ -61,7 +61,6 @@ function Index() {
           <div className="relative w-full max-w-full">
             <Input
               iconLeft={SearchIcon}
-              className="transition-shadow duration-300 focus-visible:shadow-md"
               placeholder="Search for books, comics, or manga..."
               value={q}
               onChange={(e) =>

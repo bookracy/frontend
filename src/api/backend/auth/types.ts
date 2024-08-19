@@ -8,5 +8,5 @@ export interface VerifyAuthKeyResponse {
 }
 
 export interface GenerateUserResponse {
-  uuid: string;
+  code: string;
 }

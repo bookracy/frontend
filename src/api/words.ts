@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 
 export const fetchWords = async () => {
@@ -18,10 +18,8 @@ export const fetchWordsWithNumber = async () => {
   return `${capitalizedWords.join("")}${randomNumber}`;
 };
 
-export const useRandomWordsWithNumber = () => {
-  return useQuery({
-    queryKey: ["words"],
-    queryFn: fetchWordsWithNumber,
-    staleTime: 0,
-  });
-};
+export const randomWordsWithNumberQueryOptions = queryOptions({
+  queryKey: ["words"],
+  queryFn: fetchWordsWithNumber,
+  staleTime: 0,
+});

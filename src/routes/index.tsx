@@ -1,7 +1,7 @@
 import { useGetBooksQuery } from "@/api/backend/search/search";
 import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/stores/settings";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLayoutStore } from "@/stores/layout";
 import { cn } from "@/lib/utils";

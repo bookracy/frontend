@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { AArrowDown, AArrowUp, DownloadIcon, X } from "lucide-react";
 import { ThemeToggle } from "../layout/theme-toggle";
 import { IReactReaderStyle, ReactReader, ReactReaderStyle } from "react-reader";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/stores/settings";
 import { saveAs } from "@/lib/saveAs";
 import Rendition from "epubjs/types/rendition";
 import { ClipBoardButton } from "../layout/clipboard-button";

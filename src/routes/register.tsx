@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createFileRoute } from "@tanstack/react-router";
-import { useRandomWordsWithNumber } from "@/api/words";
-import { useMutation } from "@tanstack/react-query";
+import { randomWordsWithNumberQueryOptions } from "@/api/words";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { generateUser } from "@/api/backend/auth/signup";
 import { ClipBoardButton } from "@/components/layout/clipboard-button";
 import { z } from "zod";
@@ -17,6 +17,9 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/register")({
   component: Register,
+  loader: async (opts) => {
+    await opts.context.queryClient.ensureQueryData(randomWordsWithNumberQueryOptions);
+  },
 });
 
 const displayNameSchema = z.object({
@@ -27,7 +30,7 @@ function Register() {
   const navigate = useNavigate();
   const [uuid, setUuid] = useState("");
 
-  const { data, error: randomWordsError } = useRandomWordsWithNumber();
+  const { data } = useSuspenseQuery(randomWordsWithNumberQueryOptions);
   const { mutate, isPending } = useMutation({
     mutationKey: ["signup"],
     mutationFn: generateUser,
@@ -95,7 +98,6 @@ function Register() {
                     </FormItem>
                   )}
                 />
-                {randomWordsError && <p className="text-red-500">Failed to generate a random display name</p>}
                 <div className="flex justify-end pt-4">
                   <Button type="submit" loading={isPending}>
                     Continue

@@ -4,11 +4,33 @@ import { Navbar } from "@/components/layout/navbar";
 import { Sidebar } from "@/components/layout/sidebar";
 import { cn } from "@/lib/utils";
 import { useLayoutStore } from "@/stores/layout";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { QueryClient } from "@tanstack/react-query";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+  auth: {
+    isLoggedIn: boolean;
+  };
+  queryClient: QueryClient;
+}>()({
   component: Root,
+  notFoundComponent: () => (
+    <div className="flex h-full flex-col items-center justify-center">
+      <Alert variant="default" className="w-1/2">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Page not found</AlertTitle>
+        <AlertDescription>
+          You have reached a page that does not exist.{" "}
+          <Link to="/" search={{ q: "" }} className="underline">
+            Click here to go back to the main page.
+          </Link>
+        </AlertDescription>
+      </Alert>
+    </div>
+  ),
 });
 
 function Root() {

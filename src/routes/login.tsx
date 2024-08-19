@@ -2,7 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
 import { useIsMobile } from "@/hooks/use-ismobile";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRouter } from "@tanstack/react-router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -39,7 +39,7 @@ function InputOTPGroups() {
     return groups.map((group, i) => (i === groups.length - 1 ? null : group));
   };
 
-  return <div className="flex flex-col items-center justify-center gap-2 xl:flex-row">{isMobile ? createInputOTPGroups(4) : createInputOTPGroups(6)}</div>;
+  return <div className="flex w-full flex-col items-center justify-center gap-2 xl:flex-row">{isMobile ? createInputOTPGroups(4) : createInputOTPGroups(6)}</div>;
 }
 
 function Login() {
@@ -96,7 +96,10 @@ function Login() {
                 )}
               />
             </CardContent>
-            <CardFooter className="justify-end">
+            <CardFooter className="flex-col justify-between gap-2 xl:flex-row xl:gap-0">
+              <Link to="/register" className="text-sm underline">
+                No account yet? Create one here
+              </Link>
               <Button loading={isPending} type="submit">
                 Login
               </Button>

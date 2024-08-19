@@ -78,7 +78,7 @@ function Login() {
             <CardHeader>
               <CardTitle>Login</CardTitle>
             </CardHeader>
-            <CardContent className="mt-6">
+            <CardContent>
               <FormField
                 control={form.control}
                 name="code"

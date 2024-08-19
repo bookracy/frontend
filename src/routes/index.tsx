@@ -6,7 +6,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLayoutStore } from "@/stores/layout";
 import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/ui/nav-link";
-import { SearchBar } from "@/components/ui/search-bar";
+import { Input } from "@/components/ui/input";
+import { SearchIcon } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -58,7 +59,8 @@ function Index() {
           })}
         >
           <div className="relative w-full max-w-full">
-            <SearchBar
+            <Input
+              iconLeft={SearchIcon}
               className="transition-shadow duration-300 focus-visible:shadow-md"
               placeholder="Search for books, comics, or manga..."
               value={q}

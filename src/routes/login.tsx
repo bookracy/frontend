@@ -44,6 +44,7 @@ function InputOTPGroups() {
 
 function Login() {
   const { navigate } = useRouter();
+  const { isMobile } = useIsMobile();
   const setTokens = useAuthStore((state) => state.setTokens);
 
   const { mutate, isPending } = useMutation({
@@ -71,10 +72,10 @@ function Login() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center">
+    <div className="flex h-full w-full justify-center items-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Card>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={`${isMobile ? ("w-full") : (null)}`}>
+          <Card className={`${isMobile ? ("w-full") : (null)}`}>
             <CardHeader>
               <CardTitle>Login</CardTitle>
             </CardHeader>
@@ -97,10 +98,13 @@ function Login() {
               />
             </CardContent>
             <CardFooter className="flex-col justify-between gap-2 xl:flex-row xl:gap-0">
-              <Link to="/register" className="text-sm underline">
-                No account yet? Create one here
-              </Link>
-              <Button loading={isPending} type="submit">
+              <p className="text-sm">
+                No account yet? Create one{" "}
+                <Link to="/register" className="underline">
+                  here
+                </Link>
+              </p>
+              <Button loading={isPending} type="submit" className={`${isMobile ? ("w-full") : (null)}`}>
                 Login
               </Button>
             </CardFooter>

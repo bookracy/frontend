@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/hooks/use-ismobile";
 import { createFileRoute } from "@tanstack/react-router";
 import { randomWordsWithNumberQueryOptions } from "@/api/words";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { generateUser } from "@/api/backend/auth/signup";
-import { ClipBoardButton } from "@/components/layout/clipboard-button";
+import { Clipboard } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,9 +29,21 @@ const displayNameSchema = z.object({
 
 function Register() {
   const navigate = useNavigate();
+  const { isMobile } = useIsMobile();
+  const [isCopied, setIsCopied] = useState(false);
   const [uuid, setUuid] = useState("");
 
   const { data } = useSuspenseQuery(randomWordsWithNumberQueryOptions);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText("1234 5678 9000").then(() => {
+      console.log("Copied to clipboard");
+      setIsCopied(true);
+    }).catch((error) => {
+      console.error("Error copying to clipboard:", error);
+    });
+  };
+
   const { mutate, isPending } = useMutation({
     mutationKey: ["signup"],
     mutationFn: generateUser,
@@ -60,24 +73,29 @@ function Register() {
   };
 
   return (
-    <div className="flex flex-1 items-center justify-center">
-      <Card className="w-2/5">
+    <div className="flex h-full w-full justify-center items-center">
+      <Card className={`${isMobile ? ("w-full") : ("w-2/5")}`}>
         <CardHeader>
           <CardTitle>Register</CardTitle>
         </CardHeader>
         <CardContent>
           {uuid ? (
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <Label>Generated Identifier</Label>
-                <div className="flex items-center gap-2">
+                <div className="w-full items-center justify-center relative">
                   <Input value={uuid} readOnly />
-                  <ClipBoardButton content={uuid} />
+                  <button 
+                    onClick={copyToClipboard} 
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 hover:scale-110 transition-transform duration-200"
+                  >
+                    <Clipboard />
+                  </button>
                 </div>
                 <span className="text-sm">Copy the identifier above and use it to login</span>
               </div>
 
-              <Button className="w-full" onClick={() => navigate({ to: "/login" })}>
+              <Button className="w-full"  disabled={!isCopied} onClick={() => navigate({ to: "/login" })}>
                 Continue
               </Button>
             </div>
@@ -99,7 +117,7 @@ function Register() {
                   )}
                 />
                 <div className="flex justify-end pt-4">
-                  <Button type="submit" loading={isPending}>
+                  <Button type="submit" loading={isPending} className={`${isMobile ? ("w-full") : (null)}`}>
                     Continue
                   </Button>
                 </div>

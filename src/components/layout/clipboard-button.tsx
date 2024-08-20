@@ -6,6 +6,8 @@ import { toast } from "sonner";
 
 interface ClipBoardButtonProps {
   content: string;
+  onClick?: () => void;
+  className?: string;
 }
 
 export function ClipBoardButton(props: ClipBoardButtonProps) {
@@ -14,7 +16,7 @@ export function ClipBoardButton(props: ClipBoardButtonProps) {
   const handleClick = () => {
     navigator.clipboard.writeText(props.content);
     setClickedOnClipBoard(true);
-
+    props.onClick?.();
     toast.success("Link copied to clipboard");
 
     setTimeout(() => {
@@ -23,7 +25,7 @@ export function ClipBoardButton(props: ClipBoardButtonProps) {
   };
 
   return (
-    <Button variant="outline" size="icon" onClick={handleClick}>
+    <Button variant="outline" size="icon" onClick={handleClick} className={props.className}>
       <ClipboardCheck
         className={cn("rotate-90 scale-0 transition-transform duration-500 ease-in-out", {
           "rotate-0 scale-100": clickedOnClipBoard,

@@ -61,7 +61,6 @@ Ensure you have the following installed on your local machine:
    pnpm install
    ```
 
-
 ### Running the Application
 
 Start the development server:

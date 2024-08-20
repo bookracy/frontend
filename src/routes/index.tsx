@@ -60,7 +60,7 @@ function Index() {
         >
           <div className="relative w-full max-w-full">
             <Input
-              iconLeft={SearchIcon}
+              iconLeft={<SearchIcon />}
               placeholder="Search for books, comics, or manga..."
               value={q}
               onChange={(e) =>

@@ -28,12 +28,12 @@ _Compatible with all modern browsers._
 
 ## Features
 
-- Browse and download a wide range of books and documents.
-- Customizable reading experience with adjustable fonts, themes, and more.
+- Browse and download a wide range of books, scientific documents, manga and more.
+- Customizable reading experience with built in epub reader, adjustable fonts, themes, and more.
 - Sync across devices to access your library from anywhere.
-- Tag and organize your personal collection.
-- Regular updates to the catalog with new additions.
-- Offline access to your downloads.
+- Tag, organize and share your collections
+- Regular updates to the catalog with new additions every hour.
+- Download your epubs, pdfs and mobi to use how you want offline.
 - Advanced search filters for easy discovery.
 - Plus much more...
 
@@ -61,41 +61,26 @@ Ensure you have the following installed on your local machine:
    pnpm install
    ```
 
-3. Create a `.env` file based on the `.env.example` provided:
-
-   ```sh
-   cp .env.example .env
-   ```
-
-   Update the `.env` file with your configuration settings.
 
 ### Running the Application
 
 Start the development server:
 
 ```sh
-pnpm dev
+pnpm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
+The application will be available at `http://localhost:5173`.
 
 ### Building for Production
 
 To build the project for production:
 
 ```sh
-pnpm build
+pnpm run build
 ```
 
 This will create an optimized build in the `dist` directory.
-
-### Running Tests
-
-To run tests:
-
-```sh
-pnpm test
-```
 
 ## Contributing
 

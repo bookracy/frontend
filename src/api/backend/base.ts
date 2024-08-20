@@ -8,5 +8,5 @@ export type BaseRequest<T> = {
 const backendURL = useSettingsStore.getState().backendURL;
 
 export const client = ofetch.create({
-  baseURL: backendURL,
+  baseURL: backendURL + `/api`,
 });

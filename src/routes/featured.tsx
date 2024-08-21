@@ -1,27 +1,41 @@
-import * as React from "react";
+import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
+import { useState, useEffect } from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/featured")({
   component: Feature,
 });
 
 function Feature() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/bookracy/static/main/trending.json")
+      .then(response => response.json())
+      .then(data => setBooks(data.results))
+      .catch(error => console.error("Error fetching data:", error));
+  }, []);
+
   return (
     <div className="flex h-full w-full justify-center">
       <div className="flex w-full flex-col">
-        <Card>
-          <CardHeader>
-            <CardTitle>Coming soon! ⏱️</CardTitle>
-            <CardDescription className="flex flex-col gap-8">
-              Sorry, Bookracy is a work in progress and this feature is not yet available. Come back later and maybe it will be 😉
-              <Link to="/" search={{ q: "" }}>
-                <Button className="w-full">Go Back</Button>
-              </Link>
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        {books.length > 0 ? (
+          <div className="flex flex-col gap-4">
+            {books.map((book) => (
+              <BookItem key={book.md5} {...book} />
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>Loading...</CardTitle>
+              <CardDescription className="flex flex-col gap-8">
+                Please wait while we fetch the data.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        )}
       </div>
     </div>
   );

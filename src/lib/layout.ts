@@ -1,6 +1,6 @@
 import { routeTree } from "@/routeTree.gen";
 import { RoutePaths } from "@tanstack/react-router";
-import { Blocks, House, LucideIcon, Pickaxe, Star, Upload } from "lucide-react";
+import { Blocks, House, LucideIcon, BookMarked, Star, Upload } from "lucide-react";
 
 export type Submenu = {
   href: RoutePaths<typeof routeTree>;
@@ -34,10 +34,10 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           submenus: [],
         },
         {
-          href: "/random",
-          label: "Random",
-          active: pathname === "/random",
-          icon: Pickaxe,
+          href: "/library",
+          label: "Library",
+          active: pathname === "/library",
+          icon: BookMarked,
           submenus: [],
         },
         {

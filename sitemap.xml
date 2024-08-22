@@ -32,9 +32,9 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- Random Page -->
+  <!-- Library Page -->
   <url>
-    <loc>https://www.bookracy.org/random</loc>
+    <loc>https://www.bookracy.org/library</loc>
     <lastmod>2024-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>

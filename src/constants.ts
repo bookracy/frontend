@@ -11,7 +11,7 @@ export const PAGE_TITLES: Partial<Record<RoutePaths<typeof routeTree>, string>> 
   "/account": "Account",
   "/contact": "Contact",
   "/featured": "Featured",
-  "/random": "Random",
+  "/library": "Library",
   "/settings": "Settings",
   "/upload": "Upload",
 };

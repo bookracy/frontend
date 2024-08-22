@@ -1,19 +1,17 @@
-import { getCookieValue } from "@/lib/cookie";
 import { client } from "../base";
 import { GenerateUserResponse, VerifyAuthKeyResponse } from "./types";
 
-export const verifyAuthKey = () => {
+export const verifyAuthKey = (ttkn: string) => {
   return client<VerifyAuthKeyResponse>("/_secure/signup/verify", {
     method: "POST",
     body: {
-      ttkn: getCookieValue("authKey"),
-      uid: getCookieValue("userId"),
+      ttkn,
     },
   });
 };
 
-export const generateUser = async ({ username }: { username: string }) => {
-  const verifyAuthKeyResponse = await verifyAuthKey();
+export const generateUser = async ({ username, ttkn }: { username: string; ttkn: string }) => {
+  const verifyAuthKeyResponse = await verifyAuthKey(ttkn);
   if (!verifyAuthKeyResponse?.stk) {
     throw new Error("Invalid auth key");
   }

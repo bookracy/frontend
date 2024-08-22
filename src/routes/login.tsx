@@ -12,6 +12,7 @@ import { login } from "@/api/backend/auth/signin";
 import { useAuthStore } from "@/stores/auth";
 import { toast } from "sonner";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { TurnstileWidget } from "@/components/layout/turnstile";
 
 export const Route = createFileRoute("/login")({
   component: Login,
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/login")({
 
 const loginFormSchema = z.object({
   code: z.string({ message: "Code must be 12 digits" }).min(12, { message: "Code must be 12 digits" }).max(12, { message: "Code must be 12 digits" }),
+  ttkn: z.string({ message: "Captcha not completed" }),
 });
 
 function InputOTPGroups() {
@@ -78,7 +80,7 @@ function Login() {
             <CardHeader>
               <CardTitle>Login</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="code"
@@ -91,6 +93,27 @@ function Login() {
                       </InputOTP>
                     </FormControl>
                     <FormDescription>Enter the 12-digit login code.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="ttkn"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <TurnstileWidget
+                        id={field.name}
+                        onSuccess={(token) => {
+                          form.setValue("ttkn", token);
+                        }}
+                        onExpire={() => form.setError("ttkn", { message: "Captcha expired" })}
+                        onError={() => form.setError("ttkn", { message: "Captcha not completed" })}
+                        onUnsupported={() => form.setError("ttkn", { message: "Captcha not supported" })}
+                        onTimeout={() => form.setError("ttkn", { message: "Captcha timed out" })}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

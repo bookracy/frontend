@@ -108,10 +108,14 @@ function Register() {
                     <FormItem>
                       <FormControl>
                         <TurnstileWidget
-                          {...field}
+                          id={field.name}
                           onSuccess={(token) => {
                             form.setValue("ttkn", token);
                           }}
+                          onExpire={() => form.setError("ttkn", { message: "Captcha expired" })}
+                          onError={() => form.setError("ttkn", { message: "Captcha not completed" })}
+                          onUnsupported={() => form.setError("ttkn", { message: "Captcha not supported" })}
+                          onTimeout={() => form.setError("ttkn", { message: "Captcha timed out" })}
                         />
                       </FormControl>
                       <FormMessage />

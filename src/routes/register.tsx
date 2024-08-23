@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "sonner";
 import { ClipBoardButton } from "@/components/layout/clipboard-button";
+import { TurnstileWidget } from "@/components/layout/turnstile";
 
 export const Route = createFileRoute("/register")({
   component: Register,
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/register")({
 
 const displayNameSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
+  ttkn: z.string({ message: "Captcha not completed" }),
 });
 
 function Register() {
@@ -58,12 +60,12 @@ function Register() {
   }, [data, form]);
 
   const handleDisplayName = (data: z.infer<typeof displayNameSchema>) => {
-    mutate({ username: data.displayName });
+    mutate({ username: data.displayName, ttkn: data.ttkn });
   };
 
   return (
     <div className="flex flex-1 items-center justify-center">
-      <Card className="w-full lg:w-2/5">
+      <Card className="w-full lg:w-3/5">
         <CardHeader>
           <CardTitle>Register</CardTitle>
         </CardHeader>
@@ -84,7 +86,7 @@ function Register() {
             </div>
           ) : (
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleDisplayName)}>
+              <form onSubmit={form.handleSubmit(handleDisplayName)} className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
                   name="displayName"
@@ -95,6 +97,27 @@ function Register() {
                         <Input {...field} />
                       </FormControl>
                       <FormDescription>Set a display name</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ttkn"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <TurnstileWidget
+                          id={field.name}
+                          onSuccess={(token) => {
+                            form.setValue("ttkn", token);
+                          }}
+                          onExpire={() => form.setError("ttkn", { message: "Captcha expired" })}
+                          onError={() => form.setError("ttkn", { message: "Captcha not completed" })}
+                          onUnsupported={() => form.setError("ttkn", { message: "Captcha not supported" })}
+                          onTimeout={() => form.setError("ttkn", { message: "Captcha timed out" })}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

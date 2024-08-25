@@ -15,6 +15,7 @@ import { Route as UploadImport } from './routes/upload'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
+import { Route as ListsImport } from './routes/lists'
 import { Route as LibraryImport } from './routes/library'
 import { Route as FeaturedImport } from './routes/featured'
 import { Route as ContactImport } from './routes/contact'
@@ -41,6 +42,11 @@ const RegisterRoute = RegisterImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ListsRoute = ListsImport.update({
+  path: '/lists',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -120,6 +126,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryImport
       parentRoute: typeof rootRoute
     }
+    '/lists': {
+      id: '/lists'
+      path: '/lists'
+      fullPath: '/lists'
+      preLoaderRoute: typeof ListsImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -160,6 +173,7 @@ export const routeTree = rootRoute.addChildren({
   ContactRoute,
   FeaturedRoute,
   LibraryRoute,
+  ListsRoute,
   LoginRoute,
   RegisterRoute,
   SettingsRoute,
@@ -180,6 +194,7 @@ export const routeTree = rootRoute.addChildren({
         "/contact",
         "/featured",
         "/library",
+        "/lists",
         "/login",
         "/register",
         "/settings",
@@ -203,6 +218,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/library": {
       "filePath": "library.tsx"
+    },
+    "/lists": {
+      "filePath": "lists.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

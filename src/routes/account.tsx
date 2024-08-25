@@ -12,6 +12,7 @@ import { Trash2 } from "lucide-react";
 export const Route = createFileRoute("/account")({
   component: Account,
   beforeLoad: (ctx) => {
+    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
     if (!ctx.context.auth.isLoggedIn) throw redirect({ to: "/login" });
   },
 });

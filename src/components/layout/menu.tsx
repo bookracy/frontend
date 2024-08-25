@@ -38,22 +38,34 @@ export function Menu({ isOpen }: MenuProps) {
                   </Tooltip>
                 </TooltipProvider>
               ) : null}
-              {menus.map(({ href, label, icon: Icon, active, submenus }, index) =>
+              {menus.map(({ href, label, icon: Icon, active, submenus, disabled }, index) =>
                 submenus.length === 0 ? (
                   <div className="w-full" key={index}>
-                    <TooltipProvider disableHoverableContent>
+                    <TooltipProvider>
                       <Tooltip delayDuration={100}>
                         <TooltipTrigger asChild>
-                          <Button variant={active ? "secondary" : "ghost"} className="mb-1 h-10 w-full justify-start" asChild>
-                            <Link to={href}>
-                              <span className={cn(isOpen === false ? "" : "mr-4")}>
+                          <Link to={href} disabled={disabled}>
+                            <Button variant={active ? "secondary" : "ghost"} className="!pointer-events-auto mb-1 h-10 w-full justify-start" disabled={disabled}>
+                              <span
+                                className={cn({
+                                  "mr-4": isOpen === true,
+                                })}
+                              >
                                 <Icon size={18} />
                               </span>
-                              <p className={cn("max-w-[200px] truncate", isOpen === false ? "-translate-x-96 opacity-0" : "translate-x-0 opacity-100")}>{label}</p>
-                            </Link>
-                          </Button>
+                              <p
+                                className={cn("max-w-[200px] truncate", {
+                                  "translate-x-0 opacity-100": isOpen === true,
+                                  "-translate-x-96 opacity-0": isOpen === false,
+                                })}
+                              >
+                                {label}
+                              </p>
+                            </Button>
+                          </Link>
                         </TooltipTrigger>
                         {isOpen === false && <TooltipContent side="right">{label}</TooltipContent>}
+                        {disabled && <TooltipContent side="right">Coming soon</TooltipContent>}
                       </Tooltip>
                     </TooltipProvider>
                   </div>

@@ -9,6 +9,7 @@ export const PAGE_TITLES: Partial<Record<RoutePaths<typeof routeTree>, string>> 
   "/": "Home",
   "/about": "About",
   "/account": "Account",
+  "/lists": "Lists",
   "/contact": "Contact",
   "/featured": "Featured",
   "/library": "Library",

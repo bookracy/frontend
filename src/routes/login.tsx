@@ -2,7 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
 import { useIsMobile } from "@/hooks/use-ismobile";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useRouter } from "@tanstack/react-router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -16,6 +16,9 @@ import { TurnstileWidget } from "@/components/layout/turnstile";
 
 export const Route = createFileRoute("/login")({
   component: Login,
+  beforeLoad: () => {
+    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
+  },
 });
 
 const loginFormSchema = z.object({

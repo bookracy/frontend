@@ -1,10 +1,12 @@
-import * as React from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/library")({
   component: Library,
+  beforeLoad: () => {
+    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
+  },
 });
 
 function Library() {

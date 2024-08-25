@@ -3,11 +3,11 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Button } from "@/components/ui/button";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/random")({
-  component: Random,
+export const Route = createFileRoute("/library")({
+  component: Library,
 });
 
-function Random() {
+function Library() {
   return (
     <div className="flex h-full w-full justify-center">
       <div className="flex w-full flex-col">

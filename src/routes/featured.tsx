@@ -1,27 +1,36 @@
-import * as React from "react";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import React, { useMemo } from "react";
+import { BookItem } from "@/components/books/book-item";
+import { getTrendingQueryOptions } from "@/api/backend/trending/trending";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/featured")({
   component: Feature,
+  async beforeLoad(ctx) {
+    await ctx.context.queryClient.ensureQueryData(getTrendingQueryOptions);
+  },
 });
 
 function Feature() {
+  const { data } = useSuspenseQuery(getTrendingQueryOptions);
+
+  const categories = useMemo(() => Object.keys(data ?? {}), [data]);
+
   return (
     <div className="flex h-full w-full justify-center">
       <div className="flex w-full flex-col">
-        <Card>
-          <CardHeader>
-            <CardTitle>Coming soon! ⏱️</CardTitle>
-            <CardDescription className="flex flex-col gap-8">
-              Sorry, Bookracy is a work in progress and this feature is not yet available. Come back later and maybe it will be 😉
-              <Link to="/" search={{ q: "" }}>
-                <Button className="w-full">Go Back</Button>
-              </Link>
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        {categories.map((category: string) => (
+          <div key={category} className="mb-8">
+            <h1 className="mb-4 text-2xl font-bold">
+              {category
+                .replace("_", " ")
+                .split(" ")
+                .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")}
+            </h1>
+            <div className="grid grid-cols-2 gap-4">{data[category].length > 0 ? data[category].map((book) => <BookItem key={book.md5} {...book} />) : null}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

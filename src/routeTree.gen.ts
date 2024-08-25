@@ -14,8 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as UploadImport } from './routes/upload'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as RegisterImport } from './routes/register'
-import { Route as RandomImport } from './routes/random'
 import { Route as LoginImport } from './routes/login'
+import { Route as LibraryImport } from './routes/library'
 import { Route as FeaturedImport } from './routes/featured'
 import { Route as ContactImport } from './routes/contact'
 import { Route as AccountImport } from './routes/account'
@@ -39,13 +39,13 @@ const RegisterRoute = RegisterImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const RandomRoute = RandomImport.update({
-  path: '/random',
+const LoginRoute = LoginImport.update({
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const LoginRoute = LoginImport.update({
-  path: '/login',
+const LibraryRoute = LibraryImport.update({
+  path: '/library',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -113,18 +113,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturedImport
       parentRoute: typeof rootRoute
     }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/random': {
-      id: '/random'
-      path: '/random'
-      fullPath: '/random'
-      preLoaderRoute: typeof RandomImport
       parentRoute: typeof rootRoute
     }
     '/register': {
@@ -159,8 +159,8 @@ export const routeTree = rootRoute.addChildren({
   AccountRoute,
   ContactRoute,
   FeaturedRoute,
+  LibraryRoute,
   LoginRoute,
-  RandomRoute,
   RegisterRoute,
   SettingsRoute,
   UploadRoute,
@@ -179,8 +179,8 @@ export const routeTree = rootRoute.addChildren({
         "/account",
         "/contact",
         "/featured",
+        "/library",
         "/login",
-        "/random",
         "/register",
         "/settings",
         "/upload"
@@ -201,11 +201,11 @@ export const routeTree = rootRoute.addChildren({
     "/featured": {
       "filePath": "featured.tsx"
     },
+    "/library": {
+      "filePath": "library.tsx"
+    },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/random": {
-      "filePath": "random.tsx"
     },
     "/register": {
       "filePath": "register.tsx"

@@ -14,17 +14,17 @@ export function Footer() {
         </Link>
         <div className="flex-1" />
 
-        <a target="_blank" href={GITHUB_URL} rel="noreferrer" className="h-6 w-6">
+        <a target="_blank" href={GITHUB_URL} rel="noreferrer" className="h-6 w-6 transition-transform duration-150 hover:scale-110">
           <img src={GitHubLogo} alt="Github" className="h-6 w-6 dark:invert" />
         </a>
-        <a target="_blank" rel="noreferrer" href={DISCORD_URL}>
+        <a target="_blank" rel="noreferrer" href={DISCORD_URL} className="transition-transform duration-150 hover:scale-110">
           <img src={DiscordLogo} alt="Discord" className="h-6 w-6 dark:invert" />
         </a>
-        <a target="_blank" rel="noreferrer" href={X_URL}>
+        <a target="_blank" rel="noreferrer" href={X_URL} className="transition-transform duration-150 hover:scale-110">
           <img src={XLogo} alt="Twitter" className="h-6 w-6 dark:invert" />
         </a>
 
-        <Link to="/contact">
+        <Link to="/contact" className="transition-transform duration-150 hover:scale-110">
           <MailPlus className="h-6 w-6" />
         </Link>
       </div>

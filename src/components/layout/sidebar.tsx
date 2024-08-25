@@ -1,5 +1,4 @@
 import { ChevronLeft } from "lucide-react";
-import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useLayoutStore } from "@/stores/layout";

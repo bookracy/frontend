@@ -1,6 +1,6 @@
 import { routeTree } from "@/routeTree.gen";
 import { RoutePaths } from "@tanstack/react-router";
-import { Blocks, House, LucideIcon, BookMarked, Star, Upload } from "lucide-react";
+import { Blocks, House, LucideIcon, BookMarked, Star, Upload, BookOpenText } from "lucide-react";
 
 export type Submenu = {
   href: RoutePaths<typeof routeTree>;
@@ -14,6 +14,7 @@ type Menu = {
   active: boolean;
   icon: LucideIcon;
   submenus: Submenu[];
+  disabled?: boolean;
 };
 
 type Group = {
@@ -39,6 +40,7 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           active: pathname === "/library",
           icon: BookMarked,
           submenus: [],
+          disabled: import.meta.env.PROD,
         },
         {
           href: "/upload",
@@ -46,6 +48,7 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           active: pathname === "/upload",
           icon: Upload,
           submenus: [],
+          disabled: import.meta.env.PROD,
         },
       ],
     },
@@ -57,6 +60,14 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           label: "Account",
           active: pathname === "/account",
           icon: House,
+          submenus: [],
+          disabled: import.meta.env.PROD,
+        },
+        {
+          href: "/lists",
+          label: "Lists",
+          active: pathname === "/lists",
+          icon: BookOpenText,
           submenus: [],
         },
         {

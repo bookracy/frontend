@@ -8,6 +8,7 @@ import { AspectRatio } from "../ui/aspect-ratio";
 import { Skeleton } from "../ui/skeleton";
 import { BookOpen, DownloadIcon } from "lucide-react";
 import { EpubReader } from "./epub-reader";
+import { BookmarkButton } from "./bookmark";
 
 type BookItemProps = BookItemResponse;
 
@@ -18,7 +19,11 @@ export function BookItem(props: BookItemProps) {
 
   return (
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
-      <CardContent className="p-4 md:p-6">
+      <CardContent className="relative p-4 md:p-6">
+        <div className="absolute right-4 top-4">
+          <BookmarkButton book={props} />
+        </div>
+
         <div className="flex flex-col gap-4 md:flex-row md:gap-6">
           <div className="mx-2 w-full max-w-[200px] md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
@@ -35,7 +40,7 @@ export function BookItem(props: BookItemProps) {
           </div>
           <div className="flex flex-1 flex-col justify-between">
             <div>
-              <h2 className="mb-2 text-2xl font-bold">{props.title}</h2>
+              <h2 className="mb-2 max-w-[90%] text-2xl font-bold">{props.title}</h2>
               <p className="text-md dark:text-gray-400">By {props.authors}</p>
               <p className="mt-2 text-sm dark:text-gray-400">{props.book_content}</p>
               <p className="mt-2 text-sm dark:text-gray-400">Language: {props.book_lang}</p>

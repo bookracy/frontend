@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { redirect, useNavigate } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,9 @@ import { TurnstileWidget } from "@/components/layout/turnstile";
 
 export const Route = createFileRoute("/register")({
   component: Register,
+  beforeLoad: () => {
+    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
+  },
   loader: async (opts) => {
     await opts.context.queryClient.ensureQueryData(randomWordsWithNumberQueryOptions);
   },

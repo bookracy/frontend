@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SearchResultItem } from "@/api/backend/search/types";
+import { BookItemResponse } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { saveAs } from "@/lib/saveAs";
@@ -9,7 +9,7 @@ import { Skeleton } from "../ui/skeleton";
 import { BookOpen, DownloadIcon } from "lucide-react";
 import { EpubReader } from "./epub-reader";
 
-type BookItemProps = SearchResultItem;
+type BookItemProps = BookItemResponse;
 
 export function BookItem(props: BookItemProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);

@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { BaseRequest, client } from "../base";
-import { SearchParams, SearchResultItem } from "./types";
+import { BookItemResponse } from "../types";
+import { SearchParams } from "./types";
 
 export const getBooks = (params: SearchParams) => {
-  return client<BaseRequest<SearchResultItem>>("/books", {
+  return client<BaseRequest<BookItemResponse>>("/books", {
     query: params,
   });
 };

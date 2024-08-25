@@ -14,7 +14,7 @@ export const Route = createFileRoute("/settings")({
 });
 
 function Settings() {
-  const { booksPerSearch, setBooksPerSearch, language, setLanguage, backendURL, setBackendURL } = useSettingsStore();
+  const { language, setLanguage, backendURL, setBackendURL } = useSettingsStore();
   return (
     <div className="flex h-full justify-center">
       <div className="flex w-1/2 flex-col gap-8">
@@ -45,16 +45,6 @@ function Settings() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Books per Search</CardTitle>
-            <CardDescription>Set the maximum number of books displayed per search.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Input type="number" value={booksPerSearch} onBlur={(e) => setBooksPerSearch(Number(e.target.value))} min={1} max={100} />
           </CardContent>
         </Card>
 

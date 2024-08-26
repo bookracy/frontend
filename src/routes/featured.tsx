@@ -28,7 +28,7 @@ function Feature() {
                 .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(" ")}
             </h1>
-            <div className="grid grid-cols-2 gap-4">{data[category].length > 0 ? data[category].map((book) => <BookItem key={book.md5} {...book} />) : null}</div>
+            <div className="flex flex-col gap-4 md:grid md:grid-cols-2">{data[category].length > 0 ? data[category].map((book) => <BookItem key={book.md5} {...book} />) : null}</div>
           </div>
         ))}
       </div>

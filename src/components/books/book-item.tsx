@@ -24,7 +24,7 @@ export function BookItem(props: BookItemProps) {
           <BookmarkButton book={props} />
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row md:gap-6">
+        <div className="flex flex-col gap-4 pt-12 sm:pt-0 md:flex-row md:gap-6">
           <div className="mx-2 w-full max-w-[200px] md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
               <img
@@ -34,7 +34,7 @@ export function BookItem(props: BookItemProps) {
                 onError={(e) => {
                   e.currentTarget.src = PlaceholderImage;
                 }}
-                onClick={() => open(props.book_image, "_blank")}
+                onClick={() => setIsReaderOpen(true)}
               />
             </AspectRatio>
           </div>

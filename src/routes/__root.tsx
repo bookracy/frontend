@@ -5,10 +5,17 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { cn } from "@/lib/utils";
 import { useLayoutStore } from "@/stores/layout";
 import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { QueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+
+const TanStackRouterDevtools = import.meta.env.PROD
+  ? () => null
+  : React.lazy(() =>
+      import("@tanstack/router-devtools").then((res) => ({
+        default: res.TanStackRouterDevtools,
+      })),
+    );
 
 export const Route = createRootRouteWithContext<{
   auth: {

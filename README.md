@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://bookracy.org">
-    <img src="https://lite.bookracy.org/assets/images/banner-logo.png" alt="Bookracy logo" title="Bookracy logo" width="180"/>
+    <img src="https://lite.bookracy.org/assets/logo.png" alt="Bookracy logo" title="Bookracy logo" width="180"/>
 </a>
 
 # Bookracy [Library](https://bookracy.org)

@@ -11,9 +11,10 @@ import { CollapseMenuButton } from "./collapse-menu-button";
 
 interface MenuProps {
   isOpen: boolean | undefined;
+  closeSheetMenu?: () => void;
 }
 
-export function Menu({ isOpen }: MenuProps) {
+export function Menu({ isOpen, closeSheetMenu }: MenuProps) {
   const { menuList } = useLayout();
 
   return (
@@ -44,7 +45,7 @@ export function Menu({ isOpen }: MenuProps) {
                     <TooltipProvider>
                       <Tooltip delayDuration={100}>
                         <TooltipTrigger asChild>
-                          <Link to={href} disabled={disabled}>
+                          <Link to={href} disabled={disabled} onClick={() => closeSheetMenu?.()}>
                             <Button variant={active ? "secondary" : "ghost"} className="!pointer-events-auto mb-1 h-10 w-full justify-start" disabled={disabled}>
                               <span
                                 className={cn({

@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import React, { useMemo } from "react";
-import { BookItem } from "@/components/books/book-item";
 import { getTrendingQueryOptions } from "@/api/backend/trending/trending";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { BookList } from "@/components/books/book-list";
 
 export const Route = createFileRoute("/featured")({
   component: Feature,
@@ -28,7 +28,7 @@ function Feature() {
                 .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(" ")}
             </h1>
-            <div className="flex flex-col gap-4 md:grid md:grid-cols-2">{data[category].length > 0 ? data[category].map((book) => <BookItem key={book.md5} {...book} />) : null}</div>
+            <div>{data[category].length > 0 ? <BookList books={data[category]} /> : null}</div>
           </div>
         ))}
       </div>

@@ -7,12 +7,14 @@ import { Menu } from "./menu";
 import LogoHeader from "@/assets/logo_header.svg";
 import LogoHeaderDark from "@/assets/logo_header_dark.svg";
 import { useSettingsStore } from "@/stores/settings";
+import { useState } from "react";
 
 export function SheetMenu() {
+  const [isOpen, setIsOpen] = useState(false);
   const theme = useSettingsStore((state) => state.theme);
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger className="lg:hidden" asChild>
         <Button className="h-8" variant="outline" size="icon">
           <MenuIcon size={20} />
@@ -20,13 +22,13 @@ export function SheetMenu() {
       </SheetTrigger>
       <SheetContent className="flex h-full flex-col px-3 sm:w-72" side="left">
         <SheetHeader>
-          <Button className="flex items-center justify-center pb-2 pt-1" variant="link" asChild>
-            <Link to="/" className="flex items-center gap-2" search={{ q: "" }}>
+          <Button className="mt-3 flex items-center justify-center" variant="link" asChild>
+            <Link to="/" className="flex items-center gap-2" search={{ q: "" }} onClick={() => setIsOpen(false)}>
               {theme === "dark" ? <img src={LogoHeader} className="h-12" /> : <img src={LogoHeaderDark} className="h-12" />}
             </Link>
           </Button>
         </SheetHeader>
-        <Menu isOpen />
+        <Menu isOpen closeSheetMenu={() => setIsOpen(false)} />
       </SheetContent>
     </Sheet>
   );

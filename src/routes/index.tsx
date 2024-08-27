@@ -1,5 +1,5 @@
 import { useGetBooksQuery } from "@/api/backend/search/search";
-import { BookItem, SkeletonBookItem } from "@/components/books/book-item";
+import { SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { Filters, FilterProps } from "@/components/books/filters";
+import { BookList } from "@/components/books/book-list";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -94,16 +95,13 @@ function Index() {
         {error && <p className="text-red-500">Error: {error.message}</p>}
 
         {data && (
-          <div
+          <BookList
+            books={data.results}
             className={cn({
               "flex flex-col gap-4": filters.view === "list",
               "grid grid-cols-2 gap-4": filters.view === "grid",
             })}
-          >
-            {data.results.map((book) => (
-              <BookItem key={book.md5} {...book} />
-            ))}
-          </div>
+          />
         )}
       </div>
     </div>

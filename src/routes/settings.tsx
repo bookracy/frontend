@@ -17,7 +17,7 @@ function Settings() {
   const { language, setLanguage, backendURL, setBackendURL } = useSettingsStore();
   return (
     <div className="flex h-full justify-center">
-      <div className="flex w-1/2 flex-col gap-8">
+      <div className="flex w-full flex-col gap-8 md:w-1/2">
         <Card>
           <CardHeader>
             <CardTitle>Application Language</CardTitle>

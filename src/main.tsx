@@ -63,7 +63,11 @@ export function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
+      {import.meta.env.DEV && (
+        <div className="absolute right-5 top-14">
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="relative" />
+        </div>
+      )}
       <RouterProvider router={router} context={routerContext} />
       <Toaster />
     </QueryClientProvider>

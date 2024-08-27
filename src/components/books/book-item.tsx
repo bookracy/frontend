@@ -9,10 +9,12 @@ import { Skeleton } from "../ui/skeleton";
 import { BookOpen, DownloadIcon } from "lucide-react";
 import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
+import { useIsMobile } from "@/hooks/use-ismobile";
 
 type BookItemProps = BookItemResponse;
 
 export function BookItem(props: BookItemProps) {
+  const { isMobile } = useIsMobile();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
@@ -48,12 +50,12 @@ export function BookItem(props: BookItemProps) {
             <div className="mt-4 flex flex-wrap gap-5">
               <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">
                 <DownloadIcon className="text-lg" />
-                Download ({props.book_size})
+                {!isMobile && "Download"}({props.book_size})
               </Button>
               {isEpub && (
                 <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2">
                   <BookOpen className="text-lg" />
-                  Read Online
+                  Open
                 </Button>
               )}
             </div>

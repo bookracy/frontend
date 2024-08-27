@@ -20,7 +20,7 @@ export function SheetMenu() {
       </SheetTrigger>
       <SheetContent className="flex h-full flex-col px-3 sm:w-72" side="left">
         <SheetHeader>
-          <Button className="flex items-center justify-center pb-2 pt-1" variant="link" asChild>
+          <Button className="mt-3 flex items-center justify-center" variant="link" asChild>
             <Link to="/" className="flex items-center gap-2" search={{ q: "" }}>
               {theme === "dark" ? <img src={LogoHeader} className="h-12" /> : <img src={LogoHeaderDark} className="h-12" />}
             </Link>

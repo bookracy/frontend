@@ -24,9 +24,7 @@ function Settings() {
         <Card>
           <CardHeader>
             <CardTitle>Theme</CardTitle>
-            <CardDescription>
-              Choose between light and dark themes for the application.
-            </CardDescription>
+            <CardDescription>Choose between light and dark themes for the application.</CardDescription>
           </CardHeader>
           <CardContent>
             <Select onValueChange={setTheme} defaultValue={theme}>

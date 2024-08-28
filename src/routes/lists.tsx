@@ -15,7 +15,7 @@ export function Lists() {
       <div className="flex w-full flex-col gap-4">
         {bookmarks.length > 0 ? (
           <h1 className="text-2xl font-bold">Your Bookmarks</h1>
-        ):(
+        ) : (
           <div>
             <TooltipProvider delayDuration={0}>
               <Tooltip>
@@ -23,9 +23,7 @@ export function Lists() {
                   <h1 className="text-2xl font-bold">No Bookmarks</h1>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>
-                    Add some books here by clicking the bookmark icon on a book card.
-                  </p>
+                  <p>Add some books here by clicking the bookmark icon on a book card.</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

@@ -124,11 +124,9 @@ function Login() {
               />
             </CardContent>
             <CardFooter className="flex-col justify-between gap-2 xl:flex-row xl:gap-0">
-              <p className="text-sm flex flex-row gap-1">
+              <p className="flex flex-row gap-1 text-sm">
                 No account yet? Create one
-                <NavLink to="/register">
-                  here
-                </NavLink>
+                <NavLink to="/register">here</NavLink>
               </p>
               <Button loading={isPending} type="submit" className="w-full lg:w-fit">
                 Login

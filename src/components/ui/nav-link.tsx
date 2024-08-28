@@ -16,12 +16,7 @@ function isExternalLink(url: string): boolean {
 export function NavLink({ to, target, children }: NavLinkProps) {
   if (isExternalLink(to)) {
     return (
-      <a
-        href={to}
-        target={target}
-        className="transition-colors inline-block text-blue-500 duration-300 hover:underline"
-        rel="noreferrer"
-      >
+      <a href={to} target={target} className="inline-block text-blue-500 transition-colors duration-300 hover:underline" rel="noreferrer">
         {children}
       </a>
     );
@@ -29,12 +24,7 @@ export function NavLink({ to, target, children }: NavLinkProps) {
 
   return (
     <div>
-      <Link 
-        to={to}
-        target={target}
-        className="transition-colors inline-block text-blue-500 duration-300 hover:underline" 
-        rel="noreferrer"
-      >
+      <Link to={to} target={target} className="inline-block text-blue-500 transition-colors duration-300 hover:underline" rel="noreferrer">
         {children}
       </Link>
     </div>

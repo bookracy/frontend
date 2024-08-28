@@ -29,7 +29,7 @@ const router = createRouter({
   defaultPendingMs: 100,
   defaultPendingComponent: () => {
     return (
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex h-screen items-center justify-center">
         <Loader2 className="animate-spin" />
       </div>
     );

@@ -2,7 +2,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
 import { useIsMobile } from "@/hooks/use-ismobile";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { NavLink } from "@/components/ui/nav-link";
 import { useRouter } from "@tanstack/react-router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -123,11 +124,11 @@ function Login() {
               />
             </CardContent>
             <CardFooter className="flex-col justify-between gap-2 xl:flex-row xl:gap-0">
-              <p className="text-sm">
-                No account yet? Create one{" "}
-                <Link to="/register" className="underline">
+              <p className="text-sm flex flex-row gap-1">
+                No account yet? Create one
+                <NavLink to="/register">
                   here
-                </Link>
+                </NavLink>
               </p>
               <Button loading={isPending} type="submit" className="w-full lg:w-fit">
                 Login

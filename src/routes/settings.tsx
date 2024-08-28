@@ -15,9 +15,35 @@ export const Route = createFileRoute("/settings")({
 
 function Settings() {
   const { language, setLanguage, backendURL, setBackendURL } = useSettingsStore();
+  const theme = useSettingsStore((state) => state.theme);
+  const setTheme = useSettingsStore((state) => state.setTheme);
+
   return (
     <div className="flex h-full justify-center">
       <div className="flex w-full flex-col gap-8 md:w-1/2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Theme</CardTitle>
+            <CardDescription>
+              Choose between light and dark themes for the application.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Select onValueChange={setTheme} defaultValue={theme}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Theme</SelectLabel>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Application Language</CardTitle>

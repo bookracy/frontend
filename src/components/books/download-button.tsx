@@ -11,7 +11,7 @@ interface BookDownloadButtonProps {
 }
 
 export function BookDownloadButton(props: BookDownloadButtonProps) {
-  const { data, isLoading, isError } = useExternalDownloadsQuery(props.md5);
+  const { data } = useExternalDownloadsQuery(props.md5);
   const { mutate, isPending: isDownloading } = useDownloadMutation();
 
   if (data?.external_downloads.length === 0 || !props.primaryLink) return null;
@@ -31,7 +31,7 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
         {isDownloading && <Loader2 className="animate-spin" />}
         {!isDownloading ? "Download" : ""}
       </Button>
-      {!isLoading && !isError && (
+      {(data?.external_downloads.length ?? 0 > 0) && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="rounded-l-none border-l-0 px-2">

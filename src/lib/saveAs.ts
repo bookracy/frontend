@@ -1,4 +1,5 @@
-export const saveAs = (url: string) => {
+export const saveAs = (url?: string) => {
+  if (!url) return;
   const link = document.createElement("a");
   link.href = url;
   link.download = "";

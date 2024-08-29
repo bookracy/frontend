@@ -2,19 +2,17 @@ import React, { useState } from "react";
 import { BookItemResponse } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { saveAs } from "@/lib/saveAs";
 import PlaceholderImage from "@/assets/placeholder.png";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Skeleton } from "../ui/skeleton";
-import { BookOpen, DownloadIcon } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
-import { useIsMobile } from "@/hooks/use-ismobile";
+import { BookDownloadButton } from "./download-button";
 
 type BookItemProps = BookItemResponse;
 
 export function BookItem(props: BookItemProps) {
-  const { isMobile } = useIsMobile();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
@@ -48,10 +46,7 @@ export function BookItem(props: BookItemProps) {
               <p className="mt-2 text-sm dark:text-gray-400">Language: {props.book_lang}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
-              <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">
-                <DownloadIcon className="text-lg" />
-                {!isMobile && "Download"}({props.book_size})
-              </Button>
+              <BookDownloadButton md5={props.md5} primaryLink={props.link} />
               {isEpub && (
                 <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2">
                   <BookOpen className="text-lg" />

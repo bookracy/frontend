@@ -1,7 +1,6 @@
 import { BookList } from "@/components/books/book-list";
 import { useBookmarksStore } from "@/stores/bookmarks";
 import { createFileRoute } from "@tanstack/react-router";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const Route = createFileRoute("/lists")({
   component: Lists,
@@ -17,16 +16,8 @@ export function Lists() {
           <h1 className="text-2xl font-bold">Your Bookmarks</h1>
         ) : (
           <div>
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <h1 className="text-2xl font-bold">No Bookmarks</h1>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Add some books here by clicking the bookmark icon on a book card.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <h1 className="text-2xl font-bold">No Bookmarks</h1>
+            <p className="text-sm">Add some books here by clicking the bookmark icon on a book card.</p>
           </div>
         )}
 

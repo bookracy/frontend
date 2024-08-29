@@ -24,7 +24,7 @@ export function SheetMenu() {
         <SheetHeader>
           <Button className="mt-3 flex items-center justify-center" variant="link" asChild>
             <Link to="/" className="flex items-center gap-2" search={{ q: "" }} onClick={() => setIsOpen(false)}>
-              {theme === "dark" ? <img src={LogoHeader} className="h-13" /> : <img src={LogoHeaderDark} className="h-13" />}
+              {theme === "dark" ? <img src={LogoHeader} className="h-14" /> : <img src={LogoHeaderDark} className="h-14" />}
             </Link>
           </Button>
         </SheetHeader>

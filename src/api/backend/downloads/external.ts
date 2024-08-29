@@ -21,6 +21,10 @@ export const useDownloadMutation = () => {
   return useMutation({
     mutationKey: ["download"],
     mutationFn: async (link: string) => {
+      if (link.includes("ipfs")) {
+        return link;
+      }
+
       const response = await fetch(link);
 
       if (!response.ok) {

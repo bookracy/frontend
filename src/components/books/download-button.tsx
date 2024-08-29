@@ -16,8 +16,6 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
 
   if (data?.external_downloads.length === 0 || !props.primaryLink) return null;
 
-  console.log(isLoading, isError, isDownloading, props.primaryLink);
-
   return (
     <div className="flex items-center">
       <Button
@@ -26,7 +24,7 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
         })}
         onClick={() =>
           mutate(props.primaryLink!, {
-            onSuccess: (url) => saveAs(url),
+            onSuccess: (url) => saveAs(url, url.includes("ipfs")),
           })
         }
       >
@@ -46,7 +44,7 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
                 key={download.link}
                 onClick={() =>
                   mutate(download.link, {
-                    onSuccess: (url) => saveAs(url),
+                    onSuccess: (url) => saveAs(url, url.includes("ipfs")),
                   })
                 }
                 className="w-full text-left"

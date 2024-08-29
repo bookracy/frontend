@@ -12,7 +12,24 @@ import "./styles/global.css";
 import { useAuthStore } from "./stores/auth";
 import { Loader2 } from "lucide-react";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry(failureCount, error) {
+        if ("status" in error && error.status === 404) return false;
+        if (failureCount < 2) return true;
+        return false;
+      },
+    },
+    mutations: {
+      retry(failureCount, error) {
+        if ("status" in error && error.status === 404) return false;
+        if (failureCount < 2) return true;
+        return false;
+      },
+    },
+  },
+});
 
 const router = createRouter({
   routeTree,

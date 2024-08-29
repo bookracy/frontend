@@ -1,4 +1,5 @@
 import { BookList } from "@/components/books/book-list";
+import { NavLink } from "@/components/ui/nav-link";
 import { useBookmarksStore } from "@/stores/bookmarks";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -17,7 +18,10 @@ export function Lists() {
         ) : (
           <div>
             <h1 className="text-2xl font-bold">No Bookmarks</h1>
-            <p className="text-sm">Add some books here by clicking the bookmark icon on a book card.</p>
+            <p className="flex gap-1 text-sm">
+              Start adding some books using the bookmark button. Start searching
+              <NavLink to={"/?q="}>here</NavLink>
+            </p>
           </div>
         )}
 

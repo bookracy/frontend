@@ -17,7 +17,7 @@ export const useSettingsStore = create<SettingsStoreState>()(
   persist(
     (set) => ({
       language: "en",
-      backendURL: "https://backend.bookracy.org",
+      backendURL: "https://backend.bookracy.ru",
       theme: "dark",
 
       setLanguage: (language) => set({ language }),

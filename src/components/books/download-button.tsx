@@ -16,18 +16,21 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
   const { mutate, isPending: isDownloading } = useDownloadMutation();
   if (props.externalDownloads?.length === 0 || !props.primaryLink) return null;
 
+  const handleDownload = (link?: string) => {
+    if (!link) return;
+    mutate(link, {
+      onSuccess: (url) => saveAs(url, url.includes("ipfs")),
+      onError: () => toast.error("Failed to download file"),
+    });
+  };
+
   return (
     <div className="flex items-center">
       <Button
         className={cn({
           "rounded-r-none border-r-0": props.externalDownloads?.length ?? 0 > 0,
         })}
-        onClick={() =>
-          mutate(props.primaryLink!, {
-            onSuccess: (url) => saveAs(url, url.includes("ipfs")),
-            onError: () => toast.error("Failed to download file"),
-          })
-        }
+        onClick={() => handleDownload(props.primaryLink)}
       >
         {isDownloading && <Loader2 className="animate-spin" />}
         {!isDownloading ? "Download" : ""}
@@ -41,16 +44,7 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {props.externalDownloads?.map((download) => (
-              <DropdownMenuItem
-                key={download.link}
-                onClick={() =>
-                  mutate(download.link, {
-                    onSuccess: (url) => saveAs(url, url.includes("ipfs")),
-                    onError: () => toast.error("Failed to download file"),
-                  })
-                }
-                className="w-full text-left"
-              >
+              <DropdownMenuItem key={download.link} onClick={() => handleDownload(download.link)} className="w-full text-left">
                 {download.name}
               </DropdownMenuItem>
             ))}

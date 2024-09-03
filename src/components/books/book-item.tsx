@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookItemResponse } from "@/api/backend/types";
+import { BookItem } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { saveAs } from "@/lib/saveAs";
@@ -11,9 +11,9 @@ import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { useIsMobile } from "@/hooks/use-ismobile";
 
-type BookItemProps = BookItemResponse;
+type BookItemProps = BookItem;
 
-export function BookItem(props: BookItemProps) {
+export function BookItemCard(props: BookItemProps) {
   const { isMobile } = useIsMobile();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
@@ -41,11 +41,14 @@ export function BookItem(props: BookItemProps) {
             </AspectRatio>
           </div>
           <div className="flex flex-1 flex-col justify-between">
-            <div>
-              <h2 className="mb-2 max-w-[90%] text-2xl font-bold">{props.title}</h2>
-              <p className="text-md dark:text-gray-400">By {props.authors}</p>
-              <p className="mt-2 text-sm dark:text-gray-400">{props.book_content}</p>
-              <p className="mt-2 text-sm dark:text-gray-400">Language: {props.book_lang}</p>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
+                <p className="text-md dark:text-gray-400">By {props.authors}</p>
+              </div>
+              <p className="line-clamp-3 text-sm dark:text-gray-400">{props.description}</p>
+              <p className="text-sm dark:text-gray-400">{props.book_content}</p>
+              <p className="text-sm dark:text-gray-400">Language: {props.book_lang}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">

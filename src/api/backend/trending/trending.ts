@@ -1,9 +1,9 @@
 import { queryOptions } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
-import { BookItemResponse } from "../types";
+import { BookItem } from "../types";
 
 export const getTrending = async () => {
-  return ofetch<Record<string, BookItemResponse[]>>("https://raw.githubusercontent.com/bookracy/static/main/trending.json", {
+  return ofetch<Record<string, BookItem[]>>("https://raw.githubusercontent.com/bookracy/static/main/trending.json", {
     parseResponse: (response) => JSON.parse(response),
   });
 };

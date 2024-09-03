@@ -161,10 +161,11 @@ function Settings() {
             setShowSave(false);
           }}
           className="w-32"
+          disabled={!showSave}
         >
           Reset
         </Button>
-        <Button className="w-32" onClick={handleSubmit}>
+        <Button className="w-32" onClick={handleSubmit} disabled={!showSave}>
           Save
         </Button>
       </div>

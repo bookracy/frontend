@@ -148,11 +148,11 @@ function Settings() {
       </Form>
 
       <div
-        className={cn("absolute bottom-0 z-40 flex w-full items-center gap-8 rounded-t-xl bg-slate-50 px-8 py-4 opacity-0 transition-all duration-300 ease-in-out dark:bg-stone-800", {
+        className={cn("absolute bottom-0 z-40 flex w-full items-center gap-8 rounded-t-xl bg-slate-50 px-8 py-2 opacity-0 transition-all duration-300 ease-in-out dark:bg-stone-800 md:py-4", {
           "opacity-100": showSave,
         })}
       >
-        <h1 className="flex-1 text-xl font-bold">Save settings</h1>
+        <h1 className="flex-1 text-base font-bold md:text-xl">Save settings</h1>
 
         <Button
           variant="destructive"

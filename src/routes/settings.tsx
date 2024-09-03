@@ -74,7 +74,7 @@ function Settings() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value} disabled>
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Select a language" />
                         </SelectTrigger>
@@ -124,7 +124,9 @@ function Settings() {
           <Card>
             <CardHeader>
               <CardTitle>Generate thumbnails</CardTitle>
-              <CardDescription>Most of the time, books don't have thumbnails. You can enable this setting to generate them on the fly but it may slow down the page.</CardDescription>
+              <CardDescription>
+                Most of the time, books don't have thumbnails. You can enable this setting to generate them on the fly but it may slow down the page. This setting is a work in progress.
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex items-center space-x-2">
               <FormField
@@ -134,7 +136,7 @@ function Settings() {
                   <FormItem>
                     <FormLabel>Enable Thumbnails generation</FormLabel>
                     <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} className="flex" />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} className="flex" disabled />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

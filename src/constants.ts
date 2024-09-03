@@ -2,7 +2,7 @@ import { RoutePaths } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
 export const GITHUB_URL = "https://github.com/bookracy";
-export const DISCORD_URL = "https://discord.gg/6YKQn8Sg";
+export const DISCORD_URL = "https://discord.gg/bookracy";
 export const X_URL = "https://x.com/bookracy";
 
 export const PAGE_TITLES: Partial<Record<RoutePaths<typeof routeTree>, string>> = {

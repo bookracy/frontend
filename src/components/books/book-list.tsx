@@ -1,8 +1,8 @@
-import { BookItemResponse } from "@/api/backend/types";
-import { BookItem } from "./book-item";
+import { BookItem } from "@/api/backend/types";
+import { BookItemCard } from "./book-item";
 
 interface BookListProps {
-  books: BookItemResponse[];
+  books: BookItem[];
   className?: string;
 }
 
@@ -10,7 +10,7 @@ export function BookList({ books, className = "flex flex-col gap-4 md:grid md:gr
   return (
     <div className={className}>
       {books.map((book) => (
-        <BookItem key={book.md5} {...book} />
+        <BookItemCard key={book.md5} {...book} />
       ))}
     </div>
   );

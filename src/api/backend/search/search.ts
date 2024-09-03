@@ -23,7 +23,6 @@ export const useGetBooksQueryWithExternalDownloads = (params: SearchParams) => {
     queryFn: async () => {
       const books = await getBooks(params);
       const externalDownloads = await getExternalDownloads(books.results.map((book) => book.md5));
-      console.log(externalDownloads.find((b) => b.md5 === books.results[0].md5));
       return {
         ...books,
         results: books.results.map((book) => ({

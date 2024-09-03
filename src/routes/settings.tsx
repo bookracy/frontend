@@ -146,7 +146,7 @@ function Settings() {
       </Form>
 
       <div
-        className={cn("absolute bottom-0 z-40 flex w-full items-center gap-8 rounded-t-xl bg-indigo-950 px-8 py-4 opacity-0 transition-all duration-300 ease-in-out", {
+        className={cn("absolute bottom-0 z-40 flex w-full items-center gap-8 rounded-t-xl bg-slate-50 px-8 py-4 opacity-0 transition-all duration-300 ease-in-out dark:bg-stone-800", {
           "opacity-100": showSave,
         })}
       >

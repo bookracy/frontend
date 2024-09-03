@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { client } from "../base";
 import { ExternalDownloadResponse } from "./types";
+import { ofetch } from "ofetch";
 
 export const getExternalDownloads = (md5s: string[]) => {
   if (md5s.length === 0) return Promise.resolve([]);
@@ -26,15 +27,11 @@ export const useDownloadMutation = () => {
         return link;
       }
 
-      const response = await fetch(link);
+      const response = await ofetch(link, {
+        responseType: "blob",
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to download file");
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      return url;
+      return URL.createObjectURL(response);
     },
   });
 };

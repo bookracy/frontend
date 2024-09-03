@@ -1,11 +1,11 @@
-import { BookItemResponse } from "@/api/backend/types";
+import { BookItem } from "@/api/backend/types";
 import { useBookmarksStore } from "@/stores/bookmarks";
 import { Button } from "../ui/button";
 import { useMemo } from "react";
 import { BookmarkMinus, BookmarkPlus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
-export function BookmarkButton({ book }: { book: BookItemResponse }) {
+export function BookmarkButton({ book }: { book: BookItem }) {
   const bookmarks = useBookmarksStore((state) => state.bookmarks);
   const addBookmark = useBookmarksStore((state) => state.addBookmark);
   const removeBookmark = useBookmarksStore((state) => state.removeBookmark);

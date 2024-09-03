@@ -1,4 +1,4 @@
-export interface BookItemResponse {
+export interface BookItem {
   authors: string;
   book_content: string;
   book_filetype: string;
@@ -6,7 +6,7 @@ export interface BookItemResponse {
   book_lang: string;
   book_size: string;
   book_source: string;
-  custom_subtitle: string;
+  description: string;
   link: string;
   md5: string;
   publication: string[];

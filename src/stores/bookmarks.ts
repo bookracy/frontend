@@ -1,10 +1,10 @@
-import { BookItemResponse } from "@/api/backend/types";
+import { BookItem } from "@/api/backend/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface BookmarksStoreState {
-  bookmarks: BookItemResponse[];
-  addBookmark: (bookmark: BookItemResponse) => void;
+  bookmarks: BookItem[];
+  addBookmark: (bookmark: BookItem) => void;
   removeBookmark: (md5: string) => void;
 }
 

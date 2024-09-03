@@ -48,7 +48,7 @@ function Root() {
       <Sidebar />
       <main className={cn("flex min-h-[calc(100vh_-_56px)] flex-col transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900", sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72")}>
         <Navbar />
-        <div className="flex flex-1 p-8 [&>*]:w-full">
+        <div className="relative flex flex-1 p-8 [&>*]:w-full">
           <Outlet />
         </div>
       </main>

@@ -1,3 +1,5 @@
+import { ExternalDownloadLink } from "./downloads/types";
+
 export interface BookItem {
   authors: string;
   book_content: string;
@@ -11,4 +13,8 @@ export interface BookItem {
   md5: string;
   publication: string[];
   title: string;
+}
+
+export interface BookItemWithExternalDownloads extends BookItem {
+  externalDownloads?: ExternalDownloadLink[];
 }

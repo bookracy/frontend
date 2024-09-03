@@ -3,7 +3,10 @@ export interface ExternalDownloadLink {
   name: string;
 }
 
-export interface ExternalDownloadResponse {
-  external_downloads: ExternalDownloadLink[];
-  ipfs: string[];
-}
+export type ExternalDownloadResponse = {
+  links: {
+    external_downloads: ExternalDownloadLink[];
+    ipfs: string[];
+  }[];
+  md5: string;
+}[];

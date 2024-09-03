@@ -2,18 +2,19 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { client } from "../base";
 import { ExternalDownloadResponse } from "./types";
 
-export const getExternalDownloads = (md5: string) => {
+export const getExternalDownloads = (md5s: string[]) => {
+  if (md5s.length === 0) return Promise.resolve([]);
   return client<ExternalDownloadResponse>("/books/external_downloads", {
     query: {
-      md5,
+      md5: md5s.join(","),
     },
   });
 };
 
-export const useExternalDownloadsQuery = (md5: string) => {
+export const useExternalDownloadsQuery = (md5s: string[]) => {
   return useQuery({
-    queryKey: ["external_downloads", md5],
-    queryFn: () => getExternalDownloads(md5),
+    queryKey: ["external_downloads", md5s],
+    queryFn: () => getExternalDownloads(md5s),
   });
 };
 

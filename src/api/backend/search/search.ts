@@ -32,5 +32,6 @@ export const useGetBooksQueryWithExternalDownloads = (params: SearchParams) => {
         })),
       };
     },
+    enabled: params.query !== "",
   });
 };

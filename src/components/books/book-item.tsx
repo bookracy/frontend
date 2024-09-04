@@ -7,6 +7,8 @@ import { Skeleton } from "../ui/skeleton";
 import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
@@ -77,5 +79,50 @@ export function SkeletonBookItem() {
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+export function BookItemDialog(props: BookItemProps) {
+  const [isReaderOpen, setIsReaderOpen] = useState(false);
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="flex flex-col">
+          <AspectRatio ratio={10 / 16}>
+            <img
+              src={props.book_image ?? PlaceholderImage}
+              alt={props.title}
+              className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+              onError={(e) => {
+                e.currentTarget.src = PlaceholderImage;
+              }}
+            />
+            <div className="absolute right-2 top-2">
+              <BookmarkButton book={props} />
+            </div>
+          </AspectRatio>
+          <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
+        </div>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{props.title}</DialogTitle>
+          <DialogDescription>By {props.authors}</DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-4">
+          <p>{props.description}</p>
+          <p>{props.book_content}</p>
+          <p>Language: {props.book_lang}</p>
+        </div>
+
+        <DialogFooter className="flex flex-row justify-between md:justify-end">
+          {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
+
+          {props.link && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,8 +1,8 @@
-import { BookItem } from "@/api/backend/types";
+import { BookItem, BookItemWithExternalDownloads } from "@/api/backend/types";
 import { BookItemCard } from "./book-item";
 
 interface BookListProps {
-  books: BookItem[];
+  books: BookItemWithExternalDownloads[] | BookItem[];
   className?: string;
 }
 

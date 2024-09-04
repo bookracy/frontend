@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { AArrowDown, AArrowUp, DownloadIcon, X } from "lucide-react";
+import { AArrowDown, AArrowUp, BookOpen, DownloadIcon, X } from "lucide-react";
 import { ThemeToggle } from "../layout/theme-toggle";
 import { IReactReaderStyle, ReactReader, ReactReaderStyle } from "react-reader";
 import { useSettingsStore } from "@/stores/settings";
 import { saveAs } from "@/lib/saveAs";
 import Rendition from "epubjs/types/rendition";
 import { ClipBoardButton } from "../layout/clipboard-button";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
 interface EpubReaderProps {
   title: string;
   link: string;
+  open: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
@@ -66,7 +68,7 @@ const darkReaderTheme: IReactReaderStyle = {
 };
 
 export function EpubReader(props: EpubReaderProps) {
-  const [location, setLocation] = useState<string | number>(0);
+  const [location, setLocation] = useState<string | number>(1);
   const [fontSize, setFontSize] = useState(16);
   const theme = useSettingsStore((state) => state.theme);
   const renditionRef = useRef<Rendition | null>(null);
@@ -95,8 +97,18 @@ export function EpubReader(props: EpubReaderProps) {
   }, [fontSize]);
 
   return (
-    <Dialog>
-      <DialogContent className="relative h-screen max-w-full p-0">
+    <Dialog open={props.open} onOpenChange={props.setIsOpen}>
+      <DialogTrigger asChild>
+        <Button className="flex items-center gap-2">
+          <BookOpen className="text-lg" />
+          Open
+        </Button>
+      </DialogTrigger>
+      <VisuallyHidden.Root>
+        <DialogTitle>{props.title}</DialogTitle>
+        <DialogDescription>Read {props.title} in an interactive reader</DialogDescription>
+      </VisuallyHidden.Root>
+      <DialogContent className="max-w-screen h-screen p-0" includeClose={false}>
         <div className="flex h-full flex-col">
           <div className="flex items-center justify-between border-b p-4">
             <h2 className="flex-1 truncate text-lg font-semibold">{props.title}</h2>

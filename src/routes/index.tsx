@@ -1,4 +1,4 @@
-import { useGetBooksQuery } from "@/api/backend/search/search";
+import { useGetBooksQueryWithExternalDownloads } from "@/api/backend/search/search";
 import { SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
@@ -39,7 +39,7 @@ function Index() {
 
   const debouncedQ = useDebounce(q, 500);
 
-  const { data, error, isLoading } = useGetBooksQuery({
+  const { data, error, isLoading } = useGetBooksQueryWithExternalDownloads({
     query: debouncedQ,
     lang: language,
     limit: filters.perPage,

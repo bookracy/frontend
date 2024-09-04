@@ -1,24 +1,19 @@
 import React, { useState } from "react";
-import { BookItem } from "@/api/backend/types";
+import { BookItem, BookItemWithExternalDownloads } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
-import { saveAs } from "@/lib/saveAs";
 import PlaceholderImage from "@/assets/placeholder.png";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Skeleton } from "../ui/skeleton";
-import { BookOpen, DownloadIcon } from "lucide-react";
 import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
-import { useIsMobile } from "@/hooks/use-ismobile";
+import { BookDownloadButton } from "./download-button";
 
-type BookItemProps = BookItem;
+type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
 export function BookItemCard(props: BookItemProps) {
-  const { isMobile } = useIsMobile();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
-
   return (
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="relative p-4 md:p-6">
@@ -51,22 +46,12 @@ export function BookItemCard(props: BookItemProps) {
               <p className="text-sm dark:text-gray-400">Language: {props.book_lang}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
-              <Button disabled={!props.link} onClick={() => saveAs(props.link)} className="flex items-center gap-2">
-                <DownloadIcon className="text-lg" />
-                {!isMobile && "Download"}({props.book_size})
-              </Button>
-              {isEpub && (
-                <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2">
-                  <BookOpen className="text-lg" />
-                  Open
-                </Button>
-              )}
+              {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
+              {isEpub && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
             </div>
           </div>
         </div>
       </CardContent>
-
-      {isEpub && isReaderOpen && <EpubReader title={props.title} link={props.link} setIsOpen={setIsReaderOpen} />}
     </Card>
   );
 }

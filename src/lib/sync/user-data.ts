@@ -1,4 +1,3 @@
-// This file should only be imported once in the root of the application
 import { syncUserData } from "@/api/backend/auth/sync";
 import { useBookmarksStore } from "@/stores/bookmarks";
 

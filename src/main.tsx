@@ -10,7 +10,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useAuthStore } from "./stores/auth";
 import { Loader2 } from "lucide-react";
 
-import "./lib/auth/user-data-sync";
+import "./lib/sync";
 import "./styles/global.css";
 
 const queryClient = new QueryClient({

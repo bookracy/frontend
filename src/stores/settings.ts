@@ -7,10 +7,12 @@ interface SettingsStoreState {
   language: string;
   backendURL: string;
   theme: Theme;
+  beta: boolean;
 
   setLanguage: (language: string) => void;
   setBackendURL: (url: string) => void;
   setTheme: (theme: Theme) => void;
+  setBeta: (beta: boolean) => void;
 }
 
 const isOldState = (oldState: unknown): oldState is SettingsStoreState => {
@@ -27,10 +29,12 @@ export const useSettingsStore = create<SettingsStoreState>()(
       language: "en",
       backendURL: "https://backend.bookracy.ru",
       theme: "dark",
+      beta: false,
 
       setLanguage: (language) => set({ language }),
       setBackendURL: (url) => set({ backendURL: url }),
       setTheme: (theme) => set({ theme }),
+      setBeta: (beta) => set({ beta }),
     }),
     {
       name: "BR::settings",

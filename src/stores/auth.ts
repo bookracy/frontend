@@ -4,11 +4,10 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface AuthStoreState {
   accessToken: string;
   refreshToken: string;
-  isLoggedIn: boolean;
-
   displayName: string;
 
   setTokens: (accessToken: string, refreshToken: string) => void;
+  setDisplayName: (displayName: string) => void;
   reset: () => void;
 }
 
@@ -17,12 +16,11 @@ export const useAuthStore = create<AuthStoreState>()(
     (set) => ({
       accessToken: "",
       refreshToken: "",
-      isLoggedIn: false,
-
       displayName: "",
 
-      setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken, isLoggedIn: true }),
-      reset: () => set({ accessToken: "", refreshToken: "", isLoggedIn: false }),
+      setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken }),
+      setDisplayName: (displayName) => set({ displayName }),
+      reset: () => set({ accessToken: "", refreshToken: "", displayName: "" }),
     }),
     {
       name: "BR::auth",

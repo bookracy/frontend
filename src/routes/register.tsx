@@ -15,13 +15,15 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { toast } from "sonner";
 import { ClipBoardButton } from "@/components/layout/clipboard-button";
 import { TurnstileWidget } from "@/components/layout/turnstile";
+import { useSettingsStore } from "@/stores/settings";
 
 export const Route = createFileRoute("/register")({
   component: Register,
-  beforeLoad: () => {
-    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
-  },
-  loader: async (opts) => {
+  beforeLoad: async (opts) => {
+    const beta = useSettingsStore.getState().beta;
+    if (!beta) throw redirect({ to: "/", search: { q: "" } });
+
+    if (opts.context.auth.isLoggedIn) throw redirect({ to: "/account" });
     await opts.context.queryClient.ensureQueryData(randomWordsWithNumberQueryOptions);
   },
 });

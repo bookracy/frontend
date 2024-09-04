@@ -22,7 +22,7 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Group[] {
+export function getMenuList(pathname: RoutePaths<typeof routeTree> | string, beta: boolean): Group[] {
   return [
     {
       groupLabel: "General",
@@ -61,7 +61,7 @@ export function getMenuList(pathname: RoutePaths<typeof routeTree> | string): Gr
           active: pathname === "/account",
           icon: House,
           submenus: [],
-          disabled: import.meta.env.PROD,
+          disabled: import.meta.env.DEV ? false : !beta,
         },
         {
           href: "/lists",

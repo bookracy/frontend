@@ -7,10 +7,11 @@ import { Toaster } from "@/components/ui/sonner";
 import { useSettingsStore } from "./stores/settings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-import "./styles/global.css";
 import { useAuthStore } from "./stores/auth";
 import { Loader2 } from "lucide-react";
+
+import "./lib/auth/user-data-sync";
+import "./styles/global.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -61,7 +62,9 @@ declare module "@tanstack/react-router" {
 
 export function App() {
   const theme = useSettingsStore((state) => state.theme);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { accessToken, refreshToken } = useAuthStore();
+
+  const isLoggedIn = Boolean(accessToken && refreshToken);
 
   useEffect(() => {
     const root = window.document.documentElement;

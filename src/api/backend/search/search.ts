@@ -27,8 +27,8 @@ export const useGetBooksQueryWithExternalDownloads = (params: SearchParams) => {
         ...books,
         results: books.results.map((book) => ({
           ...book,
-          externalDownloads: externalDownloads.find((b) => b.md5 === book.md5)?.links[0].external_downloads,
-          ipfs: externalDownloads.find((b) => b.md5 === book.md5)?.links[0].ipfs,
+          externalDownloads: externalDownloads.find((b) => b.md5 === book.md5)?.external_downloads,
+          ipfs: externalDownloads.find((b) => b.md5 === book.md5)?.ipfs,
         })),
       };
     },

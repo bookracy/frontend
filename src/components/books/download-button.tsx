@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 interface BookDownloadButtonProps {
   primaryLink?: string;
-  externalDownloads?: ExternalDownloadResponse[number]["links"][number]["external_downloads"];
+  externalDownloads?: ExternalDownloadResponse[number]["external_downloads"];
 }
 
 export function BookDownloadButton(props: BookDownloadButtonProps) {

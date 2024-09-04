@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { BookItem, BookItemWithExternalDownloads } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
 import PlaceholderImage from "@/assets/placeholder.png";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Skeleton } from "../ui/skeleton";
-import { BookOpen } from "lucide-react";
 import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
@@ -49,18 +47,11 @@ export function BookItemCard(props: BookItemProps) {
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
-              {isEpub && (
-                <Button onClick={() => setIsReaderOpen(true)} className="flex items-center gap-2">
-                  <BookOpen className="text-lg" />
-                  Open
-                </Button>
-              )}
+              {isEpub && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
             </div>
           </div>
         </div>
       </CardContent>
-
-      {isEpub && isReaderOpen && <EpubReader title={props.title} link={props.link} setIsOpen={setIsReaderOpen} />}
     </Card>
   );
 }

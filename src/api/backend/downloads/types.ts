@@ -4,9 +4,7 @@ export interface ExternalDownloadLink {
 }
 
 export type ExternalDownloadResponse = {
-  links: {
-    external_downloads: ExternalDownloadLink[];
-    ipfs: string[];
-  }[];
+  external_downloads: ExternalDownloadLink[];
+  ipfs: string[];
   md5: string;
 }[];

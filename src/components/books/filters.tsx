@@ -2,8 +2,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Button } from "../ui/button";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-ismobile";
-import { useEffect } from "react";
 
 interface PerPageSelectProps {
   perPage: number;
@@ -40,14 +38,6 @@ interface ResultViewSelectProps {
 export type ResultViewOptions = "list" | "grid";
 
 export function ResultViewSelect({ view, setView }: ResultViewSelectProps) {
-  const { isMobile } = useIsMobile();
-
-  useEffect(() => {
-    if (isMobile) {
-      setView("list");
-    }
-  }, [isMobile, setView]);
-
   return (
     <div className="relative inline-flex rounded-md bg-background p-1">
       <div
@@ -78,7 +68,6 @@ export function ResultViewSelect({ view, setView }: ResultViewSelectProps) {
         })}
         onClick={() => setView("grid")}
         aria-pressed={view === "grid"}
-        disabled={isMobile}
       >
         <LayoutGrid className="h-4 w-4" />
       </Button>

@@ -99,7 +99,7 @@ export function EpubReader(props: EpubReaderProps) {
   return (
     <Dialog open={props.open} onOpenChange={props.setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2">
+        <Button className="flex w-fit items-center gap-2">
           <BookOpen className="text-lg" />
           Open
         </Button>

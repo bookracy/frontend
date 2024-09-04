@@ -11,6 +11,7 @@ import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { Filters, FilterProps } from "@/components/books/filters";
 import { BookList } from "@/components/books/book-list";
+import { BookGallery } from "@/components/books/book-gallery";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -94,15 +95,8 @@ function Index() {
         )}
         {error && <p className="text-red-500">Error: {error.message}</p>}
 
-        {data && (
-          <BookList
-            books={data.results}
-            className={cn({
-              "flex flex-col gap-4": filters.view === "list",
-              "grid grid-cols-2 gap-4": filters.view === "grid",
-            })}
-          />
-        )}
+        {data && filters.view === "list" && <BookList books={data.results} />}
+        {data && filters.view === "grid" && <BookGallery books={data.results} />}
       </div>
     </div>
   );

@@ -3,12 +3,11 @@ import { BookItemCard } from "./book-item";
 
 interface BookListProps {
   books: BookItemWithExternalDownloads[] | BookItem[];
-  className?: string;
 }
 
-export function BookList({ books, className = "flex flex-col gap-4 md:grid md:grid-cols-2" }: BookListProps) {
+export function BookList({ books }: BookListProps) {
   return (
-    <div className={className}>
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       {books.map((book) => (
         <BookItemCard key={book.md5} {...book} />
       ))}

@@ -7,8 +7,7 @@ import { Skeleton } from "../ui/skeleton";
 import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
@@ -85,26 +84,34 @@ export function SkeletonBookItem() {
 export function BookItemDialog(props: BookItemProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
+  const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <div className="flex flex-col">
-          <AspectRatio ratio={10 / 16}>
-            <img
-              src={props.book_image ?? PlaceholderImage}
-              alt={props.title}
-              className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
-              onError={(e) => {
-                e.currentTarget.src = PlaceholderImage;
-              }}
-            />
-            <div className="absolute right-2 top-2">
-              <BookmarkButton book={props} />
+      <div className="flex flex-col">
+        <Card>
+          <CardContent>
+            <div className="relative flex flex-col pt-6">
+              <DialogTrigger asChild>
+                <AspectRatio ratio={10 / 16}>
+                  <img
+                    src={props.book_image ?? PlaceholderImage}
+                    alt={props.title}
+                    className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+                    onError={(e) => {
+                      e.currentTarget.src = PlaceholderImage;
+                    }}
+                  />
+                </AspectRatio>
+              </DialogTrigger>
+              <div className="absolute right-1 top-7">
+                <BookmarkButton book={props} />
+              </div>
             </div>
-          </AspectRatio>
-          <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
-        </div>
-      </DialogTrigger>
+          </CardContent>
+        </Card>
+        <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
+      </div>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{props.title}</DialogTitle>
@@ -120,7 +127,7 @@ export function BookItemDialog(props: BookItemProps) {
         <DialogFooter className="flex flex-row justify-between md:justify-end">
           {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
 
-          {props.link && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
+          {isEpub && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
         </DialogFooter>
       </DialogContent>
     </Dialog>

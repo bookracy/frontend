@@ -44,7 +44,8 @@ export function BookItemCard(props: BookItemProps) {
               </div>
               <p className="line-clamp-3 text-sm dark:text-gray-400">{props.description}</p>
               <p className="text-sm dark:text-gray-400">{props.book_content}</p>
-              <p className="text-sm dark:text-gray-400">Language: {props.book_lang}</p>
+              <p className="text-sm dark:text-gray-400">File size: {props.book_size}</p>
+              <p className="text-sm dark:text-gray-400">File type: {props.book_filetype}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
@@ -121,7 +122,8 @@ export function BookItemDialog(props: BookItemProps) {
         <div className="flex flex-col gap-4">
           <p>{props.description}</p>
           <p>{props.book_content}</p>
-          <p>Language: {props.book_lang}</p>
+          <p>File size: {props.book_size}</p>
+          <p>File type: {props.book_filetype}</p>
         </div>
 
         <DialogFooter className="flex flex-row justify-between md:justify-end">

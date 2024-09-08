@@ -12,6 +12,7 @@ import { TocSheet } from "./toc-sheet";
 import { NavItem } from "epubjs";
 import { EpubView, EpubViewInstance } from "./epub-view";
 import { cn } from "@/lib/utils";
+import { useSwipeable } from "react-swipeable";
 
 interface EpubReaderProps {
   title: string;
@@ -27,8 +28,18 @@ export function EpubReader(props: EpubReaderProps) {
   const [toc, setToc] = useState<NavItem[]>([]);
   const [location, setLocation] = useState<string | number>(1);
   const [fontSize, setFontSize] = useState(16);
+  const [page, setPage] = useState({
+    current: 1,
+    total: 1,
+  });
 
   const theme = useSettingsStore((state) => state.theme);
+
+  const handlers = useSwipeable({
+    onSwipedRight: () => readerRef.current?.prevPage(),
+    onSwipedLeft: () => readerRef.current?.nextPage(),
+    trackMouse: true,
+  });
 
   const adjustFontSize = (adjustment: number) => {
     setFontSize((prev) => {
@@ -90,9 +101,11 @@ export function EpubReader(props: EpubReaderProps) {
               </Button>
             </div>
           </div>
-          <div className="relative flex-1 overflow-hidden">
+          <div className="relative h-full">
+            {/* Hack to have swipe events for the iframe */}
+            <div {...handlers} className="absolute inset-0 z-10 bg-transparent" />
             <div
-              className={cn("absolute bottom-0 left-0 right-0 top-0", {
+              className={cn("absolute inset-0 z-0", {
                 "bg-white": theme === "light",
                 "bg-[#050505]": theme === "dark",
               })}
@@ -102,7 +115,13 @@ export function EpubReader(props: EpubReaderProps) {
                 url={props.link}
                 location={location}
                 tocChanged={setToc}
-                locationChanged={setLocation}
+                locationChanged={(loc) => {
+                  setLocation(loc);
+                  setPage({
+                    current: renditionRef.current?.location.start.displayed.page || 1,
+                    total: renditionRef.current?.location.start.displayed.total || 1,
+                  });
+                }}
                 getRendition={(rendition) => {
                   rendition.themes.override("color", theme === "dark" ? "#fff" : "#050505");
                   rendition.themes.override("background", theme === "dark" ? "#050505" : "#fff");
@@ -111,7 +130,13 @@ export function EpubReader(props: EpubReaderProps) {
               />
             </div>
 
-            <div className="absolute bottom-1 flex w-full items-center justify-center gap-10">
+            <div className="absolute right-1">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {page.current}/{page.total}
+              </span>
+            </div>
+
+            <div className="absolute bottom-1 z-10 flex w-full items-center justify-center gap-10">
               <Button variant="outline" onClick={() => readerRef.current?.prevPage()} className="w-32">
                 Previous
               </Button>

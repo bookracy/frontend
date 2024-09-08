@@ -38,16 +38,16 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
     renditionRef.current?.next();
   }, []);
 
-  const handleKeyUpInternal = useCallback(
+  const handleKeys = useCallback(
     (event: KeyboardEvent) => {
       if (handleKeyUp) {
         handleKeyUp();
         return;
       }
       if (event.key === "ArrowRight") {
-        prevPage();
-      } else if (event.key === "ArrowLeft") {
         nextPage();
+      } else if (event.key === "ArrowLeft") {
+        prevPage();
       }
     },
     [handleKeyUp, prevPage, nextPage],
@@ -56,9 +56,8 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
   const registerEvents = useCallback(
     (rendition: Rendition) => {
       rendition.on("locationChanged", onLocationChange);
-      document.addEventListener("keyup", handleKeyUpInternal);
     },
-    [handleKeyUpInternal, onLocationChange],
+    [onLocationChange],
   );
 
   const initReader = useCallback(async () => {
@@ -71,7 +70,7 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
       renditionRef.current = rendition;
 
       const { toc } = await bookRef.current.loaded.navigation;
-      tocChanged?.(toc || []);
+      tocChanged?.(toc);
 
       if (typeof location === "string" || typeof location === "number") {
         rendition.display(`${location}`);
@@ -99,13 +98,15 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
 
   useEffect(() => {
     initBook();
+    document.addEventListener("keyup", handleKeys);
+
     return () => {
       bookRef.current?.destroy();
       bookRef.current = null;
       renditionRef.current = null;
-      document.removeEventListener("keyup", handleKeyUpInternal);
+      document.removeEventListener("keyup", handleKeys);
     };
-  }, [handleKeyUpInternal, initBook]);
+  }, [handleKeys, initBook]);
 
   useEffect(() => {
     if (renditionRef.current && location) {

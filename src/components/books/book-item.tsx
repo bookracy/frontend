@@ -8,6 +8,7 @@ import { EpubReader } from "./epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
@@ -42,7 +43,7 @@ export function BookItemCard(props: BookItemProps) {
                 <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
                 <p className="text-md dark:text-gray-400">By {props.authors}</p>
               </div>
-              <p className="line-clamp-3 text-sm dark:text-gray-400">{props.description}</p>
+              <p className="line-clamp-3 break-all text-sm dark:text-gray-400">{props.description}</p>
               <p className="text-sm dark:text-gray-400">{props.book_content}</p>
               <p className="text-sm dark:text-gray-400">File size: {props.book_size}</p>
               <p className="text-sm dark:text-gray-400">File type: {props.book_filetype}</p>
@@ -118,14 +119,14 @@ export function BookItemDialog(props: BookItemProps) {
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>By {props.authors}</DialogDescription>
         </DialogHeader>
-
-        <div className="flex flex-col gap-4">
-          <p>{props.description}</p>
-          <p>{props.book_content}</p>
-          <p>File size: {props.book_size}</p>
-          <p>File type: {props.book_filetype}</p>
-        </div>
-
+        <ScrollArea className="max-h-[80vh]">
+          <div className="flex flex-col gap-4">
+            <p className="break-all">{props.description}</p>
+            <p>{props.book_content}</p>
+            <p>File size: {props.book_size}</p>
+            <p>File type: {props.book_filetype}</p>
+          </div>
+        </ScrollArea>
         <DialogFooter className="flex flex-row justify-between md:justify-end">
           {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
 

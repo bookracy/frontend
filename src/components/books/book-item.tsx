@@ -4,7 +4,7 @@ import { Card, CardContent } from "../ui/card";
 import PlaceholderImage from "@/assets/placeholder.png";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Skeleton } from "../ui/skeleton";
-import { EpubReader } from "./epub-reader";
+import { EpubReader } from "../epub-reader/epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -29,7 +29,7 @@ export function BookItemCard(props: BookItemProps) {
               <img
                 src={props.book_image ?? PlaceholderImage}
                 alt={props.title}
-                className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
+                className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
                 onError={(e) => {
                   e.currentTarget.src = PlaceholderImage;
                 }}

@@ -30,8 +30,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-scroll-area':
-        specifier: ^1.1.0
-        version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.2.0-rc.7
+        version: 1.2.0-rc.7(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-select':
         specifier: ^2.1.1
         version: 2.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -53,9 +53,6 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.48.1
         version: 1.48.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      bookracy:
-        specifier: 'file:'
-        version: file:(@react-three/fiber@8.17.5(react-dom@18.3.1(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)(three@0.167.1))(@types/react-dom@18.3.0)(@types/react@18.3.3)(eslint@8.57.0)(konva@9.3.14)(react-konva@18.2.10(konva@9.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react-zdog@1.2.2)(tailwindcss@3.4.10)(three@0.167.1)(typescript@5.5.4)(zdog@1.1.3)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -83,9 +80,6 @@ importers:
       react-hook-form:
         specifier: ^7.52.2
         version: 7.52.2(react@18.3.1)
-      react-reader:
-        specifier: ^2.0.11
-        version: 2.0.11(react@18.3.1)
       react-spring:
         specifier: ^9.7.4
         version: 9.7.4(@react-three/fiber@8.17.5(react-dom@18.3.1(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)(three@0.167.1))(konva@9.3.14)(react-dom@18.3.1(react@18.3.1))(react-konva@18.2.10(konva@9.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react-zdog@1.2.2)(react@18.3.1)(three@0.167.1)(zdog@1.1.3)
@@ -1381,8 +1375,8 @@ packages:
       '@types/react-dom':
         optional: true
 
-  '@radix-ui/react-scroll-area@1.1.0':
-    resolution: {integrity: sha512-9ArIZ9HWhsrfqS765h+GZuLoxaRHD/j0ZWOWilsCvYTpYJp8XwCqNG7Dt9Nu/TItKOdgLGkOPCodQvDc+UMwYg==}
+  '@radix-ui/react-scroll-area@1.2.0-rc.7':
+    resolution: {integrity: sha512-uUTySL0lZ26t2YgJBs7Z5QLBg8Fbp05Nr0vA6b1Cd5PnfYcG9T62yafckr4t7GrPhQCrNm5deiHBKewEAY1qOQ==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
@@ -2203,9 +2197,6 @@ packages:
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
-
-  'bookracy@file:':
-    resolution: {directory: '', type: directory}
 
   brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -3700,9 +3691,6 @@ packages:
       '@types/react':
         optional: true
 
-  react-reader@2.0.11:
-    resolution: {integrity: sha512-4PZoRc0x9d4OzE1C8XRvgAbAH8KFBxid982XMVD1RgVhN6IGtQ8F8w0GX56UuV63vQgaYoHLFR6Qmj2wcoy4Fw==}
-
   react-reconciler@0.27.0:
     resolution: {integrity: sha512-HmMDKciQjYmBRGuuhIaKA1ba/7a+UsM5FzOZsMO2JYHt9Jh8reCb7j1eDC95NOyUlKM9KRyvdx0flBuDvYSBoA==}
     engines: {node: '>=0.10.0'}
@@ -3754,11 +3742,6 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
-
-  react-swipeable@7.0.1:
-    resolution: {integrity: sha512-RKB17JdQzvECfnVj9yDZsiYn3vH0eyva/ZbrCZXZR0qp66PBRhtg4F9yJcJTWYT5Adadi+x4NoG53BxKHwIYLQ==}
-    peerDependencies:
-      react: ^16.8.3 || ^17 || ^18
 
   react-zdog@1.2.2:
     resolution: {integrity: sha512-Ix7ALha91aOEwiHuxumCeYbARS5XNpc/w0v145oGkM6poF/CvhKJwzLhM5sEZbtrghMA+psAhOJkCTzJoseicA==}
@@ -5787,7 +5770,7 @@ snapshots:
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
 
-  '@radix-ui/react-scroll-area@1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@radix-ui/react-scroll-area@1.2.0-rc.7(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@radix-ui/number': 1.1.0
       '@radix-ui/primitive': 1.1.0
@@ -6867,55 +6850,6 @@ snapshots:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.2
-
-  bookracy@file:(@react-three/fiber@8.17.5(react-dom@18.3.1(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)(three@0.167.1))(@types/react-dom@18.3.0)(@types/react@18.3.3)(eslint@8.57.0)(konva@9.3.14)(react-konva@18.2.10(konva@9.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react-zdog@1.2.2)(tailwindcss@3.4.10)(three@0.167.1)(typescript@5.5.4)(zdog@1.1.3):
-    dependencies:
-      '@hookform/resolvers': 3.9.0(react-hook-form@7.52.2(react@18.3.1))
-      '@marsidev/react-turnstile': 1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-aspect-ratio': 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-collapsible': 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-dialog': 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-dropdown-menu': 2.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-label': 2.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-scroll-area': 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-select': 2.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-slot': 1.1.0(@types/react@18.3.3)(react@18.3.1)
-      '@radix-ui/react-switch': 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-tooltip': 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@tanstack/react-query': 5.51.23(react@18.3.1)
-      '@tanstack/react-router': 1.48.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      class-variance-authority: 0.7.0
-      clsx: 2.1.1
-      epubjs: 0.3.93
-      input-otp: 1.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      lucide-react: 0.427.0(react@18.3.1)
-      ofetch: 1.3.4
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-hook-form: 7.52.2(react@18.3.1)
-      react-reader: 2.0.11(react@18.3.1)
-      react-spring: 9.7.4(@react-three/fiber@8.17.5(react-dom@18.3.1(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)(three@0.167.1))(konva@9.3.14)(react-dom@18.3.1(react@18.3.1))(react-konva@18.2.10(konva@9.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-native@0.75.1(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4))(react-zdog@1.2.2)(react@18.3.1)(three@0.167.1)(zdog@1.1.3)
-      sonner: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      tailwind-merge: 2.5.2
-      tailwindcss-animate: 1.0.7(tailwindcss@3.4.10)
-      typescript-eslint: 8.1.0(eslint@8.57.0)(typescript@5.5.4)
-      zod: 3.23.8
-      zustand: 4.5.5(@types/react@18.3.3)(react@18.3.1)
-    transitivePeerDependencies:
-      - '@react-three/fiber'
-      - '@types/react'
-      - '@types/react-dom'
-      - eslint
-      - immer
-      - konva
-      - react-konva
-      - react-native
-      - react-zdog
-      - supports-color
-      - tailwindcss
-      - three
-      - typescript
-      - zdog
 
   brace-expansion@1.1.11:
     dependencies:
@@ -8526,13 +8460,6 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  react-reader@2.0.11(react@18.3.1):
-    dependencies:
-      epubjs: 0.3.93
-      react-swipeable: 7.0.1(react@18.3.1)
-    transitivePeerDependencies:
-      - react
-
   react-reconciler@0.27.0(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -8593,10 +8520,6 @@ snapshots:
       tslib: 2.6.3
     optionalDependencies:
       '@types/react': 18.3.3
-
-  react-swipeable@7.0.1(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   react-zdog@1.2.2:
     dependencies:

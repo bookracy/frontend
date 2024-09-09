@@ -18,13 +18,13 @@ export function BookItemCard(props: BookItemProps) {
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
   return (
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
-      <CardContent className="relative p-4 md:p-6">
+      <CardContent className="relative flex h-full w-full items-center p-4 md:p-6">
         <div className="absolute right-4 top-4">
           <BookmarkButton book={props} />
         </div>
 
-        <div className="flex flex-col gap-4 pt-12 sm:pt-0 md:flex-row md:gap-6">
-          <div className="mx-2 w-full max-w-[200px] md:w-1/4">
+        <div className="flex w-full flex-col gap-4 pt-12 sm:pt-0 md:flex-row md:gap-6">
+          <div className="mx-2 flex w-full max-w-[200px] items-center justify-center md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
               <img
                 src={props.book_image ?? PlaceholderImage}
@@ -47,6 +47,7 @@ export function BookItemCard(props: BookItemProps) {
               <p className="text-sm dark:text-gray-400">{props.book_content}</p>
               <p className="text-sm dark:text-gray-400">File size: {props.book_size}</p>
               <p className="text-sm dark:text-gray-400">File type: {props.book_filetype}</p>
+              <p className="text-sm dark:text-gray-400">MD5: {props.md5}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
@@ -121,10 +122,11 @@ export function BookItemDialog(props: BookItemProps) {
         </DialogHeader>
         <ScrollArea className="max-h-[80vh]">
           <div className="flex flex-col gap-4">
-            <p className="break-all">{props.description}</p>
             <p>{props.book_content}</p>
             <p>File size: {props.book_size}</p>
             <p>File type: {props.book_filetype}</p>
+            <p>MD5: {props.md5}</p>
+            <p className="break-all">{props.description}</p>
           </div>
         </ScrollArea>
         <DialogFooter className="flex flex-row justify-between md:justify-end">

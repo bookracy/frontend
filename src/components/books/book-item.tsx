@@ -4,10 +4,11 @@ import { Card, CardContent } from "../ui/card";
 import PlaceholderImage from "@/assets/placeholder.png";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Skeleton } from "../ui/skeleton";
-import { EpubReader } from "./epub-reader";
+import { EpubReader } from "../epub-reader/epub-reader";
 import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
@@ -17,18 +18,18 @@ export function BookItemCard(props: BookItemProps) {
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
   return (
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
-      <CardContent className="relative p-4 md:p-6">
+      <CardContent className="relative flex h-full w-full items-center p-4 md:p-6">
         <div className="absolute right-4 top-4">
           <BookmarkButton book={props} />
         </div>
 
-        <div className="flex flex-col gap-4 pt-12 sm:pt-0 md:flex-row md:gap-6">
-          <div className="mx-2 w-full max-w-[200px] md:w-1/4">
+        <div className="flex w-full flex-col gap-4 pt-12 sm:pt-0 md:flex-row md:gap-6">
+          <div className="mx-2 flex w-full max-w-[200px] items-center justify-center md:w-1/4">
             <AspectRatio ratio={5 / 8} className="flex items-center">
               <img
                 src={props.book_image ?? PlaceholderImage}
                 alt={props.title}
-                className="rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
+                className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
                 onError={(e) => {
                   e.currentTarget.src = PlaceholderImage;
                 }}
@@ -42,9 +43,11 @@ export function BookItemCard(props: BookItemProps) {
                 <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
                 <p className="text-md dark:text-gray-400">By {props.authors}</p>
               </div>
-              <p className="line-clamp-3 text-sm dark:text-gray-400">{props.description}</p>
+              <p className="line-clamp-3 break-all text-sm dark:text-gray-400">{props.description}</p>
               <p className="text-sm dark:text-gray-400">{props.book_content}</p>
-              <p className="text-sm dark:text-gray-400">Language: {props.book_lang}</p>
+              <p className="text-sm dark:text-gray-400">File size: {props.book_size}</p>
+              <p className="text-sm dark:text-gray-400">File type: {props.book_filetype}</p>
+              <p className="text-sm dark:text-gray-400">MD5: {props.md5}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
@@ -117,13 +120,15 @@ export function BookItemDialog(props: BookItemProps) {
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>By {props.authors}</DialogDescription>
         </DialogHeader>
-
-        <div className="flex flex-col gap-4">
-          <p>{props.description}</p>
-          <p>{props.book_content}</p>
-          <p>Language: {props.book_lang}</p>
-        </div>
-
+        <ScrollArea className="max-h-[80vh]">
+          <div className="flex flex-col gap-4">
+            <p>{props.book_content}</p>
+            <p>File size: {props.book_size}</p>
+            <p>File type: {props.book_filetype}</p>
+            <p>MD5: {props.md5}</p>
+            <p className="break-all">{props.description}</p>
+          </div>
+        </ScrollArea>
         <DialogFooter className="flex flex-row justify-between md:justify-end">
           {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
 

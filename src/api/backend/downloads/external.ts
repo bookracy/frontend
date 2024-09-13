@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { client } from "../base";
 import { ExternalDownloadResponse } from "./types";
 import { ofetch } from "ofetch";
+import { getFileExtensionByContentType } from "@/lib/extension";
 
 export const getExternalDownloads = (md5s: string[]) => {
   if (md5s.length === 0) return Promise.resolve([]);
@@ -24,14 +25,20 @@ export const useDownloadMutation = () => {
     mutationKey: ["download"],
     mutationFn: async (link: string) => {
       if (link.includes("ipfs")) {
-        return link;
+        return {
+          url: link,
+          extension: "pdf",
+        };
       }
 
       const response = await ofetch(link, {
         responseType: "blob",
       });
 
-      return URL.createObjectURL(response);
+      return {
+        url: URL.createObjectURL(response),
+        extension: getFileExtensionByContentType(response.type),
+      };
     },
   });
 };

@@ -6,8 +6,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { cn } from "@/lib/utils";
 import { ExternalDownloadResponse } from "@/api/backend/downloads/types";
 import { toast } from "sonner";
+import { titleToSlug } from "@/lib/string";
 
 interface BookDownloadButtonProps {
+  title: string;
   primaryLink?: string;
   externalDownloads?: ExternalDownloadResponse[number]["external_downloads"];
 }
@@ -19,7 +21,8 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
   const handleDownload = (link?: string) => {
     if (!link) return;
     mutate(link, {
-      onSuccess: (url) => saveAs(url, url.includes("ipfs")),
+      onSuccess: ({ url, extension }) => saveAs(url, `${titleToSlug(props.title)}${extension}`, link.includes("ipfs")),
+
       onError: () => toast.error("Failed to download file"),
     });
   };

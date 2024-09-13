@@ -10,6 +10,7 @@ import { titleToSlug } from "@/lib/string";
 
 interface BookDownloadButtonProps {
   title: string;
+  extension: string;
   primaryLink?: string;
   externalDownloads?: ExternalDownloadResponse[number]["external_downloads"];
 }
@@ -21,7 +22,7 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
   const handleDownload = (link?: string) => {
     if (!link) return;
     mutate(link, {
-      onSuccess: ({ url, extension }) => saveAs(url, `${titleToSlug(props.title)}${extension}`, link.includes("ipfs")),
+      onSuccess: (url) => saveAs(url, `${titleToSlug(props.title)}${props.extension}`, link.includes("ipfs")),
 
       onError: () => toast.error("Failed to download file"),
     });

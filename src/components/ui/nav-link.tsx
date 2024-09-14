@@ -1,4 +1,4 @@
-import { createLink, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { FileRouteTypes } from "@/routeTree.gen";
 

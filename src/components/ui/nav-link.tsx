@@ -1,10 +1,9 @@
-import * as React from "react";
-import { Link, RoutePaths } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
-import { routeTree } from "@/routeTree.gen";
+import { FileRouteTypes } from "@/routeTree.gen";
 
 interface NavLinkProps {
-  to: RoutePaths<typeof routeTree> | (string & {});
+  to: FileRouteTypes["fullPaths"] | (string & {});
   target?: string;
   children: ReactNode;
 }

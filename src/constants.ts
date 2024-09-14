@@ -1,11 +1,10 @@
-import { RoutePaths } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import { FileRouteTypes } from "./routeTree.gen";
 
 export const GITHUB_URL = "https://github.com/bookracy";
 export const DISCORD_URL = "https://discord.gg/bookracy";
 export const X_URL = "https://x.com/bookracy";
 
-export const PAGE_TITLES: Partial<Record<RoutePaths<typeof routeTree>, string>> = {
+export const PAGE_TITLES: Partial<Record<FileRouteTypes["fullPaths"], string>> = {
   "/": "Home",
   "/about": "About",
   "/account": "Account",

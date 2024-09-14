@@ -166,19 +166,123 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  AboutRoute,
-  AccountRoute,
-  ContactRoute,
-  FeaturedRoute,
-  LibraryRoute,
-  ListsRoute,
-  LoginRoute,
-  RegisterRoute,
-  SettingsRoute,
-  UploadRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
+  '/contact': typeof ContactRoute
+  '/featured': typeof FeaturedRoute
+  '/library': typeof LibraryRoute
+  '/lists': typeof ListsRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
+  '/upload': typeof UploadRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
+  '/contact': typeof ContactRoute
+  '/featured': typeof FeaturedRoute
+  '/library': typeof LibraryRoute
+  '/lists': typeof ListsRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
+  '/upload': typeof UploadRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
+  '/contact': typeof ContactRoute
+  '/featured': typeof FeaturedRoute
+  '/library': typeof LibraryRoute
+  '/lists': typeof ListsRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
+  '/upload': typeof UploadRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/account'
+    | '/contact'
+    | '/featured'
+    | '/library'
+    | '/lists'
+    | '/login'
+    | '/register'
+    | '/settings'
+    | '/upload'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/about'
+    | '/account'
+    | '/contact'
+    | '/featured'
+    | '/library'
+    | '/lists'
+    | '/login'
+    | '/register'
+    | '/settings'
+    | '/upload'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/account'
+    | '/contact'
+    | '/featured'
+    | '/library'
+    | '/lists'
+    | '/login'
+    | '/register'
+    | '/settings'
+    | '/upload'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AccountRoute: typeof AccountRoute
+  ContactRoute: typeof ContactRoute
+  FeaturedRoute: typeof FeaturedRoute
+  LibraryRoute: typeof LibraryRoute
+  ListsRoute: typeof ListsRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
+  SettingsRoute: typeof SettingsRoute
+  UploadRoute: typeof UploadRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AccountRoute: AccountRoute,
+  ContactRoute: ContactRoute,
+  FeaturedRoute: FeaturedRoute,
+  LibraryRoute: LibraryRoute,
+  ListsRoute: ListsRoute,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
+  SettingsRoute: SettingsRoute,
+  UploadRoute: UploadRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

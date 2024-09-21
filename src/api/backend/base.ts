@@ -1,4 +1,3 @@
-import { router } from "@/main";
 import { useAuthStore } from "@/stores/auth";
 import { useSettingsStore } from "@/stores/settings";
 import { ofetch } from "ofetch";
@@ -17,19 +16,12 @@ export const client = ofetch.create({
 export const authClient = ofetch.create({
   baseURL: backendURL + `/api`,
   async onRequest(context) {
-    function handleLogout() {
-      useAuthStore.getState().reset();
-      router.navigate({
-        to: "/login",
-      });
-    }
-
     const { accessToken, refreshToken, tokenInfo } = useAuthStore.getState();
 
     let accessTokenToSend = accessToken;
 
     if (!tokenInfo) {
-      handleLogout();
+      useAuthStore.getState().reset();
       return;
     }
 
@@ -44,13 +36,13 @@ export const authClient = ofetch.create({
           const valid = useAuthStore.getState().setTokens(response.access_token, response.refresh_token);
 
           if (!valid) {
-            handleLogout();
+            useAuthStore.getState().reset();
             return;
           }
         }
         accessTokenToSend = response.access_token;
       } catch {
-        handleLogout();
+        useAuthStore.getState().reset();
         return;
       }
     }
@@ -63,9 +55,6 @@ export const authClient = ofetch.create({
   onResponseError(context) {
     if (context.response?.status === 401) {
       useAuthStore.getState().reset();
-      router.navigate({
-        to: "/login",
-      });
     }
   },
 });

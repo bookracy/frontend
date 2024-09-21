@@ -1,15 +1,14 @@
-import { routeTree } from "@/routeTree.gen";
-import { RoutePaths } from "@tanstack/react-router";
+import { FileRouteTypes } from "@/routeTree.gen";
 import { Blocks, House, LucideIcon, BookMarked, Star, Upload, BookOpenText } from "lucide-react";
 
 export type Submenu = {
-  href: RoutePaths<typeof routeTree>;
+  href: FileRouteTypes["fullPaths"];
   label: string;
   active: boolean;
 };
 
 type Menu = {
-  href: RoutePaths<typeof routeTree>;
+  href: FileRouteTypes["fullPaths"];
   label: string;
   active: boolean;
   icon: LucideIcon;
@@ -22,7 +21,7 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: RoutePaths<typeof routeTree> | string, beta: boolean): Group[] {
+export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta: boolean): Group[] {
   return [
     {
       groupLabel: "General",

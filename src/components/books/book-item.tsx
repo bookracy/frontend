@@ -50,7 +50,7 @@ export function BookItemCard(props: BookItemProps) {
               <p className="text-sm dark:text-gray-400">MD5: {props.md5}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
-              {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
+              {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}
               {isEpub && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
             </div>
           </div>
@@ -130,7 +130,7 @@ export function BookItemDialog(props: BookItemProps) {
           </div>
         </ScrollArea>
         <DialogFooter className="flex flex-row justify-between md:justify-end">
-          {"externalDownloads" in props && <BookDownloadButton externalDownloads={props.externalDownloads} primaryLink={props.link} />}
+          {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}
 
           {isEpub && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
         </DialogFooter>

@@ -22,7 +22,7 @@ export const useExternalDownloadsQuery = (md5s: string[]) => {
 export const useDownloadMutation = () => {
   return useMutation({
     mutationKey: ["download"],
-    mutationFn: async (link: string) => {
+    mutationFn: async (link: string): Promise<string> => {
       if (link.includes("ipfs")) {
         return link;
       }

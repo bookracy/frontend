@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useAuthStore } from "./stores/auth";
 import { Loader2 } from "lucide-react";
+import { ScrollToTopButton } from "./components/layout/scroll-to-top-button";
 
 import "./lib/sync";
 import "./styles/global.css";
@@ -90,6 +91,7 @@ export function App() {
       )}
       <RouterProvider router={router} context={routerContext} />
       <Toaster />
+      <ScrollToTopButton />
     </QueryClientProvider>
   );
 }

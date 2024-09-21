@@ -3,6 +3,7 @@ import { SheetMenu } from "./sheet-menu";
 import { useLayout } from "@/hooks/use-layout";
 import { useLayoutStore } from "@/stores/layout";
 import { ThemeToggle } from "./theme-toggle";
+import { UserNav } from "./user-nav";
 
 export function Navbar() {
   const { pageTitle } = useLayout();
@@ -21,6 +22,7 @@ export function Navbar() {
           <h1 className="font-bold">{pageTitle ?? pageTitleFromStore}</h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
+          <UserNav />
           <ThemeToggle />
         </div>
       </div>

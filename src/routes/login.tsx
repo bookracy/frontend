@@ -109,6 +109,9 @@ function Login() {
                     <FormControl>
                       <TurnstileWidget
                         id={field.name}
+                        options={{
+                          size: "flexible",
+                        }}
                         onSuccess={(token) => {
                           form.setValue("ttkn", token);
                         }}

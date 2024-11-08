@@ -46,42 +46,44 @@ function Index() {
     limit: filters.perPage,
   });
 
+  const isSearching = data?.results.length === 0;
+
   return (
-    <div>
-      <h1 className="text-2xl">
-        Welcome to <strong>Bookracy</strong> 📚
-      </h1>
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <p>
+    <div className="p-4md:p-6 mx-auto max-w-7xl lg:p-8">
+      <div className={cn("flex flex-col gap-4", isSearching ? "" : "h-full justify-center")}>
+        <header className="mb-0">
+          <h1 className="mb-4 text-3xl font-bold">
+            Welcome to <strong className="text-primary">Bookracy</strong> 📚
+          </h1>
+          <p className="text-lg text-muted-foreground">
             Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
             <br />
             To get started, either search below or navigate the site using the sidebar.
           </p>
           <NavLink to="/about">About Us</NavLink>
-        </div>
+        </header>
 
-        <div className="flex flex-col gap-2">
-          <Filters filters={filters} setFilters={setFilters} />
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <Filters filters={filters} setFilters={setFilters} />
+          </div>
 
-          <div
-            className={cn("sticky left-[40px] top-[8px] z-50 w-full", {
-              "left-[200px]": sidebar.isOpen,
-            })}
-          >
-            <div className="relative w-full max-w-full">
-              <Input
-                iconLeft={<SearchIcon />}
-                placeholder="Search for books, comics, or manga..."
-                value={q}
-                onChange={(e) =>
-                  navigate({
-                    search: {
-                      q: e.target.value,
-                    },
-                  })
-                }
-              />
+          <div className="relative w-full max-w-full pb-10">
+            <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
+              <div className="relative w-full max-w-full">
+                <Input
+                  iconLeft={<SearchIcon />}
+                  placeholder="Search for books, comics, or manga..."
+                  value={q}
+                  onChange={(e) =>
+                    navigate({
+                      search: {
+                        q: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

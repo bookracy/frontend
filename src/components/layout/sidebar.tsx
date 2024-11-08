@@ -33,7 +33,7 @@ export function Sidebar() {
     <aside className={cn("fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0", sidebar?.isOpen === false ? "w-[90px]" : "w-72")}>
       <SidebarToggle isOpen={sidebar.isOpen} setIsOpen={sidebar.setIsOpen} />
       <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
-        <Button className={cn("mb-1 transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")} variant="link" asChild>
+        <Button className={cn("mb-1 mt-4 transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")} variant="link" asChild>
           <Link to="/" className="m-1 flex items-center gap-2" search={{ q: "" }}>
             {theme === "dark" ? (
               <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13 transition-transform duration-200 hover:scale-[105%]" />

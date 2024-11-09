@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BookItem, BookItemWithExternalDownloads } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
 import PlaceholderImage from "@/assets/placeholder.png";

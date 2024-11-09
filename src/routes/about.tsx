@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { NavLink } from "@/components/ui/nav-link";
 import { createFileRoute } from "@tanstack/react-router";

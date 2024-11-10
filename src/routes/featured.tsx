@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { getTrendingQueryOptions } from "@/api/backend/trending/trending";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { BookList } from "@/components/books/book-list";

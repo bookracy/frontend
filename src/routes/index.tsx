@@ -3,7 +3,7 @@ import { SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useLayoutStore } from "@/stores/layout";
+/// import { useLayoutStore } from "@/stores/layout";
 import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/ui/nav-link";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = useNavigate({ from: Route.fullPath });
   const { q } = Route.useSearch();
-  const sidebar = useLayoutStore((state) => state.sidebar);
+  // const sidebar = useLayoutStore((state) => state.sidebar);
 
   const [filters, setFilters] = useState<FilterProps["filters"]>({
     view: "list",

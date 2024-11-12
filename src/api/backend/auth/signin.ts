@@ -7,3 +7,12 @@ export const login = (body: { code: string; ttkn: string }) => {
     body,
   });
 };
+
+export const refresh = (refreshToken: string) => {
+  return client<LoginResponse>("/_secure/refresh", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+};

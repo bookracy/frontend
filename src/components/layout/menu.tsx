@@ -5,8 +5,9 @@ import { useLayout } from "@/hooks/use-layout";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { CollapseMenuButton } from "./collapse-menu-button";
+import { useAuth } from "@/hooks/auth/use-auth";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -15,6 +16,10 @@ interface MenuProps {
 
 export function Menu({ isOpen, closeSheetMenu }: MenuProps) {
   const { menuList } = useLayout();
+  const { handleLogout } = useAuth();
+  const routeContext = useRouteContext({
+    from: "__root__",
+  });
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
@@ -77,6 +82,24 @@ export function Menu({ isOpen, closeSheetMenu }: MenuProps) {
               )}
             </li>
           ))}
+
+          {routeContext.auth.isLoggedIn ? (
+            <li className="flex w-full grow items-end">
+              <TooltipProvider disableHoverableContent>
+                <Tooltip delayDuration={100}>
+                  <TooltipTrigger asChild>
+                    <Button onClick={handleLogout} variant="outline" className="mt-5 h-10 w-full justify-center">
+                      <span className={cn(isOpen === false ? "" : "mr-4")}>
+                        <LogOut size={18} />
+                      </span>
+                      <p className={cn("whitespace-nowrap", isOpen === false ? "hidden opacity-0" : "opacity-100")}>Log out</p>
+                    </Button>
+                  </TooltipTrigger>
+                  {isOpen === false && <TooltipContent side="right">Log out</TooltipContent>}
+                </Tooltip>
+              </TooltipProvider>
+            </li>
+          ) : null}
         </ul>
       </nav>
     </ScrollArea>

@@ -10,13 +10,13 @@ export function BookmarkButton({ book }: { book: BookItem }) {
   const addBookmark = useBookmarksStore((state) => state.addBookmark);
   const removeBookmark = useBookmarksStore((state) => state.removeBookmark);
 
-  const bookMarkedBook = useMemo(() => bookmarks.find((b) => b.md5 === book.md5), [bookmarks, book.md5]);
+  const bookMarkedBook = useMemo(() => bookmarks.find((b) => b === book.md5), [bookmarks, book.md5]);
 
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button size="icon" onClick={() => (bookMarkedBook ? removeBookmark(bookMarkedBook.md5) : addBookmark(book))} className="flex items-center gap-2">
+          <Button size="icon" onClick={() => (bookMarkedBook ? removeBookmark(bookMarkedBook) : addBookmark(book.md5))} className="flex items-center gap-2">
             {bookMarkedBook ? <BookmarkMinus className="h-5 w-5" /> : <BookmarkPlus className="h-5 w-5" />}
           </Button>
         </TooltipTrigger>

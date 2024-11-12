@@ -30,6 +30,33 @@ export function PerPageSelect({ perPage, setPerPage }: PerPageSelectProps) {
   );
 }
 
+interface FileTypeSelectProps {
+  fileType: string
+  setFileType: (fileType: string) => void;
+}
+
+const FILE_TYPE_OPTIONS = ["ALL", "EPUB", "PDF", "AWZ3"] as const;
+
+export function FileTypeSelect({ fileType, setFileType }: FileTypeSelectProps) {
+  return (
+    <Select defaultValue={fileType} value={fileType.toString()} onValueChange={(value) => setFileType(value)}>
+      <SelectTrigger className="h-11 w-[80px]">
+        <SelectValue placeholder="Select file type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>File type</SelectLabel>
+          {FILE_TYPE_OPTIONS.map((option) => (
+            <SelectItem key={option} value={option.toString()}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}
+
 interface ResultViewSelectProps {
   view: ResultViewOptions;
   setView: (view: ResultViewOptions) => void;
@@ -79,8 +106,9 @@ export interface FilterProps {
   filters: {
     view: ResultViewOptions;
     perPage: number;
+    fileType: string;
   };
-  setFilters: (filters: { view: ResultViewOptions; perPage: number }) => void;
+  setFilters: (filters: { view: ResultViewOptions; perPage: number; fileType: string; }) => void;
 }
 
 export function Filters({ filters, setFilters }: FilterProps) {
@@ -88,6 +116,7 @@ export function Filters({ filters, setFilters }: FilterProps) {
     <div className="flex w-full justify-end gap-4">
       <ResultViewSelect view={filters.view} setView={(view) => setFilters({ ...filters, view })} />
       <PerPageSelect perPage={filters.perPage} setPerPage={(perPage) => setFilters({ ...filters, perPage })} />
+      <FileTypeSelect fileType={filters.fileType} setFileType={(fileType) => setFilters({ ...filters, fileType })} />
     </div>
   );
 }

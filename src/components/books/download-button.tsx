@@ -22,7 +22,7 @@ export function BookDownloadButton(props: BookDownloadButtonProps) {
   const handleDownload = (link?: string) => {
     if (!link) return;
     mutate(link, {
-      onSuccess: (url) => saveAs(url, `${titleToSlug(props.title)}${props.extension}`, link.includes("ipfs")),
+      onSuccess: (url) => saveAs(url, `${titleToSlug(props.title)}.${props.extension}`, link.includes("ipfs")),
 
       onError: () => toast.error("Failed to download file"),
     });

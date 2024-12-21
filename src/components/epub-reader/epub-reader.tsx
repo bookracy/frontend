@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { AArrowDown, AArrowUp, BookOpen, DownloadIcon, X } from "lucide-react";
+import { AArrowDown, AArrowUp, BookOpen, DownloadIcon, X, Loader2 } from "lucide-react";
 import { ThemeToggle } from "../layout/theme-toggle";
 import { useSettingsStore } from "@/stores/settings";
 import { saveAs } from "@/lib/saveAs";
@@ -13,6 +13,7 @@ import { NavItem } from "epubjs";
 import { EpubView, EpubViewInstance } from "./epub-view";
 import { cn } from "@/lib/utils";
 import { useSwipeable } from "react-swipeable";
+import md5 from "md5";
 
 interface EpubReaderProps {
   title: string;
@@ -32,6 +33,8 @@ export function EpubReader(props: EpubReaderProps) {
     current: 1,
     total: 1,
   });
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   const theme = useSettingsStore((state) => state.theme);
 
@@ -63,6 +66,43 @@ export function EpubReader(props: EpubReaderProps) {
       renditionRef.current.themes.fontSize(`${fontSize}px`);
     }
   }, [fontSize]);
+
+  const handleProgress = (loaded: number, total: number) => {
+    setProgress(Math.round((loaded / total) * 100));
+  };
+
+  const handleLocationChanged = (loc: string) => {
+    setLocation(loc);
+    if (renditionRef.current) {
+      const currentPage = renditionRef.current.book.locations.locationFromCfi(loc) + 1;
+      const totalPages = renditionRef.current.book.locations.total;
+      setPage({
+        current: currentPage,
+        total: totalPages,
+      });
+
+      // i could use the actual md5 hash of the book link here idrk why im not
+      const bookHash = md5(props.link);
+      const bookProgress = {
+        title: props.title,
+        link: props.link,
+        location: loc,
+        currentPage,
+        totalPages,
+      };
+      localStorage.setItem(`book-progress-${bookHash}`, JSON.stringify(bookProgress));
+    }
+  };
+
+  useEffect(() => {
+    // Check if progress exists in local storage and set initial location
+    const bookHash = md5(props.link);
+    const savedProgress = localStorage.getItem(`book-progress-${bookHash}`);
+    if (savedProgress) {
+      const { location } = JSON.parse(savedProgress);
+      setLocation(location);
+    }
+  }, [props.link]);
 
   return (
     <Dialog open={props.open} onOpenChange={props.setIsOpen}>
@@ -102,7 +142,12 @@ export function EpubReader(props: EpubReaderProps) {
             </div>
           </div>
           <div className="relative h-full">
-            {/* Hack to have swipe events for the iframe */}
+            {loading && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75">
+                <Loader2 className="animate-spin text-4xl" />
+                <p className="mt-2 text-lg">{progress}%</p>
+              </div>
+            )}
             <div {...handlers} className="absolute inset-0 z-10 bg-transparent" />
             <div
               className={cn("absolute inset-0 z-0", {
@@ -115,17 +160,18 @@ export function EpubReader(props: EpubReaderProps) {
                 url={props.link}
                 location={location}
                 tocChanged={setToc}
-                locationChanged={(loc) => {
-                  setLocation(loc);
-                  setPage({
-                    current: renditionRef.current?.location.start.displayed.page || 1,
-                    total: renditionRef.current?.location.start.displayed.total || 1,
-                  });
-                }}
+                locationChanged={handleLocationChanged}
                 getRendition={(rendition) => {
                   rendition.themes.override("color", theme === "dark" ? "#fff" : "#050505");
                   rendition.themes.override("background", theme === "dark" ? "#050505" : "#fff");
                   renditionRef.current = rendition;
+                  rendition.on("rendered", () => setLoading(false));
+                  rendition.on("relocated", () => setLoading(false));
+                  rendition.on("displayError", () => setLoading(false));
+                  rendition.on("displayed", () => setLoading(false));
+                  rendition.on("layout", () => setLoading(false));
+                  rendition.on("started", () => setLoading(false));
+                  rendition.on("loading", (loaded: number, total: number) => handleProgress(loaded, total));
                 }}
               />
             </div>

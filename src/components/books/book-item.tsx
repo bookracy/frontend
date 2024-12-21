@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BookItem, BookItemWithExternalDownloads } from "@/api/backend/types";
 import { Card, CardContent } from "../ui/card";
 import PlaceholderImage from "@/assets/placeholder.png";
@@ -9,13 +9,25 @@ import { BookmarkButton } from "./bookmark";
 import { BookDownloadButton } from "./download-button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { ScrollArea } from "../ui/scroll-area";
+import md5 from "md5";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
 export function BookItemCard(props: BookItemProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
+  const [progress, setProgress] = useState<number | null>(null);
 
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
+
+  useEffect(() => {
+    const bookHash = md5(props.link);
+    const savedProgress = localStorage.getItem(`book-progress-${bookHash}`);
+    if (savedProgress) {
+      const { currentPage, totalPages } = JSON.parse(savedProgress);
+      setProgress((currentPage / totalPages) * 100);
+    }
+  }, [props.link]);
+
   return (
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="relative flex h-full w-full items-center p-4 md:p-6">
@@ -53,6 +65,17 @@ export function BookItemCard(props: BookItemProps) {
               {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}
               {isEpub && <EpubReader title={props.title} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
             </div>
+            {progress !== null && (
+              <div className="mt-4">
+              <div className="relative h-2 w-full bg-gray-200 dark:bg-gray-700 rounded">
+                <div
+                className="absolute top-0 left-0 h-full bg-purple-600 dark:bg-purple-400 rounded"
+                style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              <p className="mt-1 text-sm text-purple-600 dark:text-purple-400">{`Progress: ${progress.toFixed(2)}%`}</p>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

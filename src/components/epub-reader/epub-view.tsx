@@ -60,6 +60,15 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
     [onLocationChange],
   );
 
+  const getTotalPages = useCallback(async () => {
+    if (bookRef.current) {
+      await bookRef.current.locations.generate(1600); // placeholder lads
+      const totalPages = bookRef.current.locations.total;
+      console.log(`Total pages: ${totalPages}`);
+      return totalPages;
+    }
+  }, []);
+
   const initReader = useCallback(async () => {
     if (viewerRef.current && bookRef.current) {
       const rendition = bookRef.current.renderTo(viewerRef.current, {
@@ -82,8 +91,9 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
 
       registerEvents(rendition);
       getRendition?.(rendition);
+      await getTotalPages();
     }
-  }, [tocChanged, location, registerEvents, getRendition]);
+  }, [tocChanged, location, registerEvents, getRendition, getTotalPages]);
 
   const initBook = useCallback(() => {
     if (bookRef.current) {

@@ -35,3 +35,18 @@ export const useGetBooksQueryWithExternalDownloads = (params: SearchParams) => {
     enabled: params.query !== "",
   });
 };
+
+export const useGetBooksByMd5sQuery = (md5s: string[]) => {
+  return useQuery({
+    queryKey: ["search", md5s],
+    queryFn: async () => {
+      const books: BookItem[] = [];
+      for (const md5 of md5s) {
+        const response = await getBooks({ query: md5, lang: "all", limit: 1 });
+        books.push(response.results[0]);
+      }
+      return books;
+    },
+    enabled: md5s.length > 0,
+  });
+};

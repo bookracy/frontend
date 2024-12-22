@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { AArrowDown, AArrowUp, BookOpen, DownloadIcon, X, Loader2 } from "lucide-react";
@@ -13,11 +13,12 @@ import { NavItem } from "epubjs";
 import { EpubView, EpubViewInstance } from "./epub-view";
 import { cn } from "@/lib/utils";
 import { useSwipeable } from "react-swipeable";
-import md5 from "md5";
+import { useReadingProgressStore } from "@/stores/progress";
 
 interface EpubReaderProps {
   title: string;
   link: string;
+  md5: string;
   open: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
@@ -26,12 +27,15 @@ export function EpubReader(props: EpubReaderProps) {
   const readerRef = useRef<EpubViewInstance>(null);
   const renditionRef = useRef<Rendition | null>(null);
 
+  const findReadingProgress = useReadingProgressStore((state) => state.findReadingProgress);
+  const setReadingProgress = useReadingProgressStore((state) => state.setReadingProgress);
+
   const [toc, setToc] = useState<NavItem[]>([]);
   const [location, setLocation] = useState<string | number>(1);
   const [fontSize, setFontSize] = useState(16);
   const [page, setPage] = useState({
-    current: 1,
-    total: 1,
+    current: 0,
+    total: 0,
   });
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -71,38 +75,54 @@ export function EpubReader(props: EpubReaderProps) {
     setProgress(Math.round((loaded / total) * 100));
   };
 
-  const handleLocationChanged = (loc: string) => {
-    setLocation(loc);
-    if (renditionRef.current) {
-      const currentPage = renditionRef.current.book.locations.locationFromCfi(loc) + 1;
-      const totalPages = renditionRef.current.book.locations.total;
-      setPage({
-        current: currentPage,
-        total: totalPages,
-      });
+  const handleLocationChanged = useCallback(
+    async (loc: string) => {
+      if (renditionRef.current) {
+        if (!renditionRef.current.book.locations.length()) {
+          await renditionRef.current.book.locations.generate(1600);
+        }
+        /* @ts-expect-error missing epub types */
+        const currentPage = renditionRef.current.book.locations.locationFromCfi(loc) + 1;
+        /* @ts-expect-error missing epub types */
+        const totalPages = renditionRef.current.book.locations.total;
+        setPage({
+          current: currentPage,
+          total: totalPages,
+        });
 
-      // i could use the actual md5 hash of the book link here idrk why im not
-      const bookHash = md5(props.link);
-      const bookProgress = {
-        title: props.title,
-        link: props.link,
-        location: loc,
-        currentPage,
-        totalPages,
-      };
-      localStorage.setItem(`book-progress-${bookHash}`, JSON.stringify(bookProgress));
-    }
-  };
+        if (currentPage > 0 && totalPages > 0) {
+          setReadingProgress({
+            md5: props.md5,
+            currentPage,
+            totalPages,
+            location: loc,
+          });
+        }
+      }
+    },
+    [props.md5, setReadingProgress],
+  );
+
+  const handleRendition = useCallback(
+    (rendition: Rendition) => {
+      rendition.themes.override("color", theme === "dark" ? "#fff" : "#050505");
+      rendition.themes.override("background", theme === "dark" ? "#050505" : "#fff");
+      renditionRef.current = rendition;
+      const eventsToStopLoading = ["rendered", "relocated", "displayError", "displayed", "layout", "started"];
+      eventsToStopLoading.forEach((event) => {
+        rendition.on(event, () => setLoading(false));
+      });
+      rendition.on("loading", (loaded: number, total: number) => handleProgress(loaded, total));
+    },
+    [theme],
+  );
 
   useEffect(() => {
-    // Check if progress exists in local storage and set initial location
-    const bookHash = md5(props.link);
-    const savedProgress = localStorage.getItem(`book-progress-${bookHash}`);
-    if (savedProgress) {
-      const { location } = JSON.parse(savedProgress);
-      setLocation(location);
+    const readingProgress = findReadingProgress(props.md5);
+    if (readingProgress) {
+      setLocation(readingProgress.location);
     }
-  }, [props.link]);
+  }, [findReadingProgress, props.md5]);
 
   return (
     <Dialog open={props.open} onOpenChange={props.setIsOpen}>
@@ -142,44 +162,25 @@ export function EpubReader(props: EpubReaderProps) {
             </div>
           </div>
           <div className="relative h-full">
+            {/* Hack to make swipe handlers work */}
+            <div {...handlers} className="absolute inset-0 z-10 bg-transparent" />
             {loading && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75">
                 <Loader2 className="animate-spin text-4xl" />
                 <p className="mt-2 text-lg">{progress}%</p>
               </div>
             )}
-            <div {...handlers} className="absolute inset-0 z-10 bg-transparent" />
             <div
               className={cn("absolute inset-0 z-0", {
                 "bg-white": theme === "light",
                 "bg-[#050505]": theme === "dark",
               })}
             >
-              <EpubView
-                ref={readerRef}
-                url={props.link}
-                location={location}
-                tocChanged={setToc}
-                locationChanged={handleLocationChanged}
-                getRendition={(rendition) => {
-                  rendition.themes.override("color", theme === "dark" ? "#fff" : "#050505");
-                  rendition.themes.override("background", theme === "dark" ? "#050505" : "#fff");
-                  renditionRef.current = rendition;
-                  rendition.on("rendered", () => setLoading(false));
-                  rendition.on("relocated", () => setLoading(false));
-                  rendition.on("displayError", () => setLoading(false));
-                  rendition.on("displayed", () => setLoading(false));
-                  rendition.on("layout", () => setLoading(false));
-                  rendition.on("started", () => setLoading(false));
-                  rendition.on("loading", (loaded: number, total: number) => handleProgress(loaded, total));
-                }}
-              />
+              <EpubView ref={readerRef} url={props.link} location={location} tocChanged={setToc} locationChanged={handleLocationChanged} getRendition={handleRendition} />
             </div>
 
             <div className="absolute right-1">
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {page.current}/{page.total}
-              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{page.current === 0 || page.total === 0 ? <Loader2 className="animate-spin" /> : `${page.current}/${page.total}`}</span>
             </div>
 
             <div className="absolute bottom-1 z-10 flex w-full items-center justify-center gap-10">

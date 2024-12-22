@@ -6,11 +6,10 @@ import type { BookOptions } from "epubjs/types/book";
 export type IEpubViewProps = {
   url: string | ArrayBuffer;
   epubInitOptions?: Partial<BookOptions>;
-  location: string | number | null;
+  location: string | number;
   locationChanged(value: string): void;
   tocChanged?(value: NavItem[]): void;
   getRendition?(rendition: Rendition): void;
-  handleKeyUp?(): void;
 };
 
 export interface EpubViewInstance {
@@ -18,7 +17,7 @@ export interface EpubViewInstance {
   prevPage: () => void;
 }
 
-export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epubInitOptions = {}, location, locationChanged, tocChanged, getRendition, handleKeyUp }, ref) => {
+export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epubInitOptions = {}, location, locationChanged, tocChanged, getRendition }, ref) => {
   const viewerRef = useRef<HTMLDivElement>(null);
   const bookRef = useRef<Book | null>(null);
   const renditionRef = useRef<Rendition | null>(null);
@@ -40,17 +39,13 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
 
   const handleKeys = useCallback(
     (event: KeyboardEvent) => {
-      if (handleKeyUp) {
-        handleKeyUp();
-        return;
-      }
       if (event.key === "ArrowRight") {
         nextPage();
       } else if (event.key === "ArrowLeft") {
         prevPage();
       }
     },
-    [handleKeyUp, prevPage, nextPage],
+    [prevPage, nextPage],
   );
 
   const registerEvents = useCallback(
@@ -59,15 +54,6 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
     },
     [onLocationChange],
   );
-
-  const getTotalPages = useCallback(async () => {
-    if (bookRef.current) {
-      await bookRef.current.locations.generate(1600); // placeholder lads
-      const totalPages = bookRef.current.locations.total;
-      console.log(`Total pages: ${totalPages}`);
-      return totalPages;
-    }
-  }, []);
 
   const initReader = useCallback(async () => {
     if (viewerRef.current && bookRef.current) {
@@ -91,9 +77,8 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
 
       registerEvents(rendition);
       getRendition?.(rendition);
-      await getTotalPages();
     }
-  }, [tocChanged, location, registerEvents, getRendition, getTotalPages]);
+  }, [tocChanged, location, registerEvents, getRendition]);
 
   const initBook = useCallback(() => {
     if (bookRef.current) {

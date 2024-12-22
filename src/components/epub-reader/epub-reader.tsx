@@ -162,7 +162,7 @@ export function EpubReader(props: EpubReaderProps) {
             </div>
           </div>
           <div className="relative h-full">
-            {/* Hack to make swipe handlers work */}
+            {/* Hack to have swipe events for the iframe */}
             <div {...handlers} className="absolute inset-0 z-10 bg-transparent" />
             {loading && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75">

@@ -65,10 +65,9 @@ export function BookItemCard(props: BookItemProps) {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
-                <p className="text-md dark:text-gray-400">By {props.authors}</p>
+                <p className="text-md dark:text-gray-400">By {props.author}</p>
               </div>
               <p className="line-clamp-3 break-all text-sm dark:text-gray-400">{props.description}</p>
-              <p className="text-sm dark:text-gray-400">{props.book_content}</p>
               <p className="text-sm dark:text-gray-400">File size: {props.book_size}</p>
               <p className="text-sm dark:text-gray-400">File type: {props.book_filetype}</p>
               <p className="text-sm dark:text-gray-400">MD5: {props.md5}</p>
@@ -142,11 +141,10 @@ export function BookItemDialog(props: BookItemProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{props.title}</DialogTitle>
-          <DialogDescription>By {props.authors}</DialogDescription>
+          <DialogDescription>By {props.author}</DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[80vh]">
           <div className="flex flex-col gap-4">
-            <p>{props.book_content}</p>
             <p>File size: {props.book_size}</p>
             <p>File type: {props.book_filetype}</p>
             <p>MD5: {props.md5}</p>

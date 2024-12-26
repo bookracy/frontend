@@ -3,8 +3,6 @@ import { SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useLayoutStore } from "@/stores/layout";
-import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/ui/nav-link";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";

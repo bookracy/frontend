@@ -37,17 +37,17 @@ export function Sidebar() {
               <div className="flex items-center">
                 <img src={Logo} className="h-11" />
                 {sidebar.isOpen && (
-                  <div className="ml-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="ml-2 overflow-hidden text-ellipsis whitespace-nowrap">
                     <h3 className="text-3xl text-secondary-foreground">Bookracy</h3>
                     <div className="text-xs text-muted-foreground">Why pay for knowledge?</div>
                   </div>
                 )}
               </div>
             ) : (
-                            <div className="flex items-center">
+              <div className="flex items-center">
                 <img src={Logo} className="h-11" />
                 {sidebar.isOpen && (
-                  <div className="ml-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="ml-2 overflow-hidden text-ellipsis whitespace-nowrap">
                     <h3 className="text-3xl text-secondary-foreground">Bookracy</h3>
                     <div className="text-xs text-muted-foreground">Why pay for knowledge?</div>
                   </div>

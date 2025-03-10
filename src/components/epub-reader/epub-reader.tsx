@@ -180,7 +180,7 @@ export function EpubReader(props: EpubReaderProps) {
             </div>
 
             <div className="absolute right-1">
-              <span className="text-sm text-gray-500 dark:text-gray-400">{page.current === 0 || page.total === 0 ? <Loader2 className="animate-spin" /> : `${page.current}/${page.total}`}</span>
+              <span className="text-sm text-muted-foreground">{page.current === 0 || page.total === 0 ? <Loader2 className="animate-spin" /> : `${page.current}/${page.total}`}</span>
             </div>
 
             <div className="absolute bottom-1 z-10 flex w-full items-center justify-center gap-10">

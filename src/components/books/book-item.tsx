@@ -55,7 +55,7 @@ export function BookItemCard(props: BookItemProps) {
                     <Progress value={progress} className="mt-2" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-xs dark:text-gray-400">Progress: {progress!.toFixed(2)}%</p>
+                    <p className="text-xs text-muted-foreground">Progress: {progress!.toFixed(2)}%</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -65,12 +65,12 @@ export function BookItemCard(props: BookItemProps) {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
-                <p className="text-md dark:text-gray-400">By {props.author}</p>
+                <p className="text-md text-muted-foreground">By {props.author}</p>
               </div>
-              <p className="line-clamp-3 break-all text-sm dark:text-gray-400">{props.description}</p>
-              <p className="text-sm dark:text-gray-400">File size: {props.book_size}</p>
-              <p className="text-sm dark:text-gray-400">File type: {props.book_filetype}</p>
-              <p className="text-sm dark:text-gray-400">MD5: {props.md5}</p>
+              <p className="line-clamp-3 break-all text-sm text-muted-foreground">{props.description}</p>
+              <p className="text-sm text-muted-foreground">File size: {props.book_size}</p>
+              <p className="text-sm text-muted-foreground">File type: {props.book_filetype}</p>
+              <p className="text-sm text-muted-foreground">MD5: {props.md5}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}

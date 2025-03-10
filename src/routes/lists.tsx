@@ -26,7 +26,7 @@ export function Lists() {
         ) : (
           <div>
             <h1 className="text-2xl font-bold">No Bookmarks</h1>
-            <p className="flex gap-1 text-sm">
+            <p className="flex gap-1 text-sm text-muted-foreground">
               Start adding some books using the bookmark button. Start searching
               <NavLink to={"/?q="}>here</NavLink>
             </p>
@@ -41,7 +41,7 @@ export function Lists() {
         {readingProgress.length === 0 && (
           <div>
             <h1 className="text-2xl font-bold">No Reading Progress</h1>
-            <p className="flex gap-1 text-sm">Start reading some books and your progress will show up here.</p>
+            <p className="flex gap-1 text-sm text-muted-foreground">Start reading some books and your progress will show up here.</p>
           </div>
         )}
         {isLoading && <Loader2 className="h-10 w-10 animate-spin" />}

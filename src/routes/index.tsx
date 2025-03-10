@@ -49,7 +49,7 @@ function Index() {
         Welcome to <strong>Bookracy</strong> 📚
       </h1>
       <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 text-muted-foreground">
           <p>
             Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
             <br />

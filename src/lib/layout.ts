@@ -1,5 +1,5 @@
 import { FileRouteTypes } from "@/routeTree.gen";
-import { Blocks, House, LucideIcon, BookMarked, Star, Upload, BookOpenText } from "lucide-react";
+import { Blocks, House, LucideIcon, BookMarked, Star, Upload, BookOpenText, Heart } from "lucide-react";
 
 export type Submenu = {
   href: FileRouteTypes["fullPaths"];
@@ -48,6 +48,13 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string): Gro
           icon: Upload,
           submenus: [],
           disabled: import.meta.env.PROD,
+        },
+        {
+          href: "/donation",
+          label: "Donate",
+          active: pathname === "/donation",
+          icon: Heart,
+          submenus: [],
         },
       ],
     },

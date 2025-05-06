@@ -27,6 +27,10 @@ export function Footer() {
         <Link to="/contact" className="transition-transform duration-150 hover:scale-110">
           <MailPlus className="h-6 w-6" />
         </Link>
+
+        <Link to="/donation" className="transition-transform duration-150 hover:scale-110">
+          <span className="text-sm font-semibold text-blue-500 dark:text-blue-400">Donate</span>
+        </Link>
       </div>
     </div>
   );

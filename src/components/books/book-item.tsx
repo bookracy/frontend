@@ -114,16 +114,16 @@ export function BookItemDialog(props: BookItemProps) {
 
   return (
     <Dialog>
-      <div className="flex flex-col">
+      <div className="flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-xl">
         <Card>
           <CardContent>
-            <div className="relative flex flex-col pt-6">
+            <div className="relative flex flex-col gap-2 pt-6">
               <DialogTrigger asChild>
                 <AspectRatio ratio={10 / 16}>
                   <img
                     src={props.book_image ?? PlaceholderImage}
                     alt={props.title}
-                    className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+                    className="h-full w-full rounded-lg object-cover"
                     onError={(e) => {
                       e.currentTarget.src = PlaceholderImage;
                     }}
@@ -133,10 +133,10 @@ export function BookItemDialog(props: BookItemProps) {
               <div className="absolute right-1 top-7">
                 <BookmarkButton book={props} />
               </div>
+              <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
             </div>
           </CardContent>
         </Card>
-        <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
       </div>
       <DialogContent>
         <DialogHeader>

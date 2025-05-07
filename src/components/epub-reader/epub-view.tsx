@@ -6,11 +6,10 @@ import type { BookOptions } from "epubjs/types/book";
 export type IEpubViewProps = {
   url: string | ArrayBuffer;
   epubInitOptions?: Partial<BookOptions>;
-  location: string | number | null;
+  location: string | number;
   locationChanged(value: string): void;
   tocChanged?(value: NavItem[]): void;
   getRendition?(rendition: Rendition): void;
-  handleKeyUp?(): void;
 };
 
 export interface EpubViewInstance {
@@ -18,7 +17,7 @@ export interface EpubViewInstance {
   prevPage: () => void;
 }
 
-export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epubInitOptions = {}, location, locationChanged, tocChanged, getRendition, handleKeyUp }, ref) => {
+export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epubInitOptions = {}, location, locationChanged, tocChanged, getRendition }, ref) => {
   const viewerRef = useRef<HTMLDivElement>(null);
   const bookRef = useRef<Book | null>(null);
   const renditionRef = useRef<Rendition | null>(null);
@@ -40,17 +39,13 @@ export const EpubView = forwardRef<EpubViewInstance, IEpubViewProps>(({ url, epu
 
   const handleKeys = useCallback(
     (event: KeyboardEvent) => {
-      if (handleKeyUp) {
-        handleKeyUp();
-        return;
-      }
       if (event.key === "ArrowRight") {
         nextPage();
       } else if (event.key === "ArrowLeft") {
         prevPage();
       }
     },
-    [handleKeyUp, prevPage, nextPage],
+    [prevPage, nextPage],
   );
 
   const registerEvents = useCallback(

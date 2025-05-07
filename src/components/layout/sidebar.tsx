@@ -6,8 +6,6 @@ import { Link } from "@tanstack/react-router";
 import { Menu } from "./menu";
 import { useSettingsStore } from "@/stores/settings";
 
-import LogoHeader from "@/assets/logo_header.svg";
-import LogoHeaderDark from "@/assets/logo_header_dark.svg";
 import Logo from "@/assets/logo.svg";
 
 interface SidebarToggleProps {
@@ -33,15 +31,31 @@ export function Sidebar() {
     <aside className={cn("fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0", sidebar?.isOpen === false ? "w-[90px]" : "w-72")}>
       <SidebarToggle isOpen={sidebar.isOpen} setIsOpen={sidebar.setIsOpen} />
       <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
-        <Button className={cn("mb-1 mt-4 transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")} variant="link" asChild>
+        <div className={cn("flex justify-center transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")}>
           <Link to="/" className="m-1 flex items-center gap-2" search={{ q: "" }}>
             {theme === "dark" ? (
-              <img src={sidebar.isOpen ? LogoHeader : Logo} className="h-13 transition-transform duration-200 hover:scale-[105%]" />
+              <div className="flex items-center">
+                <img src={Logo} className="h-11" />
+                {sidebar.isOpen && (
+                  <div className="ml-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <h3 className="text-3xl text-secondary-foreground">Bookracy</h3>
+                    <div className="text-xs text-muted-foreground">Why pay for knowledge?</div>
+                  </div>
+                )}
+              </div>
             ) : (
-              <img src={sidebar.isOpen ? LogoHeaderDark : Logo} className="h-13 transition-transform duration-200 hover:scale-[105%]" />
+              <div className="flex items-center">
+                <img src={Logo} className="h-11" />
+                {sidebar.isOpen && (
+                  <div className="ml-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <h3 className="text-3xl text-secondary-foreground">Bookracy</h3>
+                    <div className="text-xs text-muted-foreground">Why pay for knowledge?</div>
+                  </div>
+                )}
+              </div>
             )}
           </Link>
-        </Button>
+        </div>
         <Menu isOpen={sidebar?.isOpen} />
       </div>
     </aside>

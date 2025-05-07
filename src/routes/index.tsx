@@ -3,8 +3,6 @@ import { SkeletonBookItem } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-/// import { useLayoutStore } from "@/stores/layout";
-import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/ui/nav-link";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
@@ -29,7 +27,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = useNavigate({ from: Route.fullPath });
   const { q } = Route.useSearch();
-  // const sidebar = useLayoutStore((state) => state.sidebar);
 
   const [filters, setFilters] = useState<FilterProps["filters"]>({
     view: "list",
@@ -46,46 +43,36 @@ function Index() {
     limit: filters.perPage,
   });
 
-  const isSearching = data?.results.length === 0;
-
   return (
-    <div className="p-4md:p-6 mx-auto max-w-7xl lg:p-8">
-      <div className={cn("flex flex-col gap-4", isSearching ? "" : "h-full justify-center")}>
-        <header className="mb-0">
-          <h1 className="mb-4 text-3xl font-bold">
-            Welcome to <strong className="text-primary">Bookracy</strong> 📚
-          </h1>
-          <p className="text-lg text-muted-foreground">
+    <div>
+      <h1 className="text-2xl">
+        Welcome to <strong>Bookracy</strong> 📚
+      </h1>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2 text-muted-foreground">
+          <p>
             Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
             <br />
             To get started, either search below or navigate the site using the sidebar.
           </p>
           <NavLink to="/about">About Us</NavLink>
-        </header>
+        </div>
 
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <Filters filters={filters} setFilters={setFilters} />
-          </div>
+        <div className="flex flex-col gap-2">
+          <Filters filters={filters} setFilters={setFilters} />
 
-          <div className="relative w-full max-w-full pb-10">
-            <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
-              <div className="relative w-full max-w-full">
-                <Input
-                  iconLeft={<SearchIcon className="h-4 w-4" />}
-                  placeholder="Search for books, comics, or manga..."
-                  value={q}
-                  onChange={(e) =>
-                    navigate({
-                      search: {
-                        q: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
+          <Input
+            iconLeft={<SearchIcon />}
+            placeholder="Search for books, comics, or manga..."
+            value={q}
+            onChange={(e) =>
+              navigate({
+                search: {
+                  q: e.target.value,
+                },
+              })
+            }
+          />
         </div>
 
         {isLoading && (

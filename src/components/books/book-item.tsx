@@ -114,10 +114,10 @@ export function BookItemDialog(props: BookItemProps) {
 
   return (
     <Dialog>
-      <div className="flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-        <Card>
-          <CardContent>
-            <div className="relative flex flex-col gap-2 pt-6">
+      <div className="flex flex-col">
+        <Card className="h-full transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+          <CardContent className="h-full">
+            <div className="relative flex h-full flex-col gap-2 pt-6">
               <DialogTrigger asChild>
                 <AspectRatio ratio={10 / 16}>
                   <img
@@ -133,7 +133,11 @@ export function BookItemDialog(props: BookItemProps) {
               <div className="absolute right-1 top-7">
                 <BookmarkButton book={props} />
               </div>
-              <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
+              <div className="flex flex-col gap-1">
+                <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
+                <p className="text-sm text-muted-foreground">By {props.author}</p>
+                <p className="text-xs text-muted-foreground">{props.book_filetype}</p>
+              </div>
             </div>
           </CardContent>
         </Card>

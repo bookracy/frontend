@@ -98,7 +98,7 @@ function DonationPage() {
             </div>
 
             {/* Donation tiers */}
-            <div className="mt-8 px-2 grid grid-cols-1 place-items-center justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid grid-cols-1 place-items-center justify-center gap-6 px-2 sm:grid-cols-2 lg:grid-cols-3">
               {TIERS.map((tier) => (
                 <Card key={tier.name} className={`border-2 ${tier.color} flex h-full w-full max-w-sm flex-col shadow-md transition-all duration-200 hover:scale-[1.025]`}>
                   <CardHeader>

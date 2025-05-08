@@ -114,7 +114,7 @@ export function SkeletonBookItemGrid() {
         <div className="relative flex h-full flex-col gap-2 pt-6">
           <Skeleton className="aspect-[10/16] w-full rounded-lg" />
           <div className="absolute right-1 top-7">
-            <Skeleton className="h-10 w-10 rounded-half" />
+            <Skeleton className="rounded-half h-10 w-10" />
           </div>
           <div className="flex flex-col gap-1">
             <Skeleton className="h-6 w-3/4 rounded" />

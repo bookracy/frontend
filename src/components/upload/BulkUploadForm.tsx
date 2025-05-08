@@ -15,55 +15,45 @@ interface BulkBookForm extends BookFormData {
 interface BulkUploadFormProps {
   files: File[];
   onClearFiles: () => void;
+  onAddFiles: (files: File[]) => void;
 }
 
-export function BulkUploadForm({ files, onClearFiles }: BulkUploadFormProps) {
-  const [bulkForm, setBulkForm] = useState<BulkBookForm[]>([]);
+const createFormDataFromFiles = (files: File[]): BulkBookForm[] => {
+  return files.map((file) => ({
+    file,
+    cover: undefined,
+    coverPreview: null,
+    title: "",
+    author: "",
+    book_filetype: file.name.split(".").pop()?.toLowerCase() || "",
+    description: "",
+    publisher: "",
+    year: "",
+    book_lang: "",
+    isbn: "",
+    file_source: "",
+    cid: "",
+  }));
+};
+
+export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFormProps) {
+  // Initialize form empty data
+  const [bulkForm, setBulkForm] = useState<BulkBookForm[]>(() => createFormDataFromFiles(files));
   const [bulkUploading, setBulkUploading] = useState(false);
   const [bulkProgress, setBulkProgress] = useState<number[]>([]);
   const [bulkResult, setBulkResult] = useState<{ success?: boolean; error?: string; md5?: string }[]>([]);
   const [bulkAutofillLoading, setBulkAutofillLoading] = useState<number | null>(null);
 
-  // Initialize form data from files
+  // Update form data when files prop changes
   useEffect(() => {
-    if (files.length > 0) {
-      setBulkForm(
-        files.map((file) => {
-          return {
-            file,
-            cover: undefined,
-            coverPreview: null,
-            title: "",
-            author: "",
-            book_filetype: file.name.split(".").pop()?.toLowerCase() || "",
-            description: "",
-            publisher: "",
-            year: "",
-            book_lang: "",
-            isbn: "",
-            file_source: "",
-            cid: "",
-          };
-        }),
-      );
-    }
+    setBulkForm(createFormDataFromFiles(files));
   }, [files]);
 
   const handleBulkFileChange = (newFiles: File[]) => {
     if (newFiles.length > 0) {
       // Add new files to existing bulk files
       const updatedFiles = [...files, ...newFiles];
-
-      // Update the parent component's files state
-      //Clear and recreate since we can't directly update the parent's state
-      onClearFiles();
-      setTimeout(() => {
-        // Use a timeout to ensure the clear operation completes
-        const newBulkFilesEvent = new CustomEvent("bulkFilesAdded", {
-          detail: { files: updatedFiles },
-        });
-        window.dispatchEvent(newBulkFilesEvent);
-      }, 0);
+      onAddFiles(updatedFiles);
     }
   };
 

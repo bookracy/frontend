@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { ProgressBar } from "./ProgressBar";
 import { UploadResult } from "./UploadResult";
 import { BookFormData } from "./BookMetadataForm";
@@ -142,12 +143,7 @@ export function BulkBookItem({ book, onRemove, onFieldChange, onCoverChange, onA
         </div>
         <div className="col-span-full">
           <Label>Description</Label>
-          <textarea
-            value={book.description}
-            disabled={isUploading}
-            onChange={(e) => onFieldChange("description", e.target.value)}
-            className="min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          />
+          <Textarea value={book.description} disabled={isUploading} onChange={(e) => onFieldChange("description", e.target.value)} className="min-h-[60px]" />
         </div>
       </div>
       {isUploading && <ProgressBar progress={uploadProgress} />}

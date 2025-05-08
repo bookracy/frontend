@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BookMetadataForm, BookFormData } from "./BookMetadataForm";
-import { ProgressBar } from "./ProgressBar";
+import { ProgressBar } from "./UploadProgressBar";
 import { UploadResult } from "./UploadResult";
 import { computeFileMd5, autofillBookFields, FILE_TYPES } from "./utils";
 import { FileDropField } from "./FileDropField";

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BulkBookItem } from "./BulkBookItem";
 import { BookFormData } from "./BookMetadataForm";
-import { extractMetadataFromFilename, computeFileMd5, autofillBookFields, FILE_TYPES } from "./utils";
+import { computeFileMd5, autofillBookFields, FILE_TYPES } from "./utils";
 import { FileDropField } from "./FileDropField";
 import { Card } from "@/components/ui/card";
 

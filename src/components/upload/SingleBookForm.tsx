@@ -16,7 +16,7 @@ interface SingleBookFormProps {
 // 100MB in bytes
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
-export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
+export function SingleBookForm({}: SingleBookFormProps) {
   const [form, setForm] = useState<BookFormData & { file?: File; cover?: File }>({
     file: undefined,
     cover: undefined,

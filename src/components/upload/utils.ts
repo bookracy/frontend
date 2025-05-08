@@ -5,7 +5,7 @@ import { BookFormData } from "./BookMetadataForm";
 
 export const FILE_TYPES = ["epub", "pdf", "txt", "mobi", "azw3", "fb2", "djvu", "doc", "docx", "rtf", "cbz", "cbr", "html", "htm", "odt"];
 
-// Extract metadata from filename
+// Extract title and author from filename
 export function extractMetadataFromFilename(filename: string) {
   // Example: "Author - Title (2023).epub" or "Title - Author.pdf"
   const match = filename.match(/(.+?)\s*-\s*(.+?)(?:\s*\((\d{4})\))?\.[^.]+$/);
@@ -54,7 +54,7 @@ export async function computeFileMd5(file: File): Promise<string> {
 // Fetch book metadata from server
 export async function autofillBookFields(md5: string): Promise<Partial<BookItem> | null> {
   try {
-    const res = await ofetch<{ results: BookItem[] }>("https://backend.bookracy.ru/api/books", {
+    const res = await client<{ results: BookItem[] }>("/books", {
       query: { query: md5, limit: 1 },
     });
     if (res.results && res.results.length > 0) return res.results[0];

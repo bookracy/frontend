@@ -23,7 +23,7 @@ const TIERS: DonationTier[] = [
     amount: "$3/mo",
     color: "border-blue-500 dark:bg-blue-950 bg-blue-100",
     donateUrl: "#supporter",
-    perks: ["🎖️ Discord Supporter role", "🚫 Less rate limiting for downloads", "📚 Priority book requests (if missing on Bookracy or Anna’s Archive)", "🤔 Unsure? Ask us anything on Discord!"],
+    perks: ["🎖️ Discord Supporter role", "🚫 Less rate limiting for downloads", "📚 Priority book requests (if missing on Bookracy or Anna's Archive)", "🤔 Unsure? Ask us anything on Discord!"],
   },
   {
     name: "Patron",
@@ -42,7 +42,7 @@ const TIERS: DonationTier[] = [
       "🌟 'Bookracy Hero' Discord role",
       "💬 Direct feedback channel with the team",
       "⚡️ Bookmarks automatically stored on High-speed caching servers",
-      "🤔 Questions? We’re happy to help!",
+      "🤔 Questions? We're happy to help!",
     ],
   },
 ];
@@ -71,8 +71,8 @@ function DonationPage() {
   const progress = Math.min((CURRENT_AMOUNT / MONTHLY_GOAL) * 100, 100);
 
   return (
-    <div className="flex min-h-[80vh] w-full items-center justify-center">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-2 md:px-6">
+    <div className="flex min-h-[80vh] w-full justify-center">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8">
         <Card className="w-full border border-border bg-card shadow-2xl dark:bg-card">
           <CardHeader>
             <CardTitle className="text-3xl md:text-4xl">Support Bookracy 💜</CardTitle>
@@ -96,9 +96,11 @@ function DonationPage() {
                 </span>
               </div>
             </div>
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+
+            {/* Donation tiers */}
+            <div className="mt-8 px-2 grid grid-cols-1 place-items-center justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {TIERS.map((tier) => (
-                <Card key={tier.name} className={`border-2 ${tier.color} flex h-full flex-col shadow-md transition-all duration-200 hover:scale-[1.025]`}>
+                <Card key={tier.name} className={`border-2 ${tier.color} flex h-full w-full max-w-sm flex-col shadow-md transition-all duration-200 hover:scale-[1.025]`}>
                   <CardHeader>
                     <CardTitle className="text-lg md:text-xl">{tier.name}</CardTitle>
                     <div className="mt-1 text-2xl font-bold">{tier.amount}</div>
@@ -120,9 +122,10 @@ function DonationPage() {
                 </Card>
               ))}
             </div>
+
             {/* Enterprise/Partner Card */}
-            <div className="mt-8">
-              <Card className={`border-2 ${ENTERPRISE_TIER.color} flex w-full max-w-full flex-col items-center justify-between p-6 shadow-lg md:flex-row md:p-10`}>
+            <div className="mt-10 flex justify-center px-2">
+              <Card className={`border-2 ${ENTERPRISE_TIER.color} flex w-full flex-col items-center justify-between p-6 shadow-lg md:flex-row md:p-10`}>
                 <div className="min-w-0 flex-1">
                   <CardHeader className="mb-4 p-0 md:mb-0">
                     <CardTitle className="text-2xl text-orange-600 dark:text-orange-300 md:text-3xl">{ENTERPRISE_TIER.name}</CardTitle>
@@ -145,6 +148,7 @@ function DonationPage() {
                 </div>
               </Card>
             </div>
+
             <div className="mt-10 text-center text-xs text-muted-foreground">
               Want to support in other ways?{" "}
               <a href={DISCORD_URL} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">

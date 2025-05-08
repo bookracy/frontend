@@ -31,10 +31,21 @@ export function FileDropField({
 
     if (disabled) return;
 
-    const files = Array.from(e.dataTransfer.files).filter((f) => acceptedTypes.length === 0 || acceptedTypes.includes(f.name.split(".").pop()?.toLowerCase() || ""));
+    const allFiles = Array.from(e.dataTransfer.files);
+    const acceptedFiles = allFiles.filter((f) => {
+      const extension = f.name.split(".").pop()?.toLowerCase() || "";
+      return acceptedTypes.length === 0 || acceptedTypes.includes(extension);
+    });
 
-    if (files.length > 0) {
-      onFilesSelected(files);
+    // Log rejected files
+    if (acceptedFiles.length < allFiles.length) {
+      console.warn(`${allFiles.length - acceptedFiles.length} files were rejected because they had unsupported file types.`);
+    }
+
+    if (acceptedFiles.length > 0) {
+      onFilesSelected(acceptedFiles);
+    } else if (allFiles.length > 0) {
+      console.warn("No files were accepted. Supported types:", acceptedTypes.join(", "));
     }
   };
 
@@ -46,10 +57,21 @@ export function FileDropField({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const files = Array.from(e.target.files).filter((f) => acceptedTypes.length === 0 || acceptedTypes.includes(f.name.split(".").pop()?.toLowerCase() || ""));
+      const allFiles = Array.from(e.target.files);
+      const acceptedFiles = allFiles.filter((f) => {
+        const extension = f.name.split(".").pop()?.toLowerCase() || "";
+        return acceptedTypes.length === 0 || acceptedTypes.includes(extension);
+      });
 
-      if (files.length > 0) {
-        onFilesSelected(files);
+      // Log rejected files
+      if (acceptedFiles.length < allFiles.length) {
+        console.warn(`${allFiles.length - acceptedFiles.length} files were rejected because they had unsupported file types.`);
+      }
+
+      if (acceptedFiles.length > 0) {
+        onFilesSelected(acceptedFiles);
+      } else {
+        console.warn("No files were accepted. Supported types:", acceptedTypes.join(", "));
       }
     }
   };

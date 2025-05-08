@@ -28,7 +28,7 @@ interface BulkBookItemProps {
   uploadResult: { success?: boolean; error?: string; md5?: string } | undefined;
 }
 
-export function BulkBookItem({ book, index, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
+export function BulkBookItem({ book, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
   const handleCoverChange = (files: File[]) => {
     if (files.length > 0) {
       onCoverChange(files);

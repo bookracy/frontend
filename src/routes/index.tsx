@@ -1,5 +1,5 @@
 import { useGetBooksQueryWithExternalDownloads } from "@/api/backend/search/search";
-import { SkeletonBookItem } from "@/components/books/book-item";
+import { SkeletonBookItem, SkeletonBookItemGrid } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -91,10 +91,8 @@ function Index() {
             <Filters filters={filters} setFilters={setFilters} />
 
             {isSearchLoading && (
-              <div className="flex flex-col gap-4">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <SkeletonBookItem key={i} />
-                ))}
+              <div className={filters.view === "grid" ? "grid grid-cols-2 gap-4 sm:gap-8 md:grid-cols-3 xl:grid-cols-4" : "flex flex-col gap-4"}>
+                {Array.from({ length: filters.perPage }).map((_, i) => (filters.view === "grid" ? <SkeletonBookItemGrid key={i} /> : <SkeletonBookItem key={i} />))}
               </div>
             )}
             {searchError && <p className="text-red-500">Error: {searchError.message}</p>}

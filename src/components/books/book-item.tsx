@@ -107,6 +107,26 @@ export function SkeletonBookItem() {
   );
 }
 
+export function SkeletonBookItemGrid() {
+  return (
+    <Card className="h-full transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+      <CardContent className="h-full">
+        <div className="relative flex h-full flex-col gap-2 pt-6">
+          <Skeleton className="aspect-[10/16] w-full rounded-lg" />
+          <div className="absolute right-1 top-7">
+            <Skeleton className="h-10 w-10 rounded-half" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Skeleton className="h-6 w-3/4 rounded" />
+            <Skeleton className="h-4 w-1/2 rounded" />
+            <Skeleton className="h-3 w-1/4 rounded" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function BookItemDialog(props: BookItemProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 

@@ -57,7 +57,7 @@ function Upload() {
 
           <div className="px-6 pb-6">
             {bulk ? (
-              <BulkUploadForm files={bulkFiles} onClearFiles={() => setBulkFiles([])} />
+              <BulkUploadForm files={bulkFiles} onClearFiles={() => setBulkFiles([])} onAddFiles={(files) => setBulkFiles(files)} />
             ) : (
               <SingleBookForm
                 onSubmit={async (formData) => {

@@ -5,6 +5,7 @@ import { FileDropField } from "./FileDropField";
 import { Card } from "@/components/ui/card";
 import { useBulkUpload } from "./hooks/useBulkUpload";
 import { useAutofill } from "./hooks/useAutofill";
+import { BulkUploadResult } from "./UploadResult";
 
 interface BulkUploadFormProps {
   files: File[];
@@ -95,7 +96,6 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
                   index={idx}
                   onRemove={() => {
                     setBulkForm(bulkForm.filter((_, i) => i !== idx));
-                    onClearFiles();
                   }}
                   onFieldChange={(field, value) => handleBulkFieldChange(idx, field, value)}
                   onCoverChange={(e) => handleBulkCoverChange(idx, e)}
@@ -116,6 +116,8 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
           Upload All {bulkForm.length} Books
         </Button>
       )}
+
+      {bulkUploadMutation.isSuccess && bulkUploadMutation.data && <BulkUploadResult results={bulkUploadMutation.data} />}
 
       {bulkForm.length === 0 && <div className="py-4 text-center text-muted-foreground">Add book files to begin bulk upload</div>}
     </form>

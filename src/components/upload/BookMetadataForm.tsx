@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export interface BookFormData {
   title: string;
@@ -86,14 +87,7 @@ export function BookMetadataForm({ data, onChange, onFileTypeChange, disabled, f
       </div>
       <div className="col-span-full">
         <Label htmlFor="description">Description</Label>
-        <textarea
-          id="description"
-          name="description"
-          value={data.description}
-          disabled={disabled}
-          onChange={handleChange}
-          className="min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-        />
+        <Textarea id="description" name="description" value={data.description} disabled={disabled} onChange={handleChange} className="min-h-[80px]" />
       </div>
     </div>
   );

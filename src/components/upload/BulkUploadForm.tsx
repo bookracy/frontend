@@ -5,6 +5,7 @@ import { BookFormData } from "./BookMetadataForm";
 import { computeFileMd5, autofillBookFields, FILE_TYPES } from "./utils";
 import { FileDropField } from "./FileDropField";
 import { Card } from "@/components/ui/card";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface BulkBookForm extends BookFormData {
   file: File;
@@ -36,18 +37,134 @@ const createFormDataFromFiles = (files: File[]): BulkBookForm[] => {
   }));
 };
 
+interface UploadResponse {
+  success: boolean;
+  md5?: string;
+  error?: string;
+}
+
 export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFormProps) {
   // Initialize form empty data
   const [bulkForm, setBulkForm] = useState<BulkBookForm[]>(() => createFormDataFromFiles(files));
-  const [bulkUploading, setBulkUploading] = useState(false);
   const [bulkProgress, setBulkProgress] = useState<number[]>([]);
-  const [bulkResult, setBulkResult] = useState<{ success?: boolean; error?: string; md5?: string }[]>([]);
-  const [bulkAutofillLoading, setBulkAutofillLoading] = useState<number | null>(null);
+  const queryClient = useQueryClient();
 
   // Update form data when files prop changes
   useEffect(() => {
     setBulkForm(createFormDataFromFiles(files));
   }, [files]);
+
+  // Mutation for autofill
+  const autofillMutation = useMutation({
+    mutationFn: async ({ book, index }: { book: BulkBookForm; index: number }) => {
+      const md5 = await computeFileMd5(book.file);
+      const data = await autofillBookFields(md5);
+      return { data, index };
+    },
+    onSuccess: ({ data, index }) => {
+      if (data) {
+        setBulkForm((prev) =>
+          prev.map((item, i) =>
+            i === index
+              ? {
+                  ...item,
+                  title: data.title || item.title,
+                  author: data.author || item.author,
+                  book_filetype: data.book_filetype || item.book_filetype,
+                  description: data.description || item.description,
+                  publisher: data.publisher || item.publisher,
+                  year: data.year || item.year,
+                  book_lang: data.book_lang || item.book_lang,
+                  isbn: data.isbn || item.isbn,
+                  file_source: (data as any).file_source || item.file_source,
+                  cid: data.cid || item.cid,
+                  coverPreview: data.book_image || data.external_cover_url || item.coverPreview,
+                }
+              : item,
+          ),
+        );
+      }
+    },
+  });
+
+  // Mutation for file uploads
+  const uploadMutation = useMutation({
+    mutationFn: async ({ book, index }: { book: BulkBookForm; index: number }): Promise<UploadResponse> => {
+      if (!book.file || !book.title || !book.author || !book.book_filetype) {
+        return { success: false, error: `Missing required fields for file ${book.file?.name}` };
+      }
+
+      const data = new FormData();
+      data.append("file", book.file);
+      if (book.cover) data.append("cover", book.cover);
+      data.append("title", book.title);
+      data.append("author", book.author);
+      data.append("book_filetype", book.book_filetype);
+      if (book.description) data.append("description", book.description);
+      if (book.publisher) data.append("publisher", book.publisher);
+      if (book.year) data.append("year", book.year);
+      if (book.book_lang) data.append("book_lang", book.book_lang);
+      if (book.isbn) data.append("isbn", book.isbn);
+      if (book.file_source) data.append("file_source", book.file_source);
+      if (book.cid) data.append("cid", book.cid);
+
+      return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://backend.bookracy.ru/upload");
+        xhr.upload.onprogress = (evt) => {
+          if (evt.lengthComputable) {
+            setBulkProgress((prev) => prev.map((p, idx) => (idx === index ? Math.round((evt.loaded / evt.total) * 100) : p)));
+          }
+        };
+        xhr.onload = () => {
+          try {
+            const res = JSON.parse(xhr.responseText);
+            if (xhr.status === 200 && res.success) {
+              resolve({ success: true, md5: res.md5 });
+            } else {
+              resolve({ success: false, error: res.error || "Upload failed." });
+            }
+          } catch {
+            resolve({ success: false, error: "Unexpected server response." });
+          }
+        };
+        xhr.onerror = () => {
+          resolve({ success: false, error: "Network error." });
+        };
+        xhr.send(data);
+      });
+    },
+    onMutate: () => {
+      // Initialize progress at 0 for all books
+      setBulkProgress(Array(bulkForm.length).fill(0));
+    },
+    onSuccess: () => {
+      // Invalidate any relevant queries that should be refreshed
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+    },
+  });
+
+  // Mutation for uploading all books in sequence
+  const bulkUploadMutation = useMutation({
+    mutationFn: async () => {
+      const results: UploadResponse[] = [];
+
+      for (let i = 0; i < bulkForm.length; i++) {
+        const result = await uploadMutation.mutateAsync({ book: bulkForm[i], index: i });
+        results.push(result);
+      }
+
+      return results;
+    },
+    onSuccess: (results) => {
+      // Check if all uploads were successful and clear the form
+      const allSuccessful = results.every((result) => result.success);
+      if (allSuccessful) {
+        setBulkForm([]);
+        onClearFiles();
+      }
+    },
+  });
 
   const handleBulkFileChange = (newFiles: File[]) => {
     if (newFiles.length > 0) {
@@ -113,103 +230,12 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const handleBulkAutofill = async (idx: number) => {
     const book = bulkForm[idx];
     if (!book.file) return;
-    setBulkAutofillLoading(idx);
-    const md5 = await computeFileMd5(book.file);
-    const data = await autofillBookFields(md5);
-    setBulkAutofillLoading(null);
-    if (data) {
-      setBulkForm((prev) =>
-        prev.map((item, i) =>
-          i === idx
-            ? {
-                ...item,
-                title: data.title || item.title,
-                author: data.author || item.author,
-                book_filetype: data.book_filetype || item.book_filetype,
-                description: data.description || item.description,
-                publisher: data.publisher || item.publisher,
-                year: data.year || item.year,
-                book_lang: data.book_lang || item.book_lang,
-                isbn: data.isbn || item.isbn,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                file_source: (data as any).file_source || item.file_source,
-                cid: data.cid || item.cid,
-                coverPreview: data.book_image || data.external_cover_url || item.coverPreview,
-              }
-            : item,
-        ),
-      );
-    }
+    autofillMutation.mutate({ book, index: idx });
   };
 
   const handleBulkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setBulkUploading(true);
-    setBulkProgress(Array(bulkForm.length).fill(0));
-    setBulkResult([]);
-    const results: { success?: boolean; error?: string; md5?: string }[] = [];
-
-    for (let i = 0; i < bulkForm.length; i++) {
-      const book = bulkForm[i];
-      const data = new FormData();
-      if (!book.file || !book.title || !book.author || !book.book_filetype) {
-        results.push({ error: `Missing required fields for file ${book.file.name}` });
-        continue;
-      }
-
-      data.append("file", book.file);
-      if (book.cover) data.append("cover", book.cover);
-      data.append("title", book.title);
-      data.append("author", book.author);
-      data.append("book_filetype", book.book_filetype);
-      if (book.description) data.append("description", book.description);
-      if (book.publisher) data.append("publisher", book.publisher);
-      if (book.year) data.append("year", book.year);
-      if (book.book_lang) data.append("book_lang", book.book_lang);
-      if (book.isbn) data.append("isbn", book.isbn);
-      if (book.file_source) data.append("file_source", book.file_source);
-      if (book.cid) data.append("cid", book.cid);
-
-      // Use XMLHttpRequest for progress
-      await new Promise<void>((resolve) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "https://backend.bookracy.ru/upload");
-        xhr.upload.onprogress = (evt) => {
-          if (evt.lengthComputable) {
-            setBulkProgress((prev) => prev.map((p, idx2) => (idx2 === i ? Math.round((evt.loaded / evt.total) * 100) : p)));
-          }
-        };
-        xhr.onload = () => {
-          try {
-            const res = JSON.parse(xhr.responseText);
-            if (xhr.status === 200 && res.success) {
-              results.push({ success: true, md5: res.md5 });
-            } else {
-              results.push({ error: res.error || "Upload failed." });
-            }
-          } catch {
-            results.push({ error: "Unexpected server response." });
-          }
-          resolve();
-        };
-        xhr.onerror = () => {
-          results.push({ error: "Network error." });
-          resolve();
-        };
-        xhr.send(data);
-      });
-    }
-
-    setBulkResult(results);
-
-    // Check if all uploads were successful and clear the form
-    const allSuccessful = results.every((result) => result.success);
-    if (allSuccessful) {
-      setBulkForm([]);
-      onClearFiles();
-    }
-
-    setBulkUploading(false);
+    bulkUploadMutation.mutate();
   };
 
   return (
@@ -217,7 +243,14 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
       <Card className="border p-6 shadow">
         <h2 className="mb-4 text-lg font-semibold">Bulk Upload</h2>
         <div className="h-[200px]">
-          <FileDropField label="Add books (drag files here or click to browse)" acceptedTypes={FILE_TYPES} multiple={true} disabled={bulkUploading} onFilesSelected={handleBulkFileChange} icon="📚" />
+          <FileDropField
+            label="Add books (drag files here or click to browse)"
+            acceptedTypes={FILE_TYPES}
+            multiple={true}
+            disabled={bulkUploadMutation.isPending}
+            onFilesSelected={handleBulkFileChange}
+            icon="📚"
+          />
         </div>
       </Card>
 
@@ -243,10 +276,10 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
                   onFieldChange={(field, value) => handleBulkFieldChange(idx, field, value)}
                   onCoverChange={(e) => handleBulkCoverChange(idx, e)}
                   onAutofill={() => handleBulkAutofill(idx)}
-                  isAutofilling={bulkAutofillLoading === idx}
-                  isUploading={bulkUploading}
+                  isAutofilling={autofillMutation.isPending && autofillMutation.variables?.index === idx}
+                  isUploading={bulkUploadMutation.isPending}
                   uploadProgress={bulkProgress[idx] || 0}
-                  uploadResult={bulkResult[idx]}
+                  uploadResult={bulkUploadMutation.data ? bulkUploadMutation.data[idx] : undefined}
                 />
               ))}
             </div>
@@ -255,7 +288,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
       )}
 
       {bulkForm.length > 0 && (
-        <Button type="submit" className="mt-2 w-full" loading={bulkUploading} disabled={bulkUploading || bulkForm.length === 0}>
+        <Button type="submit" className="mt-2 w-full" loading={bulkUploadMutation.isPending} disabled={bulkUploadMutation.isPending || bulkForm.length === 0}>
           Upload All {bulkForm.length} Books
         </Button>
       )}

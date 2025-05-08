@@ -7,6 +7,9 @@ import { ProgressBar } from "./ProgressBar";
 import { UploadResult } from "./UploadResult";
 import { BookFormData } from "./BookMetadataForm";
 import { FILE_TYPES } from "./utils";
+import { Minus } from "lucide-react";
+import { FileDropField } from "./FileDropField";
+import { CoverPreview } from "./CoverPreview";
 
 interface BulkBookItemProps {
   book: BookFormData & {
@@ -17,7 +20,7 @@ interface BulkBookItemProps {
   index: number;
   onRemove: () => void;
   onFieldChange: (field: keyof BookFormData, value: string) => void;
-  onCoverChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCoverChange: (e: React.ChangeEvent<HTMLInputElement> | File[]) => void;
   onAutofill: () => void;
   isAutofilling: boolean;
   isUploading: boolean;
@@ -26,6 +29,18 @@ interface BulkBookItemProps {
 }
 
 export function BulkBookItem({ book, index, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
+  const handleCoverChange = (files: File[]) => {
+    if (files.length > 0) {
+      onCoverChange(files);
+    }
+  };
+
+  const handleRemoveCover = () => {
+    onCoverChange([]);
+  };
+
+  const isCoverTooLarge = book.cover ? book.cover.size > 5 * 1024 * 1024 : false; // 5MB limit
+
   return (
     <Card className="flex flex-col gap-2 border bg-muted/30 p-4 dark:bg-muted/10">
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
@@ -39,22 +54,55 @@ export function BulkBookItem({ book, index, onRemove, onFieldChange, onCoverChan
           Remove
         </Button>
       </div>
-      <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
+      <div className="relative flex-1 p-4">
+        {book.coverPreview && (
+          <button
+            type="button"
+            className="absolute right-7 top-7 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white shadow hover:bg-red-600"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveCover();
+            }}
+            disabled={isUploading}
+            title="Remove cover image"
+          >
+            <Minus size={14} />
+          </button>
+        )}
+        <FileDropField
+          label="Upload cover image (JPG, PNG)"
+          acceptedTypes={["jpg", "jpeg", "png", "gif", "webp"]}
+          disabled={isUploading}
+          onFilesSelected={handleCoverChange}
+          icon="🖼️"
+          previewComponent={book.coverPreview ? <CoverPreview imageUrl={book.coverPreview} /> : undefined}
+          isFileTooLarge={isCoverTooLarge}
+        />
+      </div>
+      <div className="border-t pb-4" />
+      <div className="mb-2 flex items-center gap-2">
+        <Button type="button" variant="outline" size="sm" onClick={onAutofill} loading={isAutofilling} disabled={isUploading}>
+          Autofill Metadata
+        </Button>
+        {isAutofilling && <span className="text-xs text-muted-foreground">Looking up metadata...</span>}
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <Label>Cover Image</Label>
-          <Input type="file" accept="image/*" disabled={isUploading} onChange={onCoverChange} />
-          {book.coverPreview && <img src={book.coverPreview} alt="Cover preview" className="mt-2 h-20 w-16 rounded border object-cover shadow" />}
-        </div>
-        <div>
-          <Label>Title *</Label>
+          <Label>
+            Title <span className="text-red-500">*</span>
+          </Label>
           <Input value={book.title} required disabled={isUploading} onChange={(e) => onFieldChange("title", e.target.value)} />
         </div>
         <div>
-          <Label>Author *</Label>
+          <Label>
+            Author <span className="text-red-500">*</span>
+          </Label>
           <Input value={book.author} required disabled={isUploading} onChange={(e) => onFieldChange("author", e.target.value)} />
         </div>
         <div>
-          <Label>File Type *</Label>
+          <Label>
+            File Type <span className="text-red-500">*</span>
+          </Label>
           <Select value={book.book_filetype} onValueChange={(v) => onFieldChange("book_filetype", v)} disabled={isUploading}>
             <SelectTrigger>
               <SelectValue placeholder="Select type" />
@@ -101,12 +149,6 @@ export function BulkBookItem({ book, index, onRemove, onFieldChange, onCoverChan
             className="min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
-      </div>
-      <div className="mb-2 flex items-center gap-2">
-        <Button type="button" variant="outline" size="sm" onClick={onAutofill} loading={isAutofilling} disabled={isUploading}>
-          Autofill from Bookracy
-        </Button>
-        {isAutofilling && <span className="text-xs text-muted-foreground">Looking up metadata...</span>}
       </div>
       {isUploading && <ProgressBar progress={uploadProgress} />}
       {uploadResult && <UploadResult result={uploadResult} />}

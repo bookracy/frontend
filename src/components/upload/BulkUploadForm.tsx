@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BulkBookItem } from "./BulkBookItem";
 import { BookFormData } from "./BookMetadataForm";
-import { extractMetadataFromFilename, computeFileMd5, autofillBookFields } from "./utils";
+import { extractMetadataFromFilename, computeFileMd5, autofillBookFields, FILE_TYPES } from "./utils";
+import { FileDropField } from "./FileDropField";
+import { Card } from "@/components/ui/card";
 
 interface BulkBookForm extends BookFormData {
   file: File;
@@ -27,17 +29,16 @@ export function BulkUploadForm({ files, onClearFiles }: BulkUploadFormProps) {
     if (files.length > 0) {
       setBulkForm(
         files.map((file) => {
-          const meta = extractMetadataFromFilename(file.name);
           return {
             file,
             cover: undefined,
             coverPreview: null,
-            title: meta.title,
-            author: meta.author,
+            title: "",
+            author: "",
             book_filetype: file.name.split(".").pop()?.toLowerCase() || "",
             description: "",
             publisher: "",
-            year: meta.year,
+            year: "",
             book_lang: "",
             isbn: "",
             file_source: "",
@@ -48,24 +49,74 @@ export function BulkUploadForm({ files, onClearFiles }: BulkUploadFormProps) {
     }
   }, [files]);
 
+  const handleBulkFileChange = (newFiles: File[]) => {
+    if (newFiles.length > 0) {
+      // Add new files to existing bulk files
+      const updatedFiles = [...files, ...newFiles];
+
+      // Update the parent component's files state
+      //Clear and recreate since we can't directly update the parent's state
+      onClearFiles();
+      setTimeout(() => {
+        // Use a timeout to ensure the clear operation completes
+        const newBulkFilesEvent = new CustomEvent("bulkFilesAdded", {
+          detail: { files: updatedFiles },
+        });
+        window.dispatchEvent(newBulkFilesEvent);
+      }, 0);
+    }
+  };
+
   const handleBulkFieldChange = (idx: number, field: keyof BookFormData, value: string) => {
     setBulkForm((prev) => prev.map((item, i) => (i === idx ? { ...item, [field]: value } : item)));
   };
 
-  const handleBulkCoverChange = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setBulkForm((prev) =>
-        prev.map((item, i) =>
-          i === idx
-            ? {
-                ...item,
-                cover: file,
-                coverPreview: URL.createObjectURL(file),
-              }
-            : item,
-        ),
-      );
+  const handleBulkCoverChange = (idx: number, e: React.ChangeEvent<HTMLInputElement> | File[]) => {
+    if (Array.isArray(e)) {
+      // Handling File[] from FileDropField
+      if (e.length > 0) {
+        const file = e[0];
+        setBulkForm((prev) =>
+          prev.map((item, i) =>
+            i === idx
+              ? {
+                  ...item,
+                  cover: file,
+                  coverPreview: URL.createObjectURL(file),
+                }
+              : item,
+          ),
+        );
+      } else {
+        // Empty array means cover removal
+        setBulkForm((prev) =>
+          prev.map((item, i) =>
+            i === idx
+              ? {
+                  ...item,
+                  cover: undefined,
+                  coverPreview: null,
+                }
+              : item,
+          ),
+        );
+      }
+    } else {
+      // Handling React.ChangeEvent (original code)
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        setBulkForm((prev) =>
+          prev.map((item, i) =>
+            i === idx
+              ? {
+                  ...item,
+                  cover: file,
+                  coverPreview: URL.createObjectURL(file),
+                }
+              : item,
+          ),
+        );
+      }
     }
   };
 
@@ -160,38 +211,66 @@ export function BulkUploadForm({ files, onClearFiles }: BulkUploadFormProps) {
     }
 
     setBulkResult(results);
+
+    // Check if all uploads were successful and clear the form
+    const allSuccessful = results.every((result) => result.success);
+    if (allSuccessful) {
+      setBulkForm([]);
+      onClearFiles();
+    }
+
     setBulkUploading(false);
   };
 
   return (
     <form onSubmit={handleBulkSubmit} className="mt-4 flex flex-col gap-6">
-      <div className="text-base font-semibold">Files to upload:</div>
+      <Card className="border p-6 shadow">
+        <h2 className="mb-4 text-lg font-semibold">Bulk Upload</h2>
+        <div className="h-[200px]">
+          <FileDropField label="Add books (drag files here or click to browse)" acceptedTypes={FILE_TYPES} multiple={true} disabled={bulkUploading} onFilesSelected={handleBulkFileChange} icon="📚" />
+        </div>
+      </Card>
 
-      <div className="flex max-h-[60vh] flex-col gap-4 overflow-y-auto">
-        {bulkForm.map((book, idx) => (
-          <BulkBookItem
-            key={book.file.name + idx}
-            book={book}
-            index={idx}
-            onRemove={() => {
-              setBulkForm(bulkForm.filter((_, i) => i !== idx));
-              // Also update the parent's files state
-              onClearFiles();
-            }}
-            onFieldChange={(field, value) => handleBulkFieldChange(idx, field, value)}
-            onCoverChange={(e) => handleBulkCoverChange(idx, e)}
-            onAutofill={() => handleBulkAutofill(idx)}
-            isAutofilling={bulkAutofillLoading === idx}
-            isUploading={bulkUploading}
-            uploadProgress={bulkProgress[idx] || 0}
-            uploadResult={bulkResult[idx]}
-          />
-        ))}
-      </div>
+      {bulkForm.length > 0 && (
+        <Card className="border shadow">
+          <div className="p-6 pb-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Files to Upload ({bulkForm.length})</h2>
+            </div>
+          </div>
 
-      <Button type="submit" className="mt-4 w-full" loading={bulkUploading} disabled={bulkUploading || bulkForm.length === 0}>
-        Upload All
-      </Button>
+          <div className="h-fit overflow-y-auto p-6 pt-0">
+            <div className="flex flex-col gap-4">
+              {bulkForm.map((book, idx) => (
+                <BulkBookItem
+                  key={book.file.name + idx}
+                  book={book}
+                  index={idx}
+                  onRemove={() => {
+                    setBulkForm(bulkForm.filter((_, i) => i !== idx));
+                    onClearFiles();
+                  }}
+                  onFieldChange={(field, value) => handleBulkFieldChange(idx, field, value)}
+                  onCoverChange={(e) => handleBulkCoverChange(idx, e)}
+                  onAutofill={() => handleBulkAutofill(idx)}
+                  isAutofilling={bulkAutofillLoading === idx}
+                  isUploading={bulkUploading}
+                  uploadProgress={bulkProgress[idx] || 0}
+                  uploadResult={bulkResult[idx]}
+                />
+              ))}
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {bulkForm.length > 0 && (
+        <Button type="submit" className="mt-2 w-full" loading={bulkUploading} disabled={bulkUploading || bulkForm.length === 0}>
+          Upload All {bulkForm.length} Books
+        </Button>
+      )}
+
+      {bulkForm.length === 0 && <div className="py-4 text-center text-muted-foreground">Add book files to begin bulk upload</div>}
     </form>
   );
 }

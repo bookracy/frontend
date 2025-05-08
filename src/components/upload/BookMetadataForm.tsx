@@ -32,15 +32,21 @@ export function BookMetadataForm({ data, onChange, onFileTypeChange, disabled, f
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <div>
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">
+          Title <span className="text-red-500">*</span>
+        </Label>
         <Input id="title" name="title" value={data.title} required disabled={disabled} onChange={handleChange} />
       </div>
       <div>
-        <Label htmlFor="author">Author *</Label>
+        <Label htmlFor="author">
+          Author <span className="text-red-500">*</span>
+        </Label>
         <Input id="author" name="author" value={data.author} required disabled={disabled} onChange={handleChange} />
       </div>
       <div>
-        <Label htmlFor="book_filetype">File Type *</Label>
+        <Label htmlFor="book_filetype">
+          File Type <span className="text-red-500">*</span>
+        </Label>
         <Select value={data.book_filetype} onValueChange={onFileTypeChange} disabled={disabled}>
           <SelectTrigger id="book_filetype">
             <SelectValue placeholder="Select type" />

@@ -41,7 +41,7 @@ export function BookItemCard(props: BookItemProps) {
               <img
                 src={props.book_image ?? PlaceholderImage}
                 alt={props.title}
-                className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
+                className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
                 onError={(e) => {
                   e.currentTarget.src = PlaceholderImage;
                 }}

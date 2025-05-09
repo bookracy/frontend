@@ -20,28 +20,23 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const [isAutofillAllRunning, setIsAutofillAllRunning] = useState(false);
 
   // Autofill mutation for each book
-  const autofillMutation = useAutofill((data: ExtendedBookItem, error?: unknown, isFromAPI?: boolean) => {
-    if (error) {
-      // If there's an API error, count as failure
+  const autofillMutation = useAutofill((data: ExtendedBookItem, error?: unknown, noResults?: boolean) => {
+    if (error || noResults) {
+      // If there's an API error or no results found, count as failure
       setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
       return;
     }
     
     if (data && autofillMutation.variables) {
       const index = autofillMutation.variables.index;
-
-      // If data came from API, trust it fully
-      // Only validate title/author from filename-based extraction
-      const shouldUseTitle = isFromAPI ? !!data.title : (!!data.title && !data.title.includes(')') && !data.title.includes('('));
-      const shouldUseAuthor = isFromAPI ? !!data.author : (!!data.author && !data.author.includes('(') && !data.author.includes(')'));
       
       setBulkForm((prev) =>
         prev.map((item, i) =>
           i === index
             ? {
                 ...item,
-                title: shouldUseTitle && data.title ? data.title : item.title,
-                author: shouldUseAuthor && data.author ? data.author : item.author,
+                title: data.title || item.title,
+                author: data.author || item.author,
                 book_filetype: data.book_filetype || item.book_filetype,
                 description: data.description || item.description,
                 publisher: data.publisher || item.publisher,
@@ -56,14 +51,8 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
         ),
       );
       
-      // Count as success if data came from API or if we have proper metadata
-      if (isFromAPI) {
-        setAutofillStats(prev => ({ ...prev, success: prev.success + 1 }));
-      } else if ((shouldUseTitle || shouldUseAuthor) && (data.description || data.publisher || data.year || data.isbn || data.book_image)) {
-        setAutofillStats(prev => ({ ...prev, success: prev.success + 1 }));
-      } else {
-        setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
-      }
+      // Count as success if we have valid data
+      setAutofillStats(prev => ({ ...prev, success: prev.success + 1 }));
     }
   });
 

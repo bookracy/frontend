@@ -8,27 +8,37 @@ interface AutofillParams {
   index: number;
 }
 
+// Extended type for BookItem with additional properties
+export interface ExtendedBookItem extends Partial<BookItem> {
+  file_source?: string;
+}
+
 // Fetch book metadata from server
-export async function autofillBookFields(md5: string): Promise<Partial<BookItem> | null> {
+export async function autofillBookFields(md5: string): Promise<ExtendedBookItem | null> {
   try {
     const res = await client<{ results: BookItem[] }>("/books", {
       query: { query: md5, limit: 1 },
     });
-    if (res.results && res.results.length > 0) return res.results[0];
+    if (res.results && res.results.length > 0) return res.results[0] as ExtendedBookItem;
     return null;
   } catch {
     return null;
   }
 }
 
-export const useAutofill = (onSuccess: (data: any) => void) => {
+interface AutofillResult {
+  data: ExtendedBookItem | null;
+  index: number;
+}
+
+export const useAutofill = (onSuccess: (data: ExtendedBookItem) => void) => {
   return useMutation({
     mutationFn: async (params: AutofillParams) => {
       const md5 = await computeFileMd5(params.file);
       const data = await autofillBookFields(md5);
       return { data, index: params.index };
     },
-    onSuccess: (result) => {
+    onSuccess: (result: AutofillResult) => {
       if (result.data) {
         onSuccess(result.data);
       }

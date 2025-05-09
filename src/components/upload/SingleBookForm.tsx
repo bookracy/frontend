@@ -16,10 +16,10 @@ interface SingleBookFormProps {
   onSubmit?: (formData: FormData) => Promise<{ success?: boolean; error?: string; md5?: string }>;
 }
 
-export function SingleBookForm({}: SingleBookFormProps) {
+export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
   const {
     form,
-    coverPreview,
+    coverPreview, 
     filePreview,
     isFileTooLarge,
     isCoverTooLarge,
@@ -49,7 +49,7 @@ export function SingleBookForm({}: SingleBookFormProps) {
       year: data.year || f.year,
       book_lang: data.book_lang || f.book_lang,
       isbn: data.isbn || f.isbn,
-      file_source: (data as any).file_source || f.file_source,
+      file_source: data.file_source || f.file_source,
       cid: data.cid || f.cid,
     }));
     if (data.book_image || data.external_cover_url) {
@@ -72,7 +72,23 @@ export function SingleBookForm({}: SingleBookFormProps) {
     setResult(null);
     setProgress(0);
 
-    const result = await uploadMutation.mutateAsync(form);
+    let result;
+    
+    if (onSubmit) {
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && key !== 'file' && key !== 'cover') {
+          formData.append(key, String(value));
+        }
+      });
+      if (form.file) formData.append('file', form.file);
+      if (form.cover) formData.append('cover', form.cover);
+      
+      result = await onSubmit(formData);
+    } else {
+      result = await uploadMutation.mutateAsync(form);
+    }
+
     setResult(result);
 
     if (result.success) {

@@ -4,7 +4,7 @@ import { FILE_TYPES } from "./hooks/utils";
 import { FileDropField } from "./FileDropField";
 import { Card } from "@/components/ui/card";
 import { useBulkUpload } from "./hooks/useBulkUpload";
-import { useAutofill } from "./hooks/useAutofill";
+import { useAutofill, ExtendedBookItem } from "./hooks/useAutofill";
 import { BulkUploadResult } from "./UploadResult";
 
 interface BulkUploadFormProps {
@@ -17,7 +17,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const { bulkForm, setBulkForm, bulkProgress, handleBulkFieldChange, handleBulkCoverChange, bulkUploadMutation } = useBulkUpload(files, onClearFiles);
 
   // Autofill mutation for each book
-  const autofillMutation = useAutofill((data) => {
+  const autofillMutation = useAutofill((data: ExtendedBookItem) => {
     if (data && autofillMutation.variables) {
       const index = autofillMutation.variables.index;
 
@@ -34,7 +34,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
                 year: data.year || item.year,
                 book_lang: data.book_lang || item.book_lang,
                 isbn: data.isbn || item.isbn,
-                file_source: (data as any).file_source || item.file_source,
+                file_source: data.file_source || item.file_source,
                 cid: data.cid || item.cid,
                 coverPreview: data.book_image || data.external_cover_url || item.coverPreview,
               }

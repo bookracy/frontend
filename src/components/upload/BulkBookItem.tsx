@@ -11,6 +11,7 @@ import { CoverPreview } from "./CoverPreview";
 import { Minus } from "lucide-react";
 import { BulkBookForm } from "./hooks/useBulkUpload";
 import { UploadResult as UploadResultType } from "./hooks/useBookUpload";
+import { memo } from "react";
 
 interface BulkBookItemProps {
   book: BulkBookForm;
@@ -27,7 +28,7 @@ interface BulkBookItemProps {
   uploadResult?: UploadResultType;
 }
 
-export function BulkBookItem({ book, id, isSelected, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
+function BulkBookItemComponent({ book, id, isSelected, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
   if (!book.file) return null;
 
   const handleRemoveCover = () => {
@@ -149,3 +150,17 @@ export function BulkBookItem({ book, id, isSelected, onRemove, onFieldChange, on
     </Card>
   );
 }
+
+// Custom comparator to prevent unnecessary re-renders
+function arePropsEqual(prevProps: BulkBookItemProps, nextProps: BulkBookItemProps) {
+  return (
+    prevProps.book === nextProps.book &&
+    prevProps.isSelected === nextProps.isSelected &&
+    prevProps.isAutofilling === nextProps.isAutofilling &&
+    prevProps.isUploading === nextProps.isUploading &&
+    prevProps.uploadProgress === nextProps.uploadProgress &&
+    prevProps.uploadResult === nextProps.uploadResult
+  );
+}
+
+export const BulkBookItem = memo(BulkBookItemComponent, arePropsEqual);

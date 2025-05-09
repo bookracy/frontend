@@ -8,7 +8,8 @@ import { useAutofill, ExtendedBookItem } from "./hooks/useAutofill";
 import { BulkUploadResult } from "./UploadResult";
 import { NavigationButtons } from "./NavigationButtons";
 import { useNavigationHelpers } from "./hooks/useNavigationHelpers";
-import { useState } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
 interface BulkUploadFormProps {
   files: File[];
@@ -20,6 +21,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const { bulkForm, setBulkForm, bulkProgress, handleBulkFieldChange, handleBulkCoverChange, bulkUploadMutation } = useBulkUpload(files, onClearFiles);
   const [autofillStats, setAutofillStats] = useState<{ success: number; failed: number }>({ success: 0, failed: 0 });
   const [isAutofillAllRunning, setIsAutofillAllRunning] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const isItemUnfilled = (item: BulkBookForm) => {
     return !item.title || !item.author || !item.book_filetype;
@@ -72,11 +74,14 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
     }
   };
 
-  const handleBulkAutofill = async (idx: number) => {
-    const book = bulkForm[idx];
-    if (!book.file) return;
-    autofillMutation.mutate({ file: book.file, index: idx });
-  };
+  const handleBulkAutofill = useCallback(
+    (idx: number) => {
+      const book = bulkForm[idx];
+      if (!book.file) return;
+      autofillMutation.mutate({ file: book.file, index: idx });
+    },
+    [bulkForm, autofillMutation],
+  );
 
   const handleAutofillAll = async () => {
     if (isAutofillAllRunning) return;
@@ -126,6 +131,44 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
     bulkUploadMutation.mutate();
   };
 
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
+
+  // Auto-scroll to the current selected item when changed
+  useEffect(() => {
+    if (currentItemIndex !== null && currentItemIndex !== -1 && virtuosoRef.current) {
+      virtuosoRef.current.scrollToIndex({
+        index: currentItemIndex,
+        align: "center",
+        behavior: "smooth",
+      });
+    }
+  }, [currentItemIndex]);
+
+  // Memoize the item renderer function to prevent unnecessary re-renders
+  const itemContent = useMemo(() => {
+    return (index: number, book: BulkBookForm) => (
+      <div className="py-2">
+        <BulkBookItem
+          key={`${index}-${book.file?.name || "unnamed"}`}
+          id={`bulk-item-${index}`}
+          book={book}
+          index={index}
+          isSelected={currentItemIndex === index}
+          onRemove={() => {
+            setBulkForm(bulkForm.filter((_, i) => i !== index));
+          }}
+          onFieldChange={(field, value) => handleBulkFieldChange(index, field, value)}
+          onCoverChange={(e) => handleBulkCoverChange(index, e)}
+          onAutofill={() => handleBulkAutofill(index)}
+          isAutofilling={autofillMutation.isPending && autofillMutation.variables?.index === index}
+          isUploading={bulkUploadMutation.isPending}
+          uploadProgress={bulkProgress[index] || 0}
+          uploadResult={bulkUploadMutation.data ? bulkUploadMutation.data[index] : undefined}
+        />
+      </div>
+    );
+  }, [bulkForm, currentItemIndex, setBulkForm, handleBulkFieldChange, handleBulkCoverChange, handleBulkAutofill, autofillMutation, bulkUploadMutation, bulkProgress]);
+
   return (
     <form onSubmit={handleBulkSubmit} className="mt-4 flex flex-col gap-6">
       <Card className="border p-6 shadow">
@@ -166,28 +209,20 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
             </div>
           </div>
 
-          <div className="h-fit overflow-y-auto p-6 pt-0">
-            <div className="flex flex-col gap-4">
-              {bulkForm.map((book, idx) => (
-                <BulkBookItem
-                  key={`${idx}-${book.file?.name || "unnamed"}`}
-                  id={`bulk-item-${idx}`}
-                  book={book}
-                  index={idx}
-                  isSelected={currentItemIndex === idx}
-                  onRemove={() => {
-                    setBulkForm(bulkForm.filter((_, i) => i !== idx));
-                  }}
-                  onFieldChange={(field, value) => handleBulkFieldChange(idx, field, value)}
-                  onCoverChange={(e) => handleBulkCoverChange(idx, e)}
-                  onAutofill={() => handleBulkAutofill(idx)}
-                  isAutofilling={autofillMutation.isPending && autofillMutation.variables?.index === idx}
-                  isUploading={bulkUploadMutation.isPending}
-                  uploadProgress={bulkProgress[idx] || 0}
-                  uploadResult={bulkUploadMutation.data ? bulkUploadMutation.data[idx] : undefined}
-                />
-              ))}
-            </div>
+          <div ref={containerRef} className="h-[80vh] overflow-hidden p-6 pt-0">
+            {bulkForm.length > 0 && (
+              <Virtuoso
+                ref={virtuosoRef}
+                style={{ height: "80vh", width: "100%" }}
+                totalCount={bulkForm.length}
+                data={bulkForm}
+                itemContent={itemContent}
+                overscan={2000}
+                increaseViewportBy={{ top: 400, bottom: 400 }}
+                defaultItemHeight={600}
+                className="p-2"
+              />
+            )}
           </div>
         </Card>
       )}

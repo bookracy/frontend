@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface FileDropFieldProps {
   label: string;
@@ -79,7 +80,12 @@ export function FileDropField({
   return (
     <div className="flex h-full w-full">
       <div
-        className={`flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${isFileTooLarge ? "border-red-500" : "border-blue-400/60"} bg-muted/40 p-5 text-center transition ${disabled ? "cursor-not-allowed opacity-50" : "hover:bg-blue-100/40 dark:hover:bg-blue-900/30"} ${filePreview ? "bg-blue-50/50 dark:bg-blue-900/20" : "dark:bg-muted/10"} `}
+        className={cn(
+          "flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-muted/40 p-5 text-center transition",
+          isFileTooLarge ? "border-red-500" : "border-blue-400/60",
+          disabled ? "cursor-not-allowed opacity-50" : "hover:bg-blue-100/40 dark:hover:bg-blue-900/30",
+          filePreview ? "bg-blue-50/50 dark:bg-blue-900/20" : "dark:bg-muted/10"
+        )}
         onDrop={handleDrop}
         onDragOver={(e) => {
           e.preventDefault();

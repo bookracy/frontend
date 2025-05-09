@@ -41,7 +41,7 @@ export function BookItemCard(props: BookItemProps) {
               <img
                 src={props.book_image ?? PlaceholderImage}
                 alt={props.title}
-                className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-110 hover:shadow-xl"
+                className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
                 onError={(e) => {
                   e.currentTarget.src = PlaceholderImage;
                 }}
@@ -107,6 +107,26 @@ export function SkeletonBookItem() {
   );
 }
 
+export function SkeletonBookItemGrid() {
+  return (
+    <Card className="h-full transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+      <CardContent className="h-full">
+        <div className="relative flex h-full flex-col gap-2 pt-6">
+          <Skeleton className="aspect-[10/16] w-full rounded-lg" />
+          <div className="absolute right-1 top-7">
+            <Skeleton className="rounded-half h-10 w-10" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Skeleton className="h-6 w-3/4 rounded" />
+            <Skeleton className="h-4 w-1/2 rounded" />
+            <Skeleton className="h-3 w-1/4 rounded" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function BookItemDialog(props: BookItemProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
@@ -115,15 +135,15 @@ export function BookItemDialog(props: BookItemProps) {
   return (
     <Dialog>
       <div className="flex flex-col">
-        <Card>
-          <CardContent>
-            <div className="relative flex flex-col pt-6">
+        <Card className="h-full transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+          <CardContent className="h-full">
+            <div className="relative flex h-full flex-col gap-2 pt-6">
               <DialogTrigger asChild>
                 <AspectRatio ratio={10 / 16}>
                   <img
                     src={props.book_image ?? PlaceholderImage}
                     alt={props.title}
-                    className="h-full w-full rounded-lg object-cover transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+                    className="h-full w-full rounded-lg object-cover"
                     onError={(e) => {
                       e.currentTarget.src = PlaceholderImage;
                     }}
@@ -133,10 +153,14 @@ export function BookItemDialog(props: BookItemProps) {
               <div className="absolute right-1 top-7">
                 <BookmarkButton book={props} />
               </div>
+              <div className="flex flex-col gap-1">
+                <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
+                <p className="text-sm text-muted-foreground">By {props.author}</p>
+                <p className="text-xs text-muted-foreground">{props.book_filetype}</p>
+              </div>
             </div>
           </CardContent>
         </Card>
-        <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
       </div>
       <DialogContent>
         <DialogHeader>

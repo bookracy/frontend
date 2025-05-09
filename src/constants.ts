@@ -14,6 +14,8 @@ export const PAGE_TITLES: Partial<Record<FileRouteTypes["fullPaths"], string>> =
   "/library": "Library",
   "/settings": "Settings",
   "/upload": "Upload",
+  "/login": "Login",
+  "/register": "Register",
 };
 
 export const LANGUAGES = [

@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { SingleBookForm } from "@/components/upload/SingleBookForm";
 import { BulkUploadForm } from "@/components/upload/BulkUploadForm";
+import { useUploadService } from "@/components/upload/hooks/useUploadService";
 
 export const Route = createFileRoute("/upload")({
   component: Upload,
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/upload")({
 function Upload() {
   const [bulk, setBulk] = useState(false);
   const [bulkFiles, setBulkFiles] = useState<File[]>([]);
+  const { uploadSingleBook } = useUploadService();
 
   // Listen for the bulkFilesAdded event
   useEffect(() => {
@@ -61,26 +63,23 @@ function Upload() {
             ) : (
               <SingleBookForm
                 onSubmit={async (formData) => {
-                  return new Promise((resolve) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("POST", "https://backend.bookracy.ru/upload");
-                    xhr.onload = () => {
-                      try {
-                        const res = JSON.parse(xhr.responseText);
-                        if (xhr.status === 200 && res.success) {
-                          resolve({ success: true, md5: res.md5 });
-                        } else {
-                          resolve({ error: res.error || "Upload failed." });
-                        }
-                      } catch {
-                        resolve({ error: "Unexpected server response." });
-                      }
-                    };
-                    xhr.onerror = () => {
-                      resolve({ error: "Network error." });
-                    };
-                    xhr.send(formData);
-                  });
+                  // Convert FormData to BookFormState
+                  const book = {
+                    file: formData.get('file') as File,
+                    cover: formData.get('cover') as File,
+                    title: formData.get('title') as string,
+                    author: formData.get('author') as string,
+                    book_filetype: formData.get('book_filetype') as string,
+                    description: formData.get('description') as string,
+                    publisher: formData.get('publisher') as string,
+                    year: formData.get('year') as string,
+                    book_lang: formData.get('book_lang') as string,
+                    isbn: formData.get('isbn') as string,
+                    file_source: formData.get('file_source') as string,
+                    cid: formData.get('cid') as string,
+                  };
+                  
+                  return uploadSingleBook(book);
                 }}
               />
             )}

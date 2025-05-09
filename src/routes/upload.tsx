@@ -65,20 +65,20 @@ function Upload() {
                 onSubmit={async (formData) => {
                   // Convert FormData to BookFormState
                   const book = {
-                    file: formData.get('file') as File,
-                    cover: formData.get('cover') as File,
-                    title: formData.get('title') as string,
-                    author: formData.get('author') as string,
-                    book_filetype: formData.get('book_filetype') as string,
-                    description: formData.get('description') as string,
-                    publisher: formData.get('publisher') as string,
-                    year: formData.get('year') as string,
-                    book_lang: formData.get('book_lang') as string,
-                    isbn: formData.get('isbn') as string,
-                    file_source: formData.get('file_source') as string,
-                    cid: formData.get('cid') as string,
+                    file: formData.get("file") as File,
+                    cover: formData.get("cover") as File,
+                    title: formData.get("title") as string,
+                    author: formData.get("author") as string,
+                    book_filetype: formData.get("book_filetype") as string,
+                    description: formData.get("description") as string,
+                    publisher: formData.get("publisher") as string,
+                    year: formData.get("year") as string,
+                    book_lang: formData.get("book_lang") as string,
+                    isbn: formData.get("isbn") as string,
+                    file_source: formData.get("file_source") as string,
+                    cid: formData.get("cid") as string,
                   };
-                  
+
                   return uploadSingleBook(book);
                 }}
               />

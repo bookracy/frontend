@@ -36,6 +36,7 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
 
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{ success?: boolean; error?: string; md5?: string } | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Autofill mutation for individual books
   const autofillMutation = useAutofill((data) => {
@@ -66,33 +67,46 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
     autofillMutation.mutate({ file: form.file, index: 0 });
   };
 
+  // Clear result when new book file is added
+  const handleBookFileWithResultClear = (files: File[]) => {
+    setResult(null);
+    handleBookFileChange(files);
+  };
+
   // Form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setResult(null);
     setProgress(0);
+    setIsUploading(true);
 
     let result;
 
-    if (onSubmit) {
-      const formData = new FormData();
-      Object.entries(form).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && key !== "file" && key !== "cover") {
-          formData.append(key, String(value));
-        }
-      });
-      if (form.file) formData.append("file", form.file);
-      if (form.cover) formData.append("cover", form.cover);
+    try {
+      if (onSubmit) {
+        const formData = new FormData();
+        Object.entries(form).forEach(([key, value]) => {
+          if (value !== null && value !== undefined && key !== "file" && key !== "cover") {
+            formData.append(key, String(value));
+          }
+        });
+        if (form.file) formData.append("file", form.file);
+        if (form.cover) formData.append("cover", form.cover);
 
-      result = await onSubmit(formData);
-    } else {
-      result = await uploadMutation.mutateAsync(form);
-    }
+        result = await onSubmit(formData);
+      } else {
+        result = await uploadMutation.mutateAsync(form);
+      }
 
-    setResult(result);
+      setResult(result);
 
-    if (result.success) {
-      resetForm();
+      if (result.success) {
+        resetForm();
+      }
+    } catch (error) {
+      setResult({ success: false, error: error instanceof Error ? error.message : "Upload failed" });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -112,8 +126,9 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveBook();
+                      setResult(null);
                     }}
-                    disabled={uploadMutation.isPending}
+                    disabled={uploadMutation.isPending || isUploading}
                     title="Remove book file"
                   >
                     <Minus size={14} />
@@ -122,8 +137,8 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
                 <FileDropField
                   label="Upload your book file (EPUB, PDF, etc.)"
                   acceptedTypes={FILE_TYPES}
-                  disabled={uploadMutation.isPending}
-                  onFilesSelected={handleBookFileChange}
+                  disabled={uploadMutation.isPending || isUploading}
+                  onFilesSelected={handleBookFileWithResultClear}
                   icon="📚"
                   previewComponent={
                     form.file && filePreview ? <BookPreview fileName={form.file.name} fileSize={form.file.size} fileType={form.book_filetype || form.file.name.split(".").pop() || ""} /> : undefined
@@ -142,7 +157,7 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
                       e.stopPropagation();
                       handleRemoveCover();
                     }}
-                    disabled={uploadMutation.isPending}
+                    disabled={uploadMutation.isPending || isUploading}
                     title="Remove cover image"
                   >
                     <Minus size={14} />
@@ -151,7 +166,7 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
                 <FileDropField
                   label="Upload cover image (JPG, PNG)"
                   acceptedTypes={["jpg", "jpeg", "png", "gif", "webp"]}
-                  disabled={uploadMutation.isPending}
+                  disabled={uploadMutation.isPending || isUploading}
                   onFilesSelected={handleCoverChange}
                   icon="🖼️"
                   previewComponent={coverPreview ? <CoverPreview imageUrl={coverPreview} /> : undefined}
@@ -169,22 +184,22 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
               <h2 className="text-lg font-semibold">Book Details</h2>
               <div>
                 {form.file && (
-                  <Button type="button" size="sm" variant="outline" onClick={handleAutofill} loading={autofillMutation.isPending} disabled={uploadMutation.isPending || !form.file}>
+                  <Button type="button" size="sm" variant="outline" onClick={handleAutofill} loading={autofillMutation.isPending} disabled={uploadMutation.isPending || isUploading || !form.file}>
                     Autofill Metadata
                   </Button>
                 )}
                 {autofillMutation.isPending && <div className="pt-2 text-xs text-muted-foreground">Looking up metadata...</div>}
               </div>
             </div>
-            <BookMetadataForm data={form} onChange={handleChange} onFileTypeChange={handleFileTypeChange} disabled={uploadMutation.isPending} fileTypes={FILE_TYPES} />
+            <BookMetadataForm data={form} onChange={handleChange} onFileTypeChange={handleFileTypeChange} disabled={uploadMutation.isPending || isUploading} fileTypes={FILE_TYPES} />
           </Card>
         </div>
       </div>
 
-      {uploadMutation.isPending && <ProgressBar progress={progress} />}
+      {(uploadMutation.isPending || isUploading) && <ProgressBar progress={progress} />}
       <UploadResult result={result} />
 
-      <Button type="submit" className="mt-2 w-full" loading={uploadMutation.isPending} disabled={uploadMutation.isPending || !form.file || isFileTooLarge || isCoverTooLarge}>
+      <Button type="submit" className="mt-2 w-full" loading={uploadMutation.isPending || isUploading} disabled={uploadMutation.isPending || isUploading || !form.file || isFileTooLarge || isCoverTooLarge}>
         {isFileTooLarge ? "Book File Too Large (Max 100MB)" : isCoverTooLarge ? "Cover Image Too Large (Max 100MB)" : "Upload Book"}
       </Button>
     </form>

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { useBulkUpload } from "./hooks/useBulkUpload";
 import { useAutofill, ExtendedBookItem } from "./hooks/useAutofill";
 import { BulkUploadResult } from "./UploadResult";
+import { useState } from "react";
 
 interface BulkUploadFormProps {
   files: File[];
@@ -15,19 +16,32 @@ interface BulkUploadFormProps {
 
 export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFormProps) {
   const { bulkForm, setBulkForm, bulkProgress, handleBulkFieldChange, handleBulkCoverChange, bulkUploadMutation } = useBulkUpload(files, onClearFiles);
+  const [autofillStats, setAutofillStats] = useState<{ success: number; failed: number }>({ success: 0, failed: 0 });
+  const [isAutofillAllRunning, setIsAutofillAllRunning] = useState(false);
 
   // Autofill mutation for each book
-  const autofillMutation = useAutofill((data: ExtendedBookItem) => {
+  const autofillMutation = useAutofill((data: ExtendedBookItem, error?: unknown, isFromAPI?: boolean) => {
+    if (error) {
+      // If there's an API error, count as failure
+      setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+      return;
+    }
+    
     if (data && autofillMutation.variables) {
       const index = autofillMutation.variables.index;
 
+      // If data came from API, trust it fully
+      // Only validate title/author from filename-based extraction
+      const shouldUseTitle = isFromAPI ? !!data.title : (!!data.title && !data.title.includes(')') && !data.title.includes('('));
+      const shouldUseAuthor = isFromAPI ? !!data.author : (!!data.author && !data.author.includes('(') && !data.author.includes(')'));
+      
       setBulkForm((prev) =>
         prev.map((item, i) =>
           i === index
             ? {
                 ...item,
-                title: data.title || item.title,
-                author: data.author || item.author,
+                title: shouldUseTitle && data.title ? data.title : item.title,
+                author: shouldUseAuthor && data.author ? data.author : item.author,
                 book_filetype: data.book_filetype || item.book_filetype,
                 description: data.description || item.description,
                 publisher: data.publisher || item.publisher,
@@ -41,6 +55,15 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
             : item,
         ),
       );
+      
+      // Count as success if data came from API or if we have proper metadata
+      if (isFromAPI) {
+        setAutofillStats(prev => ({ ...prev, success: prev.success + 1 }));
+      } else if ((shouldUseTitle || shouldUseAuthor) && (data.description || data.publisher || data.year || data.isbn || data.book_image)) {
+        setAutofillStats(prev => ({ ...prev, success: prev.success + 1 }));
+      } else {
+        setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+      }
     }
   });
 
@@ -56,6 +79,49 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
     const book = bulkForm[idx];
     if (!book.file) return;
     autofillMutation.mutate({ file: book.file, index: idx });
+  };
+
+  const handleAutofillAll = async () => {
+    if (isAutofillAllRunning) return;
+    
+    setIsAutofillAllRunning(true);
+    setAutofillStats({ success: 0, failed: 0 });
+    
+    // Process books sequentially to avoid overwhelming the API
+    for (let i = 0; i < bulkForm.length; i++) {
+      const book = bulkForm[i];
+      if (book.file) {
+        try {
+          await new Promise<void>((resolve) => {
+            const fileToAutofill = book.file;
+            if (!fileToAutofill) {
+              setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+              resolve();
+              return;
+            }
+            
+            autofillMutation.mutate(
+              { file: fileToAutofill, index: i },
+              {
+                onSettled: () => {
+                  resolve();
+                },
+                onError: () => {
+                  // Handle error in onError callback to ensure it's counted
+                  setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+                }
+              }
+            );
+          });
+        } catch {
+          setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+        }
+      } else {
+        setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+      }
+    }
+    
+    setIsAutofillAllRunning(false);
   };
 
   const handleBulkSubmit = async (e: React.FormEvent) => {
@@ -84,6 +150,22 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
           <div className="p-6 pb-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Files to Upload ({bulkForm.length})</h2>
+              <div className="flex items-center gap-4">
+                {autofillStats.success > 0 || autofillStats.failed > 0 ? (
+                  <span className="text-sm text-muted-foreground">
+                    Autofill results: {autofillStats.success} succeeded, {autofillStats.failed} failed
+                  </span>
+                ) : null}
+                <Button 
+                  type="button"
+                  variant="outline"
+                  onClick={handleAutofillAll}
+                  disabled={isAutofillAllRunning || bulkUploadMutation.isPending || bulkForm.length === 0}
+                  loading={isAutofillAllRunning}
+                >
+                  Autofill All
+                </Button>
+              </div>
             </div>
           </div>
 

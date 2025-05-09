@@ -19,7 +19,7 @@ export function FileDropField({
   multiple = false,
   onFilesSelected,
   disabled = false,
-  icon = "��",
+  icon = "",
   previewComponent,
   isFileTooLarge = false,
 }: FileDropFieldProps) {

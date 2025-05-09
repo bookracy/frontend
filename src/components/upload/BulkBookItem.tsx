@@ -25,7 +25,7 @@ interface BulkBookItemProps {
   uploadResult?: UploadResultType;
 }
 
-export function BulkBookItem({ book, index, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
+export function BulkBookItem({ book, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
   if (!book.file) return null;
 
   const handleRemoveCover = () => {

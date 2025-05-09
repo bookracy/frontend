@@ -15,6 +15,8 @@ import { UploadResult as UploadResultType } from "./hooks/useBookUpload";
 interface BulkBookItemProps {
   book: BulkBookForm;
   index: number;
+  id?: string;
+  isSelected?: boolean;
   onRemove: () => void;
   onFieldChange: (field: keyof BookFormData, value: string) => void;
   onCoverChange: (files: File[]) => void;
@@ -25,7 +27,7 @@ interface BulkBookItemProps {
   uploadResult?: UploadResultType;
 }
 
-export function BulkBookItem({ book, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
+export function BulkBookItem({ book, id, isSelected, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
   if (!book.file) return null;
 
   const handleRemoveCover = () => {
@@ -35,7 +37,7 @@ export function BulkBookItem({ book, onRemove, onFieldChange, onCoverChange, onA
   const isCoverTooLarge = book.cover ? book.cover.size > 5 * 1024 * 1024 : false; // 5MB limit
 
   return (
-    <Card className="flex flex-col gap-2 border bg-muted/30 p-4 dark:bg-muted/10">
+    <Card id={id} className={`flex flex-col gap-2 border bg-muted/30 p-4 dark:bg-muted/10 ${isSelected ? "ring-2 ring-primary" : ""}`}>
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="min-w-0 flex-1">
           <div className="break-all font-mono text-xs">{book.file.name}</div>

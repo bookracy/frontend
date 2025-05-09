@@ -23,16 +23,16 @@ export const useAutofill = (onSuccess: (data: ExtendedBookItem, error?: unknown,
   return useMutation({
     mutationFn: async (params: AutofillParams) => {
       const md5 = await computeFileMd5(params.file);
-      
+
       // Look up the book by its MD5 hash
       const res = await client<{ results: BookItem[] }>("/books", {
         query: { query: md5, limit: 1 },
       });
-      
+
       // Check if we got any results
       const noResults = !res.results || res.results.length === 0;
-      const data = !noResults ? res.results[0] as ExtendedBookItem : null;
-        
+      const data = !noResults ? (res.results[0] as ExtendedBookItem) : null;
+
       return { data, index: params.index, noResults };
     },
     onSuccess: (result: AutofillResult) => {

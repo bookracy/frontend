@@ -199,7 +199,12 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
       {(uploadMutation.isPending || isUploading) && <ProgressBar progress={progress} />}
       <UploadResult result={result} />
 
-      <Button type="submit" className="mt-2 w-full" loading={uploadMutation.isPending || isUploading} disabled={uploadMutation.isPending || isUploading || !form.file || isFileTooLarge || isCoverTooLarge}>
+      <Button
+        type="submit"
+        className="mt-2 w-full"
+        loading={uploadMutation.isPending || isUploading}
+        disabled={uploadMutation.isPending || isUploading || !form.file || isFileTooLarge || isCoverTooLarge}
+      >
         {isFileTooLarge ? "Book File Too Large (Max 100MB)" : isCoverTooLarge ? "Cover Image Too Large (Max 100MB)" : "Upload Book"}
       </Button>
     </form>

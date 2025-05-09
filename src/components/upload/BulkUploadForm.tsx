@@ -3,9 +3,11 @@ import { BulkBookItem } from "./BulkBookItem";
 import { FILE_TYPES } from "./hooks/utils";
 import { FileDropField } from "./FileDropField";
 import { Card } from "@/components/ui/card";
-import { useBulkUpload } from "./hooks/useBulkUpload";
+import { useBulkUpload, BulkBookForm } from "./hooks/useBulkUpload";
 import { useAutofill, ExtendedBookItem } from "./hooks/useAutofill";
 import { BulkUploadResult } from "./UploadResult";
+import { NavigationButtons } from "./NavigationButtons";
+import { useNavigationHelpers } from "./hooks/useNavigationHelpers";
 import { useState } from "react";
 
 interface BulkUploadFormProps {
@@ -19,17 +21,23 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const [autofillStats, setAutofillStats] = useState<{ success: number; failed: number }>({ success: 0, failed: 0 });
   const [isAutofillAllRunning, setIsAutofillAllRunning] = useState(false);
 
+  const isItemUnfilled = (item: BulkBookForm) => {
+    return !item.title || !item.author || !item.book_filetype;
+  };
+
+  const { currentItemIndex, hasPrevious, hasNext, goToNextUnfilled, goToPrevUnfilled } = useNavigationHelpers(bulkForm, isItemUnfilled);
+
   // Autofill mutation for each book
   const autofillMutation = useAutofill((data: ExtendedBookItem, error?: unknown, noResults?: boolean) => {
     if (error || noResults) {
       // If there's an API error or no results found, count as failure
-      setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+      setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
       return;
     }
-    
+
     if (data && autofillMutation.variables) {
       const index = autofillMutation.variables.index;
-      
+
       setBulkForm((prev) =>
         prev.map((item, i) =>
           i === index
@@ -50,9 +58,9 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
             : item,
         ),
       );
-      
+
       // Count as success if we have valid data
-      setAutofillStats(prev => ({ ...prev, success: prev.success + 1 }));
+      setAutofillStats((prev) => ({ ...prev, success: prev.success + 1 }));
     }
   });
 
@@ -72,10 +80,10 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
 
   const handleAutofillAll = async () => {
     if (isAutofillAllRunning) return;
-    
+
     setIsAutofillAllRunning(true);
     setAutofillStats({ success: 0, failed: 0 });
-    
+
     // Process books sequentially to avoid overwhelming the API
     for (let i = 0; i < bulkForm.length; i++) {
       const book = bulkForm[i];
@@ -84,11 +92,11 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
           await new Promise<void>((resolve) => {
             const fileToAutofill = book.file;
             if (!fileToAutofill) {
-              setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+              setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
               resolve();
               return;
             }
-            
+
             autofillMutation.mutate(
               { file: fileToAutofill, index: i },
               {
@@ -97,19 +105,19 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
                 },
                 onError: () => {
                   // Handle error in onError callback to ensure it's counted
-                  setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
-                }
-              }
+                  setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
+                },
+              },
             );
           });
         } catch {
-          setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+          setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
         }
       } else {
-        setAutofillStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+        setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
       }
     }
-    
+
     setIsAutofillAllRunning(false);
   };
 
@@ -145,7 +153,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
                     Autofill results: {autofillStats.success} succeeded, {autofillStats.failed} failed
                   </span>
                 ) : null}
-                <Button 
+                <Button
                   type="button"
                   variant="outline"
                   onClick={handleAutofillAll}
@@ -163,8 +171,10 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
               {bulkForm.map((book, idx) => (
                 <BulkBookItem
                   key={`${idx}-${book.file?.name || "unnamed"}`}
+                  id={`bulk-item-${idx}`}
                   book={book}
                   index={idx}
+                  isSelected={currentItemIndex === idx}
                   onRemove={() => {
                     setBulkForm(bulkForm.filter((_, i) => i !== idx));
                   }}
@@ -191,6 +201,8 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
       {bulkUploadMutation.isSuccess && bulkUploadMutation.data && <BulkUploadResult results={bulkUploadMutation.data} />}
 
       {bulkForm.length === 0 && <div className="py-4 text-center text-muted-foreground">Add book files to begin bulk upload</div>}
+
+      {bulkForm.length > 0 && <NavigationButtons onPrevious={goToPrevUnfilled} onNext={goToNextUnfilled} disabled={bulkUploadMutation.isPending} hasPrevious={hasPrevious} hasNext={hasNext} />}
     </form>
   );
 }

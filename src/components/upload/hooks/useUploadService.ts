@@ -43,10 +43,7 @@ export const useUploadService = () => {
   /**
    * Upload a single book and track progress
    */
-  const uploadSingleBook = async (
-    formData: BookFormState,
-    onProgressUpdate?: (progress: number) => void
-  ): Promise<UploadResult> => {
+  const uploadSingleBook = async (formData: BookFormState, onProgressUpdate?: (progress: number) => void): Promise<UploadResult> => {
     // Validate required fields
     if (!validateBookData(formData)) {
       return { success: false, error: "Please fill all required fields." };
@@ -59,7 +56,7 @@ export const useUploadService = () => {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `${backendURL}/upload`);
-      
+
       if (onProgressUpdate) {
         xhr.upload.onprogress = (evt) => {
           if (evt.lengthComputable) {
@@ -67,7 +64,7 @@ export const useUploadService = () => {
           }
         };
       }
-      
+
       xhr.onload = () => {
         try {
           const res = JSON.parse(xhr.responseText);
@@ -81,11 +78,11 @@ export const useUploadService = () => {
           resolve({ success: false, error: "Unexpected server response." });
         }
       };
-      
+
       xhr.onerror = () => {
         resolve({ success: false, error: "Network error." });
       };
-      
+
       xhr.send(data);
     });
   };
@@ -93,10 +90,7 @@ export const useUploadService = () => {
   /**
    * Upload multiple books in sequence
    */
-  const uploadMultipleBooks = async (
-    books: BookFormState[],
-    onProgressUpdate?: (index: number, progress: number) => void
-  ): Promise<UploadResult[]> => {
+  const uploadMultipleBooks = async (books: BookFormState[], onProgressUpdate?: (index: number, progress: number) => void): Promise<UploadResult[]> => {
     const results: UploadResult[] = [];
 
     for (let i = 0; i < books.length; i++) {
@@ -130,7 +124,7 @@ export const useUploadService = () => {
     }
 
     // Invalidate queries after all uploads
-    if (results.some(result => result.success)) {
+    if (results.some((result) => result.success)) {
       queryClient.invalidateQueries({ queryKey: ["books"] });
     }
 
@@ -141,4 +135,4 @@ export const useUploadService = () => {
     uploadSingleBook,
     uploadMultipleBooks,
   };
-}; 
+};

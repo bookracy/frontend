@@ -19,7 +19,7 @@ interface SingleBookFormProps {
 export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
   const {
     form,
-    coverPreview, 
+    coverPreview,
     filePreview,
     isFileTooLarge,
     isCoverTooLarge,
@@ -73,17 +73,17 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
     setProgress(0);
 
     let result;
-    
+
     if (onSubmit) {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && key !== 'file' && key !== 'cover') {
+        if (value !== null && value !== undefined && key !== "file" && key !== "cover") {
           formData.append(key, String(value));
         }
       });
-      if (form.file) formData.append('file', form.file);
-      if (form.cover) formData.append('cover', form.cover);
-      
+      if (form.file) formData.append("file", form.file);
+      if (form.cover) formData.append("cover", form.cover);
+
       result = await onSubmit(formData);
     } else {
       result = await uploadMutation.mutateAsync(form);

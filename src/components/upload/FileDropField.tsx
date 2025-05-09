@@ -84,7 +84,7 @@ export function FileDropField({
           "flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-muted/40 p-5 text-center transition",
           isFileTooLarge ? "border-red-500" : "border-blue-400/60",
           disabled ? "cursor-not-allowed opacity-50" : "hover:bg-blue-100/40 dark:hover:bg-blue-900/30",
-          filePreview ? "bg-blue-50/50 dark:bg-blue-900/20" : "dark:bg-muted/10"
+          filePreview ? "bg-blue-50/50 dark:bg-blue-900/20" : "dark:bg-muted/10",
         )}
         onDrop={handleDrop}
         onDragOver={(e) => {

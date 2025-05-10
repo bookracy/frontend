@@ -4,7 +4,7 @@ import { FILE_TYPES } from "./hooks/utils";
 import { FileDropField } from "./FileDropField";
 import { Card } from "@/components/ui/card";
 import { useBulkUpload, BulkBookForm } from "./hooks/useBulkUpload";
-import { useAutofill, ExtendedBookItem } from "./hooks/useAutofill";
+import { useAutofill, AutofillOutcome } from "./hooks/useAutofill";
 import { BulkUploadResult } from "./UploadResult";
 import { NavigationButtons } from "./NavigationButtons";
 import { useNavigationHelpers } from "./hooks/useNavigationHelpers";
@@ -30,40 +30,39 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const { currentItemIndex, hasPrevious, hasNext, goToNextUnfilled, goToPrevUnfilled } = useNavigationHelpers(bulkForm, isItemUnfilled);
 
   // Autofill mutation for each book
-  const autofillMutation = useAutofill((data: ExtendedBookItem, error?: unknown, noResults?: boolean) => {
-    if (error || noResults) {
-      // If there's an API error or no results found, count as failure
+  const autofillMutation = useAutofill((outcome: AutofillOutcome) => {
+    if (outcome.status === "error" || outcome.status === "empty") {
+      // Count any error or empty result as a failure
       setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
       return;
     }
 
-    if (data && autofillMutation.variables) {
-      const index = autofillMutation.variables.index;
+    // If there is data, use it
+    const { data, index } = outcome;
 
-      setBulkForm((prev) =>
-        prev.map((item, i) =>
-          i === index
-            ? {
-                ...item,
-                title: data.title || item.title,
-                author: data.author || item.author,
-                book_filetype: data.book_filetype || item.book_filetype,
-                description: data.description || item.description,
-                publisher: data.publisher || item.publisher,
-                year: data.year || item.year,
-                book_lang: data.book_lang || item.book_lang,
-                isbn: data.isbn || item.isbn,
-                file_source: data.file_source || item.file_source,
-                cid: data.cid || item.cid,
-                coverPreview: data.book_image || data.external_cover_url || item.coverPreview,
-              }
-            : item,
-        ),
-      );
+    setBulkForm((prev) =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              title: data.title || item.title,
+              author: data.author || item.author,
+              book_filetype: data.book_filetype || item.book_filetype,
+              description: data.description || item.description,
+              publisher: data.publisher || item.publisher,
+              year: data.year || item.year,
+              book_lang: data.book_lang || item.book_lang,
+              isbn: data.isbn || item.isbn,
+              file_source: data.file_source || item.file_source,
+              cid: data.cid || item.cid,
+              coverPreview: data.book_image || data.external_cover_url || item.coverPreview,
+            }
+          : item,
+      ),
+    );
 
-      // Count as success if we have valid data
-      setAutofillStats((prev) => ({ ...prev, success: prev.success + 1 }));
-    }
+    // Count as success
+    setAutofillStats((prev) => ({ ...prev, success: prev.success + 1 }));
   });
 
   const handleBulkFileChange = (newFiles: File[]) => {
@@ -107,10 +106,6 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
               {
                 onSettled: () => {
                   resolve();
-                },
-                onError: () => {
-                  // Handle error in onError callback to ensure it's counted
-                  setAutofillStats((prev) => ({ ...prev, failed: prev.failed + 1 }));
                 },
               },
             );

@@ -11,24 +11,27 @@ import { CoverPreview } from "./CoverPreview";
 import { Minus } from "lucide-react";
 import { BulkBookForm } from "./hooks/useBulkUpload";
 import { UploadResult as UploadResultType } from "./hooks/useBookUpload";
-import { memo } from "react";
+
+interface UploadState {
+  isUploading: boolean;
+  progress: number;
+  result?: UploadResultType;
+}
 
 interface BulkBookItemProps {
   book: BulkBookForm;
   index: number;
   id?: string;
   isSelected?: boolean;
+  uploadState: UploadState;
+  isAutofilling: boolean;
   onRemove: () => void;
   onFieldChange: (field: keyof BookFormData, value: string) => void;
   onCoverChange: (files: File[]) => void;
   onAutofill: () => void;
-  isAutofilling: boolean;
-  isUploading: boolean;
-  uploadProgress: number;
-  uploadResult?: UploadResultType;
 }
 
-function BulkBookItemComponent({ book, id, isSelected, onRemove, onFieldChange, onCoverChange, onAutofill, isAutofilling, isUploading, uploadProgress, uploadResult }: BulkBookItemProps) {
+export function BulkBookItem({ book, id, isSelected, uploadState, isAutofilling, onRemove, onFieldChange, onCoverChange, onAutofill }: BulkBookItemProps) {
   if (!book.file) return null;
 
   const handleRemoveCover = () => {
@@ -36,6 +39,7 @@ function BulkBookItemComponent({ book, id, isSelected, onRemove, onFieldChange, 
   };
 
   const isCoverTooLarge = book.cover ? book.cover.size > 5 * 1024 * 1024 : false; // 5MB limit
+  const { isUploading, progress, result } = uploadState;
 
   return (
     <Card id={id} className={`flex flex-col gap-2 border bg-muted/30 p-4 dark:bg-muted/10 ${isSelected ? "ring-2 ring-primary" : ""}`}>
@@ -143,24 +147,10 @@ function BulkBookItemComponent({ book, id, isSelected, onRemove, onFieldChange, 
       </div>
       {isUploading && (
         <div className="mt-4">
-          <ProgressBar progress={uploadProgress} />
-          {uploadResult && <div className={`mt-1 text-sm ${uploadResult.success ? "text-green-600" : "text-red-600"}`}>{uploadResult.success ? "Success" : uploadResult.error}</div>}
+          <ProgressBar progress={progress} />
+          {result && <div className={`mt-1 text-sm ${result.success ? "text-green-600" : "text-red-600"}`}>{result.success ? "Success" : result.error}</div>}
         </div>
       )}
     </Card>
   );
 }
-
-// Custom comparator to prevent unnecessary re-renders
-function arePropsEqual(prevProps: BulkBookItemProps, nextProps: BulkBookItemProps) {
-  return (
-    prevProps.book === nextProps.book &&
-    prevProps.isSelected === nextProps.isSelected &&
-    prevProps.isAutofilling === nextProps.isAutofilling &&
-    prevProps.isUploading === nextProps.isUploading &&
-    prevProps.uploadProgress === nextProps.uploadProgress &&
-    prevProps.uploadResult === nextProps.uploadResult
-  );
-}
-
-export const BulkBookItem = memo(BulkBookItemComponent, arePropsEqual);

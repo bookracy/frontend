@@ -155,7 +155,7 @@ export function BookItemDialog(props: BookItemProps) {
               </div>
               <div className="flex flex-col gap-1">
                 <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
-                <p className="text-sm text-muted-foreground">By {props.author}</p>
+                <p className="text-sm text-muted-foreground">By {props.author.length > 25 ? `${props.author.slice(0, 25)}...` : props.author}</p>
                 <p className="text-xs text-muted-foreground">{props.book_filetype}</p>
               </div>
             </div>
@@ -167,7 +167,7 @@ export function BookItemDialog(props: BookItemProps) {
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>By {props.author}</DialogDescription>
         </DialogHeader>
-        <ScrollArea className="max-h-[80vh]">
+        <ScrollArea className="max-h-[60vh]">
           <div className="flex flex-col gap-4">
             <p>File size: {props.book_size}</p>
             <p>File type: {props.book_filetype}</p>

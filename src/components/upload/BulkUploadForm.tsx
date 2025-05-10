@@ -209,11 +209,11 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
             </div>
           </div>
 
-          <div ref={containerRef} className="h-[80vh] overflow-hidden p-6 pt-0">
+          <div ref={containerRef} className="p-6 pt-0">
             {bulkForm.length > 0 && (
               <Virtuoso
                 ref={virtuosoRef}
-                style={{ height: "80vh", width: "100%" }}
+                useWindowScroll
                 totalCount={bulkForm.length}
                 data={bulkForm}
                 itemContent={itemContent}

@@ -144,21 +144,23 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
     return (index: number, book: BulkBookForm) => (
       <div className="py-2">
         <BulkBookItem
-          key={`${index}-${book.file?.name || "unnamed"}`}
+          key={index}
           id={`bulk-item-${index}`}
           book={book}
           index={index}
           isSelected={currentItemIndex === index}
+          uploadState={{
+            isUploading: bulkUploadMutation.isPending,
+            progress: bulkProgress[index] || 0,
+            result: bulkUploadMutation.data ? bulkUploadMutation.data[index] : undefined,
+          }}
+          isAutofilling={autofillMutation.isPending && autofillMutation.variables?.index === index}
           onRemove={() => {
             setBulkForm(bulkForm.filter((_, i) => i !== index));
           }}
           onFieldChange={(field, value) => handleBulkFieldChange(index, field, value)}
           onCoverChange={(e) => handleBulkCoverChange(index, e)}
           onAutofill={() => handleBulkAutofill(index)}
-          isAutofilling={autofillMutation.isPending && autofillMutation.variables?.index === index}
-          isUploading={bulkUploadMutation.isPending}
-          uploadProgress={bulkProgress[index] || 0}
-          uploadResult={bulkUploadMutation.data ? bulkUploadMutation.data[index] : undefined}
         />
       </div>
     );

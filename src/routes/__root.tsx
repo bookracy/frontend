@@ -7,7 +7,9 @@ import { useLayoutStore } from "@/stores/layout";
 import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { getUserData, UserData } from "@/api/backend/auth/sync";
+import { useAuthStore } from "@/stores/auth";
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null
@@ -20,6 +22,7 @@ const TanStackRouterDevtools = import.meta.env.PROD
 export const Route = createRootRouteWithContext<{
   auth: {
     isLoggedIn: boolean;
+    user: UserData | null;
   };
   queryClient: QueryClient;
 }>()({
@@ -38,6 +41,42 @@ export const Route = createRootRouteWithContext<{
       </Alert>
     </div>
   ),
+  pendingMinMs: 1,
+  wrapInSuspense: true,
+  pendingComponent: () => (
+    <div className="flex h-screen items-center justify-center">
+      <Loader2 className="animate-spin" />
+    </div>
+  ),
+  async beforeLoad(ctx) {
+    const authState = useAuthStore.getState();
+
+    if (!authState.accessToken && !authState.refreshToken) {
+      ctx.context.auth.isLoggedIn = false;
+      ctx.context.auth.user = null;
+      return;
+    }
+
+    if (authState.accessToken && !ctx.context.auth.user) {
+      try {
+        const user = await ctx.context.queryClient.fetchQuery({
+          queryKey: ["userData"],
+          queryFn: getUserData,
+          staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+        });
+
+        ctx.context.auth.isLoggedIn = true;
+        ctx.context.auth.user = user;
+        return;
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
+        authState.reset();
+        ctx.context.auth.isLoggedIn = false;
+        ctx.context.auth.user = null;
+      }
+      return;
+    }
+  },
 });
 
 function Root() {

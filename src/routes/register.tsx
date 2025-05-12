@@ -15,19 +15,31 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { toast } from "sonner";
 import { ClipBoardButton } from "@/components/layout/clipboard-button";
 import { TurnstileWidget } from "@/components/layout/turnstile";
+import { useSettingsStore } from "@/stores/settings";
+import { ImageUploader } from "@/components/ui/image-upload-field";
 
 export const Route = createFileRoute("/register")({
   component: Register,
-  beforeLoad: () => {
-    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
-  },
-  loader: async (opts) => {
+  beforeLoad: async (opts) => {
+    const beta = useSettingsStore.getState().beta;
+    if (!beta) throw redirect({ to: "/", search: { q: "" } });
+
+    if (opts.context.auth.isLoggedIn) throw redirect({ to: "/account" });
     await opts.context.queryClient.ensureQueryData(randomWordsWithNumberQueryOptions);
   },
 });
 
-const displayNameSchema = z.object({
+const profileRegistrationSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
+  profilePicture: z
+    .instanceof(File, { message: "Invalid file" })
+    .refine((file) => file.type.startsWith("image/"), {
+      message: "Please upload an image file",
+    })
+    .refine((file) => file.size <= 1024 * 1024, {
+      message: "Please upload a file smaller than 1MB",
+    })
+    .optional(),
   ttkn: z.string({ message: "Captcha not completed" }),
 });
 
@@ -49,8 +61,8 @@ function Register() {
     },
   });
 
-  const form = useForm<z.infer<typeof displayNameSchema>>({
-    resolver: zodResolver(displayNameSchema),
+  const form = useForm({
+    resolver: zodResolver(profileRegistrationSchema),
     defaultValues: {
       displayName: data ?? "",
     },
@@ -58,12 +70,16 @@ function Register() {
 
   useEffect(() => {
     if (data) {
-      form.reset({ displayName: data });
+      form.reset({ displayName: data, profilePicture: undefined });
     }
   }, [data, form]);
 
-  const handleDisplayName = (data: z.infer<typeof displayNameSchema>) => {
-    mutate({ username: data.displayName, ttkn: data.ttkn });
+  const handleSubmit = (data: z.infer<typeof profileRegistrationSchema>) => {
+    mutate({
+      username: data.displayName,
+      pfp: data.profilePicture,
+      ttkn: data.ttkn,
+    });
   };
 
   return (
@@ -89,7 +105,7 @@ function Register() {
             </div>
           ) : (
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleDisplayName)} className="flex flex-col gap-4">
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
                   name="displayName"
@@ -104,6 +120,21 @@ function Register() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="profilePicture"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Profile Picture</FormLabel>
+                      <FormControl>
+                        <ImageUploader value={field.value} onChange={(file) => field.onChange(file)} disabled={isPending} className="mx-auto" />
+                      </FormControl>
+                      <FormDescription>Upload a profile picture. Recommended aspect ratio: 16:9.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="ttkn"

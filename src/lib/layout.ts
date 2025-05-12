@@ -21,7 +21,7 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string): Group[] {
+export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta: boolean): Group[] {
   return [
     {
       groupLabel: "General",
@@ -67,7 +67,7 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string): Gro
           active: pathname === "/account",
           icon: House,
           submenus: [],
-          disabled: import.meta.env.PROD,
+          disabled: import.meta.env.DEV ? false : !beta,
         },
         {
           href: "/lists",

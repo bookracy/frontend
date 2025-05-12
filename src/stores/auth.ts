@@ -1,14 +1,19 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { decodeJwt } from "jose";
+import { z } from "zod";
+
+const tokenSchema = z.object({
+  exp: z.number(),
+});
 
 interface AuthStoreState {
   accessToken: string;
   refreshToken: string;
-  isLoggedIn: boolean;
 
-  displayName: string;
+  tokenInfo: z.infer<typeof tokenSchema> | null;
 
-  setTokens: (accessToken: string, refreshToken: string) => void;
+  setTokens: (accessToken: string, refreshToken: string) => boolean;
   reset: () => void;
 }
 
@@ -17,17 +22,23 @@ export const useAuthStore = create<AuthStoreState>()(
     (set) => ({
       accessToken: "",
       refreshToken: "",
-      isLoggedIn: false,
+      tokenInfo: null,
 
-      displayName: "",
+      setTokens: (accessToken, refreshToken) => {
+        const payload = decodeJwt(accessToken);
+        const parsedPayload = tokenSchema.safeParse(payload);
 
-      setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken, isLoggedIn: true }),
-      reset: () => set({ accessToken: "", refreshToken: "", isLoggedIn: false }),
+        if (parsedPayload.success) {
+          set({ accessToken, refreshToken, tokenInfo: parsedPayload.data });
+        }
+
+        return parsedPayload.success;
+      },
+      reset: () => set({ accessToken: "", refreshToken: "" }),
     }),
     {
       name: "BR::auth",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ accessToken: state.accessToken, refreshToken: state.refreshToken }),
     },
   ),
 );

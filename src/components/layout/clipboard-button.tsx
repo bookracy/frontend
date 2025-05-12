@@ -17,7 +17,7 @@ export function ClipBoardButton(props: ClipBoardButtonProps) {
     navigator.clipboard.writeText(props.content);
     setClickedOnClipBoard(true);
     props.onClick?.();
-    toast.success("Link copied to clipboard");
+    toast.success("Copied to clipboard");
 
     setTimeout(() => {
       setClickedOnClipBoard(false);

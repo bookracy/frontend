@@ -29,6 +29,11 @@ export function SheetMenu() {
           </Button>
         </SheetHeader>
         <Menu isOpen closeSheetMenu={() => setIsOpen(false)} />
+        <div className="flex flex-col items-center justify-center px-3 pt-2">
+          <Button variant="outline" className="h-auto w-full overflow-hidden p-0" onClick={() => window.open("https://snowcore.io/ref?bookracy", "_blank")}>
+            <img src="https://raw.githubusercontent.com/bookracy/static/main/ads/snowcore-purple.gif?raw=true" className="h-full w-full object-cover" />
+          </Button>
+        </div>
       </SheetContent>
     </Sheet>
   );

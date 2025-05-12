@@ -1,18 +1,24 @@
 import { ExternalDownloadLink } from "./downloads/types";
 
 export interface BookItem {
-  authors: string;
-  book_content: string;
+  author: string;
   book_filetype: string;
   book_image: string;
   book_lang: string;
+  book_length: string;
   book_size: string;
-  book_source: string;
+  cid: string;
   description: string;
+  external_cover_url: string;
+  id: number;
+  isbn: string;
   link: string;
   md5: string;
-  publication: string[];
+  other_titles: string;
+  publisher: string;
+  series: string;
   title: string;
+  year: string;
 }
 
 export interface BookItemWithExternalDownloads extends BookItem {

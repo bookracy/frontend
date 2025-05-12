@@ -169,7 +169,7 @@ function Settings() {
       </div>
 
       <div className="absolute bottom-0 right-4">
-        <p className="text-gray-400">
+        <p className="text-muted-foreground">
           Hostname: <span className="text-purple-500">{window.location.hostname}</span>
         </p>
       </div>

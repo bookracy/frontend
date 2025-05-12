@@ -1,8 +1,10 @@
 import { searchBooksByMd5QueryOptions } from "@/api/backend/search/books";
+import { useQuery } from "@tanstack/react-query";
+import { getBooksByMd5sQueryOptions } from "@/api/backend/search/search";
 import { BookList } from "@/components/books/book-list";
 import { NavLink } from "@/components/ui/nav-link";
 import { useBookmarksStore } from "@/stores/bookmarks";
-import { useQuery } from "@tanstack/react-query";
+import { useReadingProgressStore } from "@/stores/progress";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/lists")({
@@ -10,15 +12,25 @@ export const Route = createFileRoute("/lists")({
   async beforeLoad(ctx) {
     const bookmarks = useBookmarksStore.getState().bookmarks;
     await ctx.context.queryClient.ensureQueryData(searchBooksByMd5QueryOptions(bookmarks));
+    const readingProgress = useReadingProgressStore
+      .getState()
+      .readingProgress.filter((p) => p.totalPages > 0)
+      .filter((p) => p.currentPage < p.totalPages);
+    await ctx.context.queryClient.ensureQueryData(getBooksByMd5sQueryOptions(readingProgress.map((p) => p.md5)));
   },
 });
 
 export function Lists() {
   const bookmarks = useBookmarksStore((state) => state.bookmarks);
+  const readingProgress = useReadingProgressStore((state) => state.readingProgress)
+    .filter((p) => p.totalPages > 0)
+    .filter((p) => p.currentPage < p.totalPages);
 
-  const { data } = useQuery(searchBooksByMd5QueryOptions(bookmarks));
+  const { data } = useQuery(getBooksByMd5sQueryOptions(readingProgress.map((p) => p.md5)));
 
-  if (bookmarks.length === 0 || !data) {
+  const { data: bookmarksData } = useQuery(searchBooksByMd5QueryOptions(bookmarks));
+
+  if (bookmarks.length === 0 || !bookmarksData) {
     return (
       <div className="flex flex-1 justify-center">
         <div className="flex w-full flex-col gap-4">
@@ -33,11 +45,22 @@ export function Lists() {
   }
 
   return (
-    <div className="flex flex-1 justify-center">
+    <div className="flex flex-1 flex-col gap-4">
       <div className="flex w-full flex-col gap-4">
         <h1 className="text-2xl font-bold">Your Bookmarks</h1>
 
-        <BookList books={data.results} />
+        <BookList books={bookmarksData.results} />
+      </div>
+
+      <div className="flex w-full flex-col gap-4">
+        {data?.length && data?.length > 0 && <h1 className="text-2xl font-bold">Reading Progress</h1>}
+        {readingProgress.length === 0 && (
+          <div>
+            <h1 className="text-2xl font-bold">No Reading Progress</h1>
+            <p className="flex gap-1 text-sm text-muted-foreground">Start reading some books and your progress will show up here.</p>
+          </div>
+        )}
+        {data?.length && data?.length > 0 && <BookList books={data} />}
       </div>
     </div>
   );

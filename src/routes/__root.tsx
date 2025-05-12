@@ -49,7 +49,6 @@ export const Route = createRootRouteWithContext<{
       ctx.context.auth.user = null;
       return;
     }
-    console.log(ctx.context.auth);
 
     if (authState.accessToken && !ctx.context.auth.user) {
       try {

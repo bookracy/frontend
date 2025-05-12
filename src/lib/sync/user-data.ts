@@ -9,7 +9,6 @@ useBookmarksStore.subscribe(
       const accessToken = useAuthStore.getState().accessToken;
       if (!accessToken) return bookmarks;
 
-      console.log("Syncing user data", bookmarks);
       await syncUserData({
         bookmarks,
       });

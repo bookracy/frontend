@@ -5,7 +5,6 @@ import { z } from "zod";
 
 const tokenSchema = z.object({
   exp: z.number(),
-  uuid: z.string(),
 });
 
 interface AuthStoreState {
@@ -26,7 +25,7 @@ export const useAuthStore = create<AuthStoreState>()(
     (set) => ({
       accessToken: "",
       refreshToken: "",
-      displayName: "",
+      displayName: "Bookracy User",
       tokenInfo: null,
 
       setTokens: (accessToken, refreshToken) => {
@@ -40,7 +39,7 @@ export const useAuthStore = create<AuthStoreState>()(
         return parsedPayload.success;
       },
       setDisplayName: (displayName) => set({ displayName }),
-      reset: () => set({ accessToken: "", refreshToken: "", displayName: "" }),
+      reset: () => set({ accessToken: "", refreshToken: "", displayName: "Bookracy User" }),
     }),
     {
       name: "BR::auth",

@@ -25,18 +25,24 @@ const updateAccountSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
   profilePicture: z
     .union([z.string(), z.instanceof(File)])
-    .transform((value) => {
-      if (typeof value === "string") {
-        return new File([value], "profile-picture.png", { type: "image/png" });
-      }
-      return value;
-    })
-    .refine((file) => file.type.startsWith("image/"), {
-      message: "Please upload an image file",
-    })
-    .refine((file) => file.size <= 1024 * 1024, {
-      message: "Please upload a file smaller than 1MB",
-    })
+    .refine(
+      (file) => {
+        if (typeof file === "string") return true;
+        return file.type.startsWith("image/");
+      },
+      {
+        message: "Please upload a valid image file",
+      },
+    )
+    .refine(
+      (file) => {
+        if (typeof file === "string") return true;
+        return file.size <= 1024 * 1024;
+      },
+      {
+        message: "Please upload a file smaller than 1MB",
+      },
+    )
     .optional(),
 });
 
@@ -49,8 +55,7 @@ function Account() {
     resolver: zodResolver(updateAccountSchema),
     defaultValues: {
       displayName: user?.username || "",
-      // base64 image to file
-      profilePicture: user?.pfp as never as File,
+      profilePicture: user?.pfp || "",
     },
   });
 
@@ -66,7 +71,7 @@ function Account() {
   });
 
   const handleSubmit = (data: z.infer<typeof updateAccountSchema>) => {
-    mutate({ username: data.displayName, pfp: data.profilePicture ?? null });
+    mutate({ username: data.displayName, pfp: data.profilePicture ?? "" });
   };
 
   return (

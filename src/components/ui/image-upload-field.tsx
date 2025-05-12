@@ -83,7 +83,7 @@ export function ImageUploader({ value, onChange, disabled = false, className }: 
           <input {...getInputProps()} />
           <UploadCloud className="mb-2 h-10 w-10 text-muted-foreground" />
           <p className="text-center text-sm text-muted-foreground">{isDragActive ? "Drop image here" : "Drag and drop an image, or click to select"}</p>
-          <p className="mt-1 text-center text-xs text-muted-foreground">JPG, PNG, GIF or WEBP (max. 10MB)</p>
+          <p className="mt-1 text-center text-xs text-muted-foreground">JPG, PNG, GIF or WEBP (max. 1MB)</p>
         </div>
       )}
     </div>

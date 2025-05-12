@@ -30,7 +30,7 @@ export function Sidebar() {
   return (
     <aside className={cn("fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0", sidebar?.isOpen === false ? "w-[90px]" : "w-72")}>
       <SidebarToggle isOpen={sidebar.isOpen} setIsOpen={sidebar.setIsOpen} />
-      <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
+      <div className="relative flex h-[calc(100vh_-_56px)] flex-col overflow-y-auto px-3">
         <div className={cn("flex justify-center transition-transform duration-300 ease-in-out", sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0")}>
           <Link to="/" className="m-1 flex items-center gap-2" search={{ q: "" }}>
             {theme === "dark" ? (
@@ -57,6 +57,11 @@ export function Sidebar() {
           </Link>
         </div>
         <Menu isOpen={sidebar?.isOpen} />
+      </div>
+      <div className="flex flex-col items-center justify-center px-3 pt-2">
+        <Button variant="outline" className="h-auto w-full overflow-hidden p-0" onClick={() => window.open("https://snowcore.io/ref?bookracy", "_blank")}>
+          <img src="https://raw.githubusercontent.com/bookracy/static/main/ads/snowcore-purple.gif?raw=true" className="h-full w-full object-cover" />
+        </Button>
       </div>
     </aside>
   );

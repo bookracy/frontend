@@ -1,13 +1,15 @@
 import { useAuthStore } from "@/stores/auth";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useCallback } from "react";
 
 export const useAuth = () => {
+  const router = useRouter();
   const reset = useAuthStore((state) => state.reset);
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
     reset();
+    router.invalidate();
     navigate({
       to: "/login",
       search: {
@@ -15,7 +17,7 @@ export const useAuth = () => {
       },
       replace: true,
     });
-  }, [reset, navigate]);
+  }, [reset, navigate, router]);
 
   return { handleLogout } as const;
 };

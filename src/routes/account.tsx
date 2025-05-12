@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouteContext } from "@tanstack/react-router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,7 @@ import { useSettingsStore } from "@/stores/settings";
 import { useMutation } from "@tanstack/react-query";
 import { syncUserData } from "@/api/backend/auth/sync";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/auth";
+import { ImageUploader } from "@/components/ui/image-upload-field";
 
 export const Route = createFileRoute("/account")({
   component: Account,
@@ -21,18 +21,36 @@ export const Route = createFileRoute("/account")({
   },
 });
 
-const updateDisplayNameSchema = z.object({
+const updateAccountSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
+  profilePicture: z
+    .union([z.string(), z.instanceof(File)])
+    .transform((value) => {
+      if (typeof value === "string") {
+        return new File([value], "profile-picture.png", { type: "image/png" });
+      }
+      return value;
+    })
+    .refine((file) => file.type.startsWith("image/"), {
+      message: "Please upload an image file",
+    })
+    .refine((file) => file.size <= 1024 * 1024, {
+      message: "Please upload a file smaller than 1MB",
+    })
+    .optional(),
 });
 
 function Account() {
-  const displayName = useAuthStore((state) => state.displayName);
-  const setDisplayName = useAuthStore((state) => state.setDisplayName);
+  const user = useRouteContext({
+    from: "__root__",
+  }).auth.user;
 
-  const form = useForm<z.infer<typeof updateDisplayNameSchema>>({
-    resolver: zodResolver(updateDisplayNameSchema),
+  const form = useForm<z.infer<typeof updateAccountSchema>>({
+    resolver: zodResolver(updateAccountSchema),
     defaultValues: {
-      displayName,
+      displayName: user?.username || "",
+      // base64 image to file
+      profilePicture: user?.pfp as never as File,
     },
   });
 
@@ -40,16 +58,15 @@ function Account() {
     mutationKey: ["updateDisplayName"],
     mutationFn: syncUserData,
     onSuccess: () => {
-      setDisplayName(form.getValues().displayName);
-      toast.success("Display name updated");
+      toast.success("Account updated");
     },
     onError: () => {
-      toast.error("Failed to update display name");
+      toast.error("Failed to update account");
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof updateDisplayNameSchema>) => {
-    mutate({ username: data.displayName });
+  const handleSubmit = (data: z.infer<typeof updateAccountSchema>) => {
+    mutate({ username: data.displayName, pfp: data.profilePicture ?? null });
   };
 
   return (
@@ -59,10 +76,10 @@ function Account() {
           <CardTitle>Account</CardTitle>
           <CardDescription>Manage your account</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <Form {...form}>
-              <form className="flex items-center gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <CardContent className="p-4 py-0">
+              <div className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
                   name="displayName"
@@ -77,13 +94,29 @@ function Account() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="profilePicture"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Profile picture</FormLabel>
+                      <FormControl>
+                        <ImageUploader value={field.value} onChange={(file) => field.onChange(file)} disabled={isPending} className="mx-auto" />
+                      </FormControl>
+                      <FormDescription>Change your profile picture</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <CardFooter className="justify-end pt-4">
                 <Button type="submit" loading={isPending}>
                   Update
                 </Button>
-              </form>
-            </Form>
-          </div>
-        </CardContent>
+              </CardFooter>
+            </CardContent>
+          </form>
+        </Form>
       </Card>
     </div>
   );

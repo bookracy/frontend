@@ -1,3 +1,4 @@
+import { getPfpInBase64 } from "@/lib/file";
 import { client } from "../base";
 import { GenerateUserResponse, VerifyAuthKeyResponse } from "./types";
 
@@ -15,19 +16,6 @@ export const generateUser = async ({ username, pfp, ttkn }: { username: string; 
   if (!verifyAuthKeyResponse?.stk) {
     throw new Error("Invalid auth key");
   }
-
-  const getPfpInBase64 = async (pfp: File): Promise<string | ArrayBuffer | null> => {
-    return new Promise((resolve) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(pfp);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = () => {
-        resolve(null);
-      };
-    });
-  };
 
   let pfpInBase64: string | ArrayBuffer | null = null;
   if (pfp) {

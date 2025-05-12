@@ -2,6 +2,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useSettingsStore } from "@/stores/settings";
 import { ofetch } from "ofetch";
 import { refresh } from "./auth/signin";
+import { router } from "@/main";
 
 export type BaseResponse<T> = {
   results: T[];
@@ -22,6 +23,7 @@ export const authClient = ofetch.create({
 
     if (!tokenInfo) {
       useAuthStore.getState().reset();
+      router.invalidate();
       return;
     }
 
@@ -37,12 +39,14 @@ export const authClient = ofetch.create({
 
           if (!valid) {
             useAuthStore.getState().reset();
+            router.invalidate();
             return;
           }
         }
         accessTokenToSend = response.access_token;
       } catch {
         useAuthStore.getState().reset();
+        router.invalidate();
         return;
       }
     }
@@ -52,6 +56,7 @@ export const authClient = ofetch.create({
   onResponseError(context) {
     if (context.response?.status === 401) {
       useAuthStore.getState().reset();
+      router.invalidate();
     }
   },
 });

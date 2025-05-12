@@ -1,29 +1,40 @@
+import { getPfpInBase64 } from "@/lib/file";
 import { authClient } from "../base";
 
-export const syncUserData = async ({
-  username,
-  bookmarks,
-  preferences,
-  readingLists,
-}: {
-  username?: string;
-  bookmarks?: string[];
-  preferences?: Record<string, unknown>;
-  readingLists?: Record<string, unknown>;
-}) => {
+export type UserData = {
+  username: string;
+  pfp: string;
+  bookmarks: string[];
+  preferences: Record<string, unknown>;
+  reading_lists: Record<string, unknown>;
+};
+
+export const syncUserData = async (
+  data: Partial<
+    | UserData
+    | {
+        pfp: File | string;
+      }
+  >,
+) => {
+  if (data.pfp && data.pfp instanceof File) {
+    const pfpInBase64 = await getPfpInBase64(data.pfp);
+
+    if (!pfpInBase64) {
+      throw new Error("Failed to read file");
+    }
+
+    data.pfp = pfpInBase64.toString();
+  }
+
   await authClient<{ message: string }>("/_secure/sync", {
     method: "POST",
-    body: {
-      username,
-      bookmarks,
-      preferences,
-      reading_lists: readingLists,
-    },
+    body: data,
   });
 };
 
 export const getUserData = async () => {
-  return authClient<{ bookmarks: string[]; preferences: Record<string, unknown>; reading_lists: Record<string, unknown> }>("/_secure/get", {
+  return authClient<UserData>("/_secure/get", {
     method: "GET",
   });
 };

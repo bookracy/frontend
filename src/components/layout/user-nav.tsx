@@ -1,21 +1,22 @@
-import { LogOut } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { useEffect } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/auth/use-auth";
-import { useAuthStore } from "@/stores/auth";
 import Logo from "@/assets/logo.svg";
 import { useRouteContext } from "@tanstack/react-router";
+import { useSettingsStore } from "@/stores/settings";
 
 export function UserNav() {
   const { handleLogout } = useAuth();
-  const displayName = useAuthStore((state) => state.displayName);
+  const theme = useSettingsStore((state) => state.theme);
+  const setTheme = useSettingsStore((state) => state.setTheme);
 
-  const routeContext = useRouteContext({
+  const auth = useRouteContext({
     from: "__root__",
-  });
+  }).auth;
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
@@ -29,7 +30,7 @@ export function UserNav() {
     };
   });
 
-  if (!routeContext.auth.isLoggedIn) return null;
+  if (!auth.isLoggedIn) return null;
 
   return (
     <DropdownMenu>
@@ -39,8 +40,10 @@ export function UserNav() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={Logo} />
-                  <AvatarFallback>BR</AvatarFallback>
+                  <AvatarImage src={auth.user?.pfp} />
+                  <AvatarFallback>
+                    <img src={Logo} className="h-8 w-8" />
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -52,11 +55,15 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{displayName}</p>
+            <p className="text-sm font-medium leading-none">{auth.user?.username}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuItem className="hover:cursor-pointer" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            {theme === "dark" ? <Sun className="mr-3 h-4 w-4 text-muted-foreground" /> : <Moon className="mr-3 h-4 w-4 text-muted-foreground" />}
+            <span>Switch theme</span>
+          </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" onClick={handleLogout}>
             <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
             <span>Log out</span>

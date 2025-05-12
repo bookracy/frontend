@@ -30,37 +30,33 @@ export function Lists() {
 
   const { data: bookmarksData } = useQuery(searchBooksByMd5QueryOptions(bookmarks));
 
-  if (bookmarks.length === 0 || !bookmarksData) {
-    return (
-      <div className="flex flex-1 justify-center">
-        <div className="flex w-full flex-col gap-4">
-          <h1 className="text-2xl font-bold">No Bookmarks</h1>
-          <p className="flex gap-1 text-sm">
-            Start adding some books using the bookmark button. Start searching
-            <NavLink to={"/?q="}>here</NavLink>
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex w-full flex-col gap-4">
-        <h1 className="text-2xl font-bold">Your Bookmarks</h1>
+        {bookmarks.length > 0 ? <h1 className="text-lg font-bold">Bookmarks</h1> : null}
 
-        <BookList books={bookmarksData.results} />
+        {bookmarks.length === 0 && (
+          <div>
+            <h1 className="text-2xl font-bold">No Bookmarks</h1>
+            <p className="flex gap-1 text-sm text-muted-foreground">
+              Start adding some books using the bookmark button. Start searching
+              <NavLink to={"/?q="}>here</NavLink>
+            </p>
+          </div>
+        )}
+
+        <BookList books={bookmarksData?.results ?? []} />
       </div>
 
       <div className="flex w-full flex-col gap-4">
-        {data?.length && data?.length > 0 && <h1 className="text-2xl font-bold">Reading Progress</h1>}
+        {data?.length && data?.length > 0 ? <h1 className="text-2xl font-bold">Reading Progress</h1> : null}
         {readingProgress.length === 0 && (
           <div>
             <h1 className="text-2xl font-bold">No Reading Progress</h1>
             <p className="flex gap-1 text-sm text-muted-foreground">Start reading some books and your progress will show up here.</p>
           </div>
         )}
-        {data?.length && data?.length > 0 && <BookList books={data} />}
+        {data?.length && data?.length > 0 ? <BookList books={data} /> : null}
       </div>
     </div>
   );

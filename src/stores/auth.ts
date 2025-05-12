@@ -13,10 +13,7 @@ interface AuthStoreState {
 
   tokenInfo: z.infer<typeof tokenSchema> | null;
 
-  displayName: string;
-
   setTokens: (accessToken: string, refreshToken: string) => boolean;
-  setDisplayName: (displayName: string) => void;
   reset: () => void;
 }
 
@@ -25,7 +22,6 @@ export const useAuthStore = create<AuthStoreState>()(
     (set) => ({
       accessToken: "",
       refreshToken: "",
-      displayName: "Bookracy User",
       tokenInfo: null,
 
       setTokens: (accessToken, refreshToken) => {
@@ -38,13 +34,11 @@ export const useAuthStore = create<AuthStoreState>()(
 
         return parsedPayload.success;
       },
-      setDisplayName: (displayName) => set({ displayName }),
-      reset: () => set({ accessToken: "", refreshToken: "", displayName: "Bookracy User" }),
+      reset: () => set({ accessToken: "", refreshToken: "" }),
     }),
     {
       name: "BR::auth",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ accessToken: state.accessToken, refreshToken: state.refreshToken, displayName: state.displayName }),
     },
   ),
 );

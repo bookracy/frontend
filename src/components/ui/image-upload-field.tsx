@@ -26,7 +26,7 @@ export function ImageUploader({ value, onChange, disabled = false, className }: 
         };
       }
     },
-    [onChange],
+    [onChange, preview],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

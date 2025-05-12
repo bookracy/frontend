@@ -47,10 +47,7 @@ export const authClient = ofetch.create({
       }
     }
 
-    context.options.headers = {
-      ...context.options.headers,
-      Authorization: `Bearer ${accessTokenToSend}`,
-    };
+    context.options.headers.set("Authorization", `Bearer ${accessTokenToSend}`);
   },
   onResponseError(context) {
     if (context.response?.status === 401) {

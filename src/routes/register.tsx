@@ -29,7 +29,7 @@ export const Route = createFileRoute("/register")({
   },
 });
 
-const displayNameSchema = z.object({
+const profileRegistrationSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
   profilePicture: z
     .instanceof(File, { message: "Invalid file" })
@@ -61,8 +61,8 @@ function Register() {
     },
   });
 
-  const form = useForm<z.infer<typeof displayNameSchema>>({
-    resolver: zodResolver(displayNameSchema),
+  const form = useForm({
+    resolver: zodResolver(profileRegistrationSchema),
     defaultValues: {
       displayName: data ?? "",
     },
@@ -74,7 +74,7 @@ function Register() {
     }
   }, [data, form]);
 
-  const handleSubmit = (data: z.infer<typeof displayNameSchema>) => {
+  const handleSubmit = (data: z.infer<typeof profileRegistrationSchema>) => {
     mutate({
       username: data.displayName,
       pfp: data.profilePicture,

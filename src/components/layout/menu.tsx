@@ -1,4 +1,4 @@
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, LogOut } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useLayout } from "@/hooks/use-layout";

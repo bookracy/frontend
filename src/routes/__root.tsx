@@ -7,7 +7,7 @@ import { useLayoutStore } from "@/stores/layout";
 import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { getUserData, UserData } from "@/api/backend/auth/sync";
 import { useAuthStore } from "@/stores/auth";
 
@@ -39,6 +39,13 @@ export const Route = createRootRouteWithContext<{
           </Link>
         </AlertDescription>
       </Alert>
+    </div>
+  ),
+  pendingMinMs: 1,
+  wrapInSuspense: true,
+  pendingComponent: () => (
+    <div className="flex h-screen items-center justify-center">
+      <Loader2 className="animate-spin" />
     </div>
   ),
   async beforeLoad(ctx) {

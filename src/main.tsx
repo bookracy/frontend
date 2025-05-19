@@ -10,7 +10,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./styles/global.css";
 import { useAuthStore } from "./stores/auth";
 import { Loader2 } from "lucide-react";
-import { ScrollButtons } from "./components/layout/scroll-buttons";
+import { ScrollToTopButton } from "./components/layout/scroll-to-top-button";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -87,7 +87,7 @@ export function App() {
       )}
       <RouterProvider router={router} context={routerContext} />
       <Toaster />
-      <ScrollButtons />
+      <ScrollToTopButton />
     </QueryClientProvider>
   );
 }

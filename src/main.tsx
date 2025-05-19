@@ -7,7 +7,7 @@ import { useSettingsStore } from "./stores/settings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Loader2 } from "lucide-react";
-import { ScrollButtons } from "./components/layout/scroll-buttons";
+import { ScrollToTopButton } from "./components/layout/scroll-to-top-button";
 
 import "./lib/sync";
 import "./styles/global.css";
@@ -78,7 +78,7 @@ export function App() {
       )}
       <RouterProvider router={router} />
       <Toaster />
-      <ScrollButtons />
+      <ScrollToTopButton />
     </QueryClientProvider>
   );
 }

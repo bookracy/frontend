@@ -9,7 +9,7 @@ import { BookPreview, CoverPreview } from "./FilePreview";
 import { Card } from "@/components/ui/card";
 import { Minus } from "lucide-react";
 import { useBookForm } from "./hooks/useBookForm";
-import { useAutofill } from "./hooks/useAutofill";
+import { useAutofill, AutofillOutcome } from "./hooks/useAutofill";
 import { useBookUpload } from "./hooks/useBookUpload";
 
 interface SingleBookFormProps {
@@ -39,22 +39,25 @@ export function SingleBookForm({ onSubmit }: SingleBookFormProps) {
   const [isUploading, setIsUploading] = useState(false);
 
   // Autofill mutation for individual books
-  const autofillMutation = useAutofill((data) => {
-    setForm((f) => ({
-      ...f,
-      title: data.title || f.title,
-      author: data.author || f.author,
-      book_filetype: data.book_filetype || f.book_filetype,
-      description: data.description || f.description,
-      publisher: data.publisher || f.publisher,
-      year: data.year || f.year,
-      book_lang: data.book_lang || f.book_lang,
-      isbn: data.isbn || f.isbn,
-      file_source: data.file_source || f.file_source,
-      cid: data.cid || f.cid,
-    }));
-    if (data.book_image || data.external_cover_url) {
-      setCoverPreview(data.book_image || data.external_cover_url || null);
+  const autofillMutation = useAutofill((outcome: AutofillOutcome) => {
+    if (outcome.status === "success") {
+      const data = outcome.data;
+      setForm((f) => ({
+        ...f,
+        title: data.title || f.title,
+        author: data.author || f.author,
+        book_filetype: data.book_filetype || f.book_filetype,
+        description: data.description || f.description,
+        publisher: data.publisher || f.publisher,
+        year: data.year || f.year,
+        book_lang: data.book_lang || f.book_lang,
+        isbn: data.isbn || f.isbn,
+        file_source: data.file_source || f.file_source,
+        cid: data.cid || f.cid,
+      }));
+      if (data.book_image || data.external_cover_url) {
+        setCoverPreview(data.book_image || data.external_cover_url || null);
+      }
     }
   });
 

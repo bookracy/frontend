@@ -10,6 +10,8 @@ import { NavigationButtons } from "./NavigationButtons";
 import { useNavigationHelpers } from "./hooks/useNavigationHelpers";
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormItem, FormLabel } from "@/components/ui/form";
 
 interface BulkUploadFormProps {
   files: File[];
@@ -22,6 +24,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   const [autofillStats, setAutofillStats] = useState<{ success: number; failed: number }>({ success: 0, failed: 0 });
   const [isAutofillAllRunning, setIsAutofillAllRunning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const form = useForm();
 
   const isItemUnfilled = (item: BulkBookForm) => {
     return !item.title || !item.author || !item.book_filetype;
@@ -121,8 +124,7 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
     setIsAutofillAllRunning(false);
   };
 
-  const handleBulkSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleBulkSubmit = async () => {
     bulkUploadMutation.mutate();
   };
 
@@ -167,74 +169,84 @@ export function BulkUploadForm({ files, onClearFiles, onAddFiles }: BulkUploadFo
   }, [bulkForm, currentItemIndex, setBulkForm, handleBulkFieldChange, handleBulkCoverChange, handleBulkAutofill, autofillMutation, bulkUploadMutation, bulkProgress]);
 
   return (
-    <form onSubmit={handleBulkSubmit} className="mt-4 flex flex-col gap-6">
-      <Card className="border p-6 shadow">
-        <h2 className="mb-4 text-lg font-semibold">Bulk Upload</h2>
-        <div className="h-[200px]">
-          <FileDropField
-            label="Add books (drag files here or click to browse)"
-            acceptedTypes={FILE_TYPES}
-            multiple={true}
-            disabled={bulkUploadMutation.isPending}
-            onFilesSelected={handleBulkFileChange}
-            icon="📚"
-          />
-        </div>
-      </Card>
+    <div className="mt-4 flex flex-col gap-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleBulkSubmit)} className="space-y-6">
+          <Card className="border p-6 shadow">
+            <FormItem>
+              <FormLabel>
+                <h2 className="mb-4 text-lg font-semibold">Bulk Upload</h2>
+              </FormLabel>
+              <FormControl>
+                <div className="h-[200px]">
+                  <FileDropField
+                    label="Add books (drag files here or click to browse)"
+                    acceptedTypes={FILE_TYPES}
+                    multiple={true}
+                    disabled={bulkUploadMutation.isPending}
+                    onFilesSelected={handleBulkFileChange}
+                    icon="📚"
+                  />
+                </div>
+              </FormControl>
+            </FormItem>
+          </Card>
 
-      {bulkForm.length > 0 && (
-        <Card className="border shadow">
-          <div className="p-6 pb-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Files to Upload ({bulkForm.length})</h2>
-              <div className="flex items-center gap-4">
-                {autofillStats.success > 0 || autofillStats.failed > 0 ? (
-                  <span className="text-sm text-muted-foreground">
-                    Autofill results: {autofillStats.success} succeeded, {autofillStats.failed} failed
-                  </span>
-                ) : null}
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleAutofillAll}
-                  disabled={isAutofillAllRunning || bulkUploadMutation.isPending || bulkForm.length === 0}
-                  loading={isAutofillAllRunning}
-                >
-                  Autofill All
-                </Button>
+          {bulkForm.length > 0 && (
+            <Card className="border shadow">
+              <div className="p-6 pb-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Files to Upload ({bulkForm.length})</h2>
+                  <div className="flex items-center gap-4">
+                    {autofillStats.success > 0 || autofillStats.failed > 0 ? (
+                      <span className="text-sm text-muted-foreground">
+                        Autofill results: {autofillStats.success} succeeded, {autofillStats.failed} failed
+                      </span>
+                    ) : null}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleAutofillAll}
+                      disabled={isAutofillAllRunning || bulkUploadMutation.isPending || bulkForm.length === 0}
+                      loading={isAutofillAllRunning}
+                    >
+                      Autofill All
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div ref={containerRef} className="p-6 pt-0">
-            {bulkForm.length > 0 && (
-              <Virtuoso
-                ref={virtuosoRef}
-                useWindowScroll
-                totalCount={bulkForm.length}
-                data={bulkForm}
-                itemContent={itemContent}
-                overscan={2000}
-                increaseViewportBy={{ top: 400, bottom: 400 }}
-                defaultItemHeight={600}
-                className="p-2"
-              />
-            )}
-          </div>
-        </Card>
-      )}
+              <div ref={containerRef} className="p-6 pt-0">
+                {bulkForm.length > 0 && (
+                  <Virtuoso
+                    ref={virtuosoRef}
+                    useWindowScroll
+                    totalCount={bulkForm.length}
+                    data={bulkForm}
+                    itemContent={itemContent}
+                    overscan={2000}
+                    increaseViewportBy={{ top: 400, bottom: 400 }}
+                    defaultItemHeight={600}
+                    className="p-2"
+                  />
+                )}
+              </div>
+            </Card>
+          )}
 
-      {bulkForm.length > 0 && (
-        <Button type="submit" className="mt-2 w-full" loading={bulkUploadMutation.isPending} disabled={bulkUploadMutation.isPending || bulkForm.length === 0}>
-          Upload All {bulkForm.length} Books
-        </Button>
-      )}
+          {bulkForm.length > 0 && (
+            <Button type="submit" className="mt-2 w-full" loading={bulkUploadMutation.isPending} disabled={bulkUploadMutation.isPending || bulkForm.length === 0}>
+              Upload All {bulkForm.length} Books
+            </Button>
+          )}
+        </form>
+      </Form>
 
       {bulkUploadMutation.isSuccess && bulkUploadMutation.data && <BulkUploadResult results={bulkUploadMutation.data} />}
 
       {bulkForm.length === 0 && <div className="py-4 text-center text-muted-foreground">Add book files to begin bulk upload</div>}
 
       {bulkForm.length > 0 && <NavigationButtons onPrevious={goToPrevUnfilled} onNext={goToNextUnfilled} disabled={bulkUploadMutation.isPending} hasPrevious={hasPrevious} hasNext={hasNext} />}
-    </form>
+    </div>
   );
 }

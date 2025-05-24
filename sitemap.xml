@@ -10,7 +10,7 @@
 
   <!-- Search Page -->
   <url>
-    <loc>https://www.bookracy.org/search/</loc>
+    <loc>https://www.bookracy.org/</loc>
     <lastmod>2024-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

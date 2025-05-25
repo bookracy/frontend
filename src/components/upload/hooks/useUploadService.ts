@@ -1,6 +1,7 @@
 import { useSettingsStore } from "@/stores/settings";
 import { BookFormState } from "./useBookForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "@/stores/auth";
 
 export interface UploadResult {
   success?: boolean;
@@ -39,6 +40,7 @@ export const validateBookData = (formData: BookFormState): boolean => {
 export const useUploadService = () => {
   const backendURL = useSettingsStore.getState().backendURL;
   const queryClient = useQueryClient();
+  const accessToken = useAuthStore.getState().accessToken;
 
   /**
    * Upload a single book and track progress
@@ -56,6 +58,10 @@ export const useUploadService = () => {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `${backendURL}/upload`);
+
+      if (accessToken) {
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
+      }
 
       if (onProgressUpdate) {
         xhr.upload.onprogress = (evt) => {

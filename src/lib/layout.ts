@@ -54,7 +54,7 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta
           active: pathname === "/upload",
           icon: Upload,
           submenus: [],
-          disabled: import.meta.env.PROD,
+          disabled: import.meta.env.DEV ? false : !beta,
         },
         {
           href: "/donation",

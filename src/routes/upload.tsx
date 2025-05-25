@@ -8,8 +8,9 @@ import { useUploadService } from "@/components/upload/hooks/useUploadService";
 
 export const Route = createFileRoute("/upload")({
   component: Upload,
-  beforeLoad: () => {
+  beforeLoad: (ctx) => {
     if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
+    if (!ctx.context.auth.isLoggedIn) throw redirect({ to: "/login" });
   },
 });
 

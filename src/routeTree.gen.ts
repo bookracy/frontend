@@ -18,6 +18,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as ListsImport } from './routes/lists'
 import { Route as LibraryImport } from './routes/library'
 import { Route as FeaturedImport } from './routes/featured'
+import { Route as DonationImport } from './routes/donation'
 import { Route as ContactImport } from './routes/contact'
 import { Route as AccountImport } from './routes/account'
 import { Route as AboutImport } from './routes/about'
@@ -64,6 +65,12 @@ const LibraryRoute = LibraryImport.update({
 const FeaturedRoute = FeaturedImport.update({
   id: '/featured',
   path: '/featured',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DonationRoute = DonationImport.update({
+  id: '/donation',
+  path: '/donation',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactImport
+      parentRoute: typeof rootRoute
+    }
+    '/donation': {
+      id: '/donation'
+      path: '/donation'
+      fullPath: '/donation'
+      preLoaderRoute: typeof DonationImport
       parentRoute: typeof rootRoute
     }
     '/featured': {
@@ -182,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/contact': typeof ContactRoute
+  '/donation': typeof DonationRoute
   '/featured': typeof FeaturedRoute
   '/library': typeof LibraryRoute
   '/lists': typeof ListsRoute
@@ -196,6 +211,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/contact': typeof ContactRoute
+  '/donation': typeof DonationRoute
   '/featured': typeof FeaturedRoute
   '/library': typeof LibraryRoute
   '/lists': typeof ListsRoute
@@ -211,6 +227,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/contact': typeof ContactRoute
+  '/donation': typeof DonationRoute
   '/featured': typeof FeaturedRoute
   '/library': typeof LibraryRoute
   '/lists': typeof ListsRoute
@@ -227,6 +244,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/contact'
+    | '/donation'
     | '/featured'
     | '/library'
     | '/lists'
@@ -240,6 +258,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/contact'
+    | '/donation'
     | '/featured'
     | '/library'
     | '/lists'
@@ -253,6 +272,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/contact'
+    | '/donation'
     | '/featured'
     | '/library'
     | '/lists'
@@ -268,6 +288,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
   ContactRoute: typeof ContactRoute
+  DonationRoute: typeof DonationRoute
   FeaturedRoute: typeof FeaturedRoute
   LibraryRoute: typeof LibraryRoute
   ListsRoute: typeof ListsRoute
@@ -282,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
   ContactRoute: ContactRoute,
+  DonationRoute: DonationRoute,
   FeaturedRoute: FeaturedRoute,
   LibraryRoute: LibraryRoute,
   ListsRoute: ListsRoute,
@@ -305,6 +327,7 @@ export const routeTree = rootRoute
         "/about",
         "/account",
         "/contact",
+        "/donation",
         "/featured",
         "/library",
         "/lists",
@@ -325,6 +348,9 @@ export const routeTree = rootRoute
     },
     "/contact": {
       "filePath": "contact.tsx"
+    },
+    "/donation": {
+      "filePath": "donation.tsx"
     },
     "/featured": {
       "filePath": "featured.tsx"

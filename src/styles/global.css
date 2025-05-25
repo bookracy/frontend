@@ -73,15 +73,3 @@ body,
 #root {
   height: 100%;
 }
-
-/* Circular scrollbar styles */
-::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
-  background: #f5f5f57c; /* Background of the scrollbar */
-  border-radius: 5%;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #000000; /* Color of the thumb */
-  border-radius: 2%;
-}

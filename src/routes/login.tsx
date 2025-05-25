@@ -14,11 +14,16 @@ import { useAuthStore } from "@/stores/auth";
 import { toast } from "sonner";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { TurnstileWidget } from "@/components/layout/turnstile";
+import { useSettingsStore } from "@/stores/settings";
+import { useUserDataSync } from "@/hooks/auth/use-user-data-sync";
 
 export const Route = createFileRoute("/login")({
   component: Login,
-  beforeLoad: () => {
-    if (import.meta.env.PROD) throw redirect({ to: "/", search: { q: "" } });
+  beforeLoad: (opts) => {
+    const beta = useSettingsStore.getState().beta;
+    if (!beta) throw redirect({ to: "/", search: { q: "" } });
+
+    if (opts.context.auth.isLoggedIn) throw redirect({ to: "/account" });
   },
 });
 
@@ -51,13 +56,16 @@ function InputOTPGroups() {
 function Login() {
   const { navigate } = useRouter();
   const setTokens = useAuthStore((state) => state.setTokens);
+  const { syncUserData } = useUserDataSync();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: login,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success("Logged in successfully");
       setTokens(data.access_token, data.refresh_token);
+      await syncUserData();
+
       navigate({ to: "/", search: { q: "" } });
     },
     onError: () => {

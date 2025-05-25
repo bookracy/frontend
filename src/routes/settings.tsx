@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 const settingsFormSchema = z.object({
   language: z.string(),
   backendURL: z.string().url(),
-  thumbnailGeneration: z.boolean(),
+  beta: z.boolean(),
 });
 
 export const Route = createFileRoute("/settings")({
@@ -34,7 +34,7 @@ function Settings() {
     defaultValues: {
       language,
       backendURL,
-      thumbnailGeneration: false,
+      beta: false,
     },
   });
 
@@ -52,7 +52,7 @@ function Settings() {
 
   const handleSubmit = () => {
     form.handleSubmit((data) => {
-      useSettingsStore.setState({ language: data.language, backendURL: data.backendURL });
+      useSettingsStore.setState(data);
       toast.success("Settings saved successfully", { position: "top-right" });
       setShowSave(false);
     })();
@@ -123,20 +123,18 @@ function Settings() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Generate thumbnails</CardTitle>
-              <CardDescription>
-                Most of the time, books don't have thumbnails. You can enable this setting to generate them on the fly but it may slow down the page. This setting is a work in progress.
-              </CardDescription>
+              <CardTitle>Beta</CardTitle>
+              <CardDescription>Enable the beta feature to get early access to new features. This might include unstable or incomplete features.</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center space-x-2">
               <FormField
                 control={form.control}
-                name="thumbnailGeneration"
+                name="beta"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enable Thumbnails generation</FormLabel>
+                    <FormLabel>Enable beta</FormLabel>
                     <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} className="flex" disabled />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} className="flex" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

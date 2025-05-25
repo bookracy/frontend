@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { BaseRequest, client } from "../base";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { BaseResponse, client } from "../base";
 import { BookItem } from "../types";
 import { SearchParams } from "./types";
 import { getExternalDownloads } from "../downloads/external";
 import { ExternalDownloadResponse } from "../downloads/types";
 
 export const getBooks = (params: SearchParams) => {
-  return client<BaseRequest<BookItem>>("/books", {
+  return client<BaseResponse<BookItem>>("/books", {
     query: params,
   });
 };
@@ -43,7 +43,11 @@ export const useGetBooksQueryWithExternalDownloads = (params: SearchParams) => {
 };
 
 export const useGetBooksByMd5sQuery = (md5s: string[]) => {
-  return useQuery({
+  return useQuery(getBooksByMd5sQueryOptions(md5s));
+};
+
+export const getBooksByMd5sQueryOptions = (md5s: string[]) => {
+  return queryOptions({
     queryKey: ["search", md5s],
     queryFn: async () => {
       const books: BookItem[] = [];

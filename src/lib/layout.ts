@@ -1,5 +1,5 @@
 import { FileRouteTypes } from "@/routeTree.gen";
-import { Blocks, House, LucideIcon, BookMarked, Star, Upload, BookOpenText, Heart } from "lucide-react";
+import { Blocks, House, LucideIcon, BookMarked, Star, Upload, BookOpenText, SearchIcon, Heart } from "lucide-react";
 
 export type Submenu = {
   href: FileRouteTypes["fullPaths"];
@@ -21,11 +21,18 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string): Group[] {
+export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta: boolean): Group[] {
   return [
     {
       groupLabel: "General",
       menus: [
+        {
+          href: "/",
+          label: "Search",
+          active: pathname === "/",
+          icon: SearchIcon,
+          submenus: [],
+        },
         {
           href: "/featured",
           label: "Featured",
@@ -67,7 +74,7 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string): Gro
           active: pathname === "/account",
           icon: House,
           submenus: [],
-          disabled: import.meta.env.PROD,
+          disabled: import.meta.env.DEV ? false : !beta,
         },
         {
           href: "/lists",

@@ -9,8 +9,8 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type = "text", iconLeft, iconRight, ...props }, ref) => {
   return (
     <div className="relative flex items-center">
-      {iconLeft && <div className="absolute left-3">{iconLeft}</div>}
-      {iconRight && <div className="absolute right-3">{iconRight}</div>}
+      {iconLeft && <div className="absolute left-4">{iconLeft}</div>}
+      {iconRight && <div className="absolute right-4">{iconRight}</div>}
       <input
         type={type}
         className={cn(

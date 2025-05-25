@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useMemo } from "react";
+import { StrictMode, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
@@ -6,11 +6,11 @@ import { Toaster } from "@/components/ui/sonner";
 import { useSettingsStore } from "./stores/settings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-import "./styles/global.css";
-import { useAuthStore } from "./stores/auth";
 import { Loader2 } from "lucide-react";
 import { ScrollToTopButton } from "./components/layout/scroll-to-top-button";
+
+import "./lib/sync";
+import "./styles/global.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,11 +31,12 @@ const queryClient = new QueryClient({
   },
 });
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     auth: {
       isLoggedIn: false,
+      user: null,
     },
     queryClient: queryClient,
   },
@@ -46,7 +47,7 @@ const router = createRouter({
   defaultPendingMs: 100,
   defaultPendingComponent: () => {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex flex-1 items-center justify-center">
         <Loader2 className="animate-spin" />
       </div>
     );
@@ -61,22 +62,12 @@ declare module "@tanstack/react-router" {
 
 export function App() {
   const theme = useSettingsStore((state) => state.theme);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
   }, [theme]);
-
-  const routerContext = useMemo(() => {
-    return {
-      auth: {
-        isLoggedIn,
-      },
-      queryClient: queryClient,
-    };
-  }, [isLoggedIn]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -85,7 +76,7 @@ export function App() {
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="relative" />
         </div>
       )}
-      <RouterProvider router={router} context={routerContext} />
+      <RouterProvider router={router} />
       <Toaster />
       <ScrollToTopButton />
     </QueryClientProvider>

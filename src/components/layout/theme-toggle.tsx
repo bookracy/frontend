@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { useSettingsStore } from "@/stores/settings";
 import { cn } from "@/lib/utils";
+import { useRouteContext } from "@tanstack/react-router";
 
 interface ThemeToggleProps {
   className?: string;
@@ -11,6 +12,11 @@ interface ThemeToggleProps {
 export function ThemeToggle(props: ThemeToggleProps) {
   const theme = useSettingsStore((state) => state.theme);
   const setTheme = useSettingsStore((state) => state.setTheme);
+  const auth = useRouteContext({
+    from: "__root__",
+  }).auth;
+
+  if (auth.isLoggedIn) return null;
 
   return (
     <TooltipProvider disableHoverableContent>

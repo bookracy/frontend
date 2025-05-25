@@ -62,6 +62,7 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta
           active: pathname === "/donation",
           icon: Heart,
           submenus: [],
+          disabled: import.meta.env.DEV
         },
       ],
     },

@@ -64,8 +64,8 @@ export function BookItemCard(props: BookItemProps) {
           <div className="flex flex-1 flex-col justify-between">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
-                <p className="text-md text-muted-foreground">By {props.author}</p>
+                <h2 className="max-w-[90%] text-2xl font-bold">{props.title.length > 100 ? `${props.title.slice(0, 100)}...` : props.title}</h2>
+                <p className="text-md text-muted-foreground">By {props.author.length > 25 ? `${props.author.slice(0, 25)}...` : props.author}</p>
               </div>
               <p className="line-clamp-3 break-all text-sm text-muted-foreground">{props.description}</p>
               <p className="text-sm text-muted-foreground">File size: {props.book_size}</p>
@@ -154,7 +154,7 @@ export function BookItemDialog(props: BookItemProps) {
                 <BookmarkButton book={props} />
               </div>
               <div className="flex flex-col gap-1">
-                <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
+                <h2 className="line-clamp-2 text-lg font-semibold">{props.title.length > 100 ? `${props.title.slice(0, 100)}...` : props.title}</h2>
                 <p className="text-sm text-muted-foreground">By {props.author.length > 25 ? `${props.author.slice(0, 25)}...` : props.author}</p>
                 <p className="text-xs text-muted-foreground">{props.book_filetype}</p>
               </div>

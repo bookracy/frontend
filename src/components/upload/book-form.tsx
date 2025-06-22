@@ -24,8 +24,17 @@ export function BookForm({ form, index, canRemove, onRemove }: BookFormProps) {
 
   useEffect(() => {
     if (fileValue && fileValue && typeof fileValue === "object" && "name" in fileValue && "type" in fileValue) {
-      const fileType = getFileType((fileValue as File).name);
+      const file = fileValue as File;
+      const fileType = getFileType(file.name);
       form.setValue(`books.${index}.fileType`, fileType);
+
+      const currentTitle = form.getValues(`books.${index}.title`);
+      if (!currentTitle || currentTitle.trim() === "") {
+        const title = file.name.replace(/\.[^/.]+$/, "");
+        form.setValue(`books.${index}.title`, title);
+      }
+    } else if (!fileValue) {
+      form.setValue(`books.${index}.title`, "");
     }
   }, [fileValue, form, index]);
 

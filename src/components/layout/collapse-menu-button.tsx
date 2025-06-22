@@ -7,7 +7,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
-import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import { Submenu } from "@/lib/layout";
 
 interface CollapseMenuButtonProps {
@@ -85,7 +84,6 @@ export function CollapseMenuButton({ icon: Icon, label, active, submenus, isOpen
             </Link>
           </DropdownMenuItem>
         ))}
-        <DropdownMenuArrow className="fill-border" />
       </DropdownMenuContent>
     </DropdownMenu>
   );

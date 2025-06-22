@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { create } from "zustand";
-import { persist, subscribeWithSelector } from "zustand/middleware";
+import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middleware";
 
 interface BookmarksStoreState {
   bookmarks: string[];
@@ -24,7 +24,7 @@ export const useBookmarksStore = create<BookmarksStoreState>()(
       }),
       {
         name: "BR::bookmarks",
-        getStorage: () => localStorage,
+        storage: createJSONStorage(() => localStorage),
         version: 1,
         migrate(persistedState, version) {
           if (version === 0) {

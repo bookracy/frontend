@@ -7,7 +7,7 @@ import { useSettingsStore } from "@/stores/settings";
 export function useLayout() {
   const beta = useSettingsStore((state) => state.beta);
   const matches = useMatches();
-  const currentMatch = matches.at(-1);
+  const currentMatch = matches[matches.length - 1];
 
   const routeId = useMemo(() => {
     // replace all routes that have double underscores, e.g. /orders/__orderId/update -> /orders/update

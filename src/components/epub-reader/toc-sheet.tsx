@@ -1,5 +1,5 @@
 import { NavItem } from "epubjs";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { TableOfContents } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useState } from "react";
@@ -46,9 +46,11 @@ export const TocSheet = ({ toc, setLocation }: TocSheetProps) => {
       <SheetTrigger>
         <TableOfContents className="h-6 w-6" />
       </SheetTrigger>
-      <SheetContent side="left">
-        <SheetTitle>Table of contents</SheetTitle>
-        <ScrollArea className="h-[calc(100vh-4rem)]">
+      <SheetContent side="left" className="p-0">
+        <SheetHeader>
+          <SheetTitle>Table of contents</SheetTitle>
+        </SheetHeader>
+        <ScrollArea className="h-[calc(100vh-4rem)] pb-4">
           <div>
             {toc.map((item, i) => (
               <TocSheetItem key={i} data={item} setLocation={setLocation} setIsOpen={setIsOpen} />

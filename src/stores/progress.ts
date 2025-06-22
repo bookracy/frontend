@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface ProgressItem {
   md5: string;
@@ -34,7 +34,7 @@ export const useReadingProgressStore = create<ReadingProgressStoreState>()(
     }),
     {
       name: "BR::progress",
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 );

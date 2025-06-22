@@ -7,7 +7,7 @@ import { DISCORD_URL, GITHUB_URL, X_URL } from "@/constants";
 
 export function Footer() {
   return (
-    <div className="z-20 h-[56px] w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="bg-background/95 supports-backdrop-filter:bg-background/60 z-20 h-[56px] w-full shadow-sm backdrop-blur-sm">
       <div className="flex h-full items-center justify-center gap-4 px-8">
         <Link to="/about">
           <p className="text-sm font-semibold">© {new Date().getFullYear()} Bookracy</p>

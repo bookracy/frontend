@@ -7,7 +7,7 @@ import { useSettingsStore } from "@/stores/settings";
 import { saveAs } from "@/lib/saveAs";
 import Rendition from "epubjs/types/rendition";
 import { ClipBoardButton } from "../layout/clipboard-button";
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { VisuallyHidden } from "radix-ui";
 import { TocSheet } from "./toc-sheet";
 import { NavItem } from "epubjs";
 import { EpubView, EpubViewInstance } from "./epub-view";
@@ -136,7 +136,7 @@ export function EpubReader(props: EpubReaderProps) {
         <DialogTitle>{props.title}</DialogTitle>
         <DialogDescription>Read {props.title} in an interactive reader</DialogDescription>
       </VisuallyHidden.Root>
-      <DialogContent className="max-w-screen h-screen p-0" includeClose={false}>
+      <DialogContent className="h-screen max-w-screen min-w-screen p-0" showCloseButton={false}>
         <div className="flex h-full flex-col">
           <div className="flex w-full flex-col items-center justify-between gap-4 border-b p-4 md:flex-row md:gap-0">
             <div className="flex items-center gap-4">
@@ -165,7 +165,7 @@ export function EpubReader(props: EpubReaderProps) {
             {/* Hack to have swipe events for the iframe */}
             <div {...handlers} className="absolute inset-0 z-10 bg-transparent" />
             {loading && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75">
+              <div className="bg-opacity-75 dark:bg-opacity-75 absolute inset-0 z-10 flex flex-col items-center justify-center bg-white dark:bg-black">
                 <Loader2 className="animate-spin text-4xl" />
                 <p className="mt-2 text-lg">{progress}%</p>
               </div>
@@ -180,7 +180,7 @@ export function EpubReader(props: EpubReaderProps) {
             </div>
 
             <div className="absolute right-1">
-              <span className="text-sm text-muted-foreground">{page.current === 0 || page.total === 0 ? <Loader2 className="animate-spin" /> : `${page.current}/${page.total}`}</span>
+              <span className="text-muted-foreground text-sm">{page.current === 0 || page.total === 0 ? <Loader2 className="animate-spin" /> : `${page.current}/${page.total}`}</span>
             </div>
 
             <div className="absolute bottom-1 z-10 flex w-full items-center justify-center gap-10">

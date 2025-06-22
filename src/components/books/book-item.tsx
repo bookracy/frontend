@@ -31,7 +31,7 @@ export function BookItemCard(props: BookItemProps) {
   return (
     <Card className="shadow-md transition-shadow duration-300 hover:shadow-lg">
       <CardContent className="relative flex h-full w-full items-center p-4 md:p-6">
-        <div className="absolute right-4 top-4">
+        <div className="absolute top-4 right-4">
           <BookmarkButton book={props} />
         </div>
 
@@ -55,7 +55,7 @@ export function BookItemCard(props: BookItemProps) {
                     <Progress value={progress} className="mt-2" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-xs text-muted-foreground">Progress: {progress!.toFixed(2)}%</p>
+                    <p className="text-muted-foreground text-xs">Progress: {progress!.toFixed(2)}%</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -67,10 +67,10 @@ export function BookItemCard(props: BookItemProps) {
                 <h2 className="max-w-[90%] text-2xl font-bold">{props.title}</h2>
                 <p className="text-md text-muted-foreground">By {props.author}</p>
               </div>
-              <p className="line-clamp-3 break-all text-sm text-muted-foreground">{props.description}</p>
-              <p className="text-sm text-muted-foreground">File size: {props.book_size}</p>
-              <p className="text-sm text-muted-foreground">File type: {props.book_filetype}</p>
-              <p className="text-sm text-muted-foreground">MD5: {props.md5}</p>
+              <p className="text-muted-foreground line-clamp-3 text-sm break-all">{props.description}</p>
+              <p className="text-muted-foreground text-sm">File size: {props.book_size}</p>
+              <p className="text-muted-foreground text-sm">File type: {props.book_filetype}</p>
+              <p className="text-muted-foreground text-sm">MD5: {props.md5}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
               {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}
@@ -112,8 +112,8 @@ export function SkeletonBookItemGrid() {
     <Card className="h-full transition-transform duration-300 hover:scale-105 hover:shadow-xl">
       <CardContent className="h-full">
         <div className="relative flex h-full flex-col gap-2 pt-6">
-          <Skeleton className="aspect-[10/16] w-full rounded-lg" />
-          <div className="absolute right-1 top-7">
+          <Skeleton className="aspect-10/16 w-full rounded-lg" />
+          <div className="absolute top-7 right-1">
             <Skeleton className="rounded-half h-10 w-10" />
           </div>
           <div className="flex flex-col gap-1">
@@ -150,13 +150,13 @@ export function BookItemDialog(props: BookItemProps) {
                   />
                 </AspectRatio>
               </DialogTrigger>
-              <div className="absolute right-1 top-7">
+              <div className="absolute top-7 right-1">
                 <BookmarkButton book={props} />
               </div>
               <div className="flex flex-col gap-1">
                 <h2 className="line-clamp-2 text-lg font-semibold">{props.title}</h2>
-                <p className="text-sm text-muted-foreground">By {props.author}</p>
-                <p className="text-xs text-muted-foreground">{props.book_filetype}</p>
+                <p className="text-muted-foreground text-sm">By {props.author}</p>
+                <p className="text-muted-foreground text-xs">{props.book_filetype}</p>
               </div>
             </div>
           </CardContent>

@@ -1,12 +1,11 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-
+import { LoaderCircleIcon } from "lucide-react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background hover:scale-[101%] transition-transform duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background hover:scale-[101%] transition-transform duration-150 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -20,10 +19,13 @@ const buttonVariants = cva(
         blue: "bg-blue-500 text-primary-foreground hover:bg-blue-600",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-9 px-4 py-2 has-[>svg:not(.loading)]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg:not(.loading)]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg:not(.loading)]:px-4",
+        icon: "size-9",
+      },
+      loading: {
+        true: "text-transparent",
       },
     },
     defaultVariants: {
@@ -38,36 +40,32 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loading?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, loading, variant, size, asChild = false, children, ...props }, ref) => {
-  if (asChild) {
-    return (
-      <Slot ref={ref} {...props}>
-        <>
-          {React.Children.map(children as React.ReactElement, (child: React.ReactElement) => {
-            return React.cloneElement(child, {
-              className: cn(buttonVariants({ variant, size }), className),
-              children: (
-                <>
-                  {loading && <Loader2 className={cn("h-4 w-4 animate-spin", children && "mr-2")} />}
-                  {child.props.children}
-                </>
-              ),
-            });
-          })}
-        </>
-      </Slot>
-    );
-  }
+function Button({
+  className,
+  variant,
+  size,
+  children,
+  disabled,
+  asChild = false,
+  loading = false,
+  ...props
+}: React.ComponentProps<"button"> & VariantProps<typeof buttonVariants> & { asChild?: boolean; loading?: boolean }) {
+  const Comp = asChild ? Slot.Slot : "button";
 
   return (
-    <button className={cn(buttonVariants({ variant, size, className }))} disabled={loading} ref={ref} {...props}>
-      <>
-        {loading && <Loader2 className={cn("h-4 w-4 animate-spin", children && "mr-2")} />}
-        {children}
-      </>
-    </button>
+    <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className, loading }))} disabled={disabled || loading} {...props}>
+      {loading && (
+        <LoaderCircleIcon
+          className={cn(
+            "text-muted absolute animate-spin",
+            // Used for conditional styling when button is loading
+            "loading",
+          )}
+        />
+      )}
+      <Slot.Slottable>{children}</Slot.Slottable>
+    </Comp>
   );
-});
-Button.displayName = "Button";
+}
 
 export { Button, buttonVariants };

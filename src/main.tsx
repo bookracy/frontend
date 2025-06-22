@@ -72,7 +72,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       {import.meta.env.DEV && (
-        <div className="absolute right-5 top-14">
+        <div className="absolute top-14 right-5">
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="relative" />
         </div>
       )}

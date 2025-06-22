@@ -146,7 +146,7 @@ function Settings() {
       </Form>
 
       <div
-        className={cn("absolute bottom-0 z-40 flex w-full items-center gap-8 rounded-t-xl bg-slate-50 px-8 py-2 opacity-0 transition-all duration-300 ease-in-out dark:bg-stone-800 md:py-4", {
+        className={cn("absolute bottom-0 z-40 flex w-full items-center gap-8 rounded-t-xl bg-slate-50 px-8 py-2 opacity-0 transition-all duration-300 ease-in-out md:py-4 dark:bg-stone-800", {
           "opacity-100": showSave,
         })}
       >
@@ -168,7 +168,7 @@ function Settings() {
         </Button>
       </div>
 
-      <div className="absolute bottom-0 right-4">
+      <div className="absolute right-4 bottom-0">
         <p className="text-muted-foreground">
           Hostname: <span className="text-purple-500">{window.location.hostname}</span>
         </p>

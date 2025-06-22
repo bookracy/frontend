@@ -12,7 +12,7 @@ interface FloatingActionsProps {
 
 export function FloatingActions({ bookCount, canAddMore, canSubmit, onAddBook, isUploading = false, progress = 0 }: FloatingActionsProps) {
   return (
-    <div className="fixed bottom-6 right-12 z-50 flex gap-4">
+    <div className="fixed right-12 bottom-6 z-50 flex gap-4">
       <Button type="button" variant="outline" onClick={onAddBook} disabled={!canAddMore}>
         <Plus className="mr-2 h-4 w-4" />
         Add Book
@@ -21,7 +21,7 @@ export function FloatingActions({ bookCount, canAddMore, canSubmit, onAddBook, i
         <span className="relative z-10">{isUploading ? "Uploading..." : `Upload ${bookCount} Book${bookCount !== 1 ? "s" : ""}`}</span>
         {isUploading && progress > 0 && (
           <div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-pink-500 to-pink-600 transition-all duration-1000 ease-out"
+            className="absolute top-0 left-0 h-full bg-linear-to-r from-pink-500 to-pink-600 transition-all duration-1000 ease-out"
             style={{
               width: `${progress}%`,
             }}

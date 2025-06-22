@@ -55,17 +55,17 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{auth.user?.username}</p>
+            <p className="text-sm leading-none font-medium">{auth.user?.username}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-            {theme === "dark" ? <Sun className="mr-3 h-4 w-4 text-muted-foreground" /> : <Moon className="mr-3 h-4 w-4 text-muted-foreground" />}
+            {theme === "dark" ? <Sun className="text-muted-foreground mr-3 h-4 w-4" /> : <Moon className="text-muted-foreground mr-3 h-4 w-4" />}
             <span>Switch theme</span>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" onClick={handleLogout}>
-            <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
+            <LogOut className="text-muted-foreground mr-3 h-4 w-4" />
             <span>Log out</span>
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>

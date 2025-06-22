@@ -4,10 +4,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AVAILABLE_FILE_TYPES, getFileType } from "@/lib/file";
 import { BookForm, BulkUpload, FloatingActions } from "@/components/upload";
+import { useMutation } from "@tanstack/react-query";
+import { uploadBooks } from "@/api/backend/upload";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/upload")({
   component: Upload,
@@ -42,7 +45,6 @@ const uploadBookFormSchema = z.object({
 });
 
 const createBaseBook = (book?: Partial<UploadFormBook>): UploadFormBook => {
-  console.log(book);
   return {
     title: "",
     author: "",
@@ -61,6 +63,8 @@ const createBaseBook = (book?: Partial<UploadFormBook>): UploadFormBook => {
 };
 
 function Upload() {
+  const [progress, setProgress] = useState(0);
+
   const form = useForm<UploadForm>({
     resolver: zodResolver(uploadBookFormSchema),
     defaultValues: {
@@ -76,6 +80,29 @@ function Upload() {
   const books = useWatch({ control: form.control, name: "books" });
   const hasUploadableBooks = books?.some((book) => book.file && book.coverImage) ?? false;
 
+  const uploadMutation = useMutation({
+    mutationFn: (books: UploadForm["books"]) =>
+      uploadBooks(books, (completed, total, currentBookProgress) => {
+        console.log(`Progress: ${completed}/${total} = ${currentBookProgress}%`);
+        setProgress(currentBookProgress);
+      }),
+    onSuccess: (data) => {
+      setProgress(100);
+      const uploadedCount = data.length;
+      toast.success(`${uploadedCount} books uploaded successfully!`, { position: "top-center" });
+      form.reset({
+        books: [createBaseBook()],
+      });
+    },
+    onError: (error) => {
+      console.error("Upload failed:", error);
+      toast.error("Failed to upload books", { position: "top-center" });
+    },
+    onSettled: () => {
+      setTimeout(() => setProgress(0), 1000);
+    },
+  });
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       acceptedFiles.forEach((file) => {
@@ -85,7 +112,6 @@ function Upload() {
         const firstBook = form.getValues("books")[0];
         const isFirstBookEmpty = firstBook.title === "" && firstBook.author === "" && !firstBook.file && !firstBook.coverImage;
         if (isFirstBookEmpty) {
-          console.log("Updating file type");
           form.setValue("books.0.title", title);
           form.setValue("books.0.fileType", fileType);
           form.setValue("books.0.file", file);
@@ -109,8 +135,9 @@ function Upload() {
     multiple: true,
   });
 
-  const onSubmit = (data: z.infer<typeof uploadBookFormSchema>) => {
-    console.log("Form data:", data);
+  const onSubmit = async (data: UploadForm) => {
+    toast.info(`Uploading ${data.books.length} books...`, { position: "top-center" });
+    await uploadMutation.mutateAsync(data.books);
   };
 
   return (
@@ -130,7 +157,14 @@ function Upload() {
                   <BookForm key={field.id} form={form} index={index} canRemove={fields.length > 1} onRemove={() => remove(index)} />
                 ))}
 
-                <FloatingActions bookCount={fields.length} canAddMore={fields.length < 10} canSubmit={hasUploadableBooks} onAddBook={() => append(createBaseBook())} />
+                <FloatingActions
+                  bookCount={fields.length}
+                  canAddMore={fields.length < 10}
+                  canSubmit={hasUploadableBooks && !uploadMutation.isPending}
+                  onAddBook={() => append(createBaseBook())}
+                  isUploading={uploadMutation.isPending}
+                  progress={progress}
+                />
               </form>
             </Form>
           </CardContent>

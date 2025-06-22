@@ -76,12 +76,34 @@ body,
 
 /* Circular scrollbar styles */
 ::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
-  background: #f5f5f57c; /* Background of the scrollbar */
-  border-radius: 5%;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000000; /* Color of the thumb */
-  border-radius: 2%;
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Custom loading animation */
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }

@@ -21,9 +21,9 @@ export function BulkUpload({ isDragActive, getRootProps, getInputProps }: BulkUp
         )}
       >
         <input {...getInputProps()} />
-        <UploadCloud className="mb-2 h-10 w-10 text-muted-foreground" />
-        <p className="text-center text-sm text-muted-foreground">{isDragActive ? "Drop files here" : "Drag and drop files here, or click to select"}</p>
-        <p className="mt-1 text-center text-xs text-muted-foreground">{AVAILABLE_FILE_TYPES.map((type) => type.toUpperCase()).join(", ")} (max. 10 files)</p>
+        <UploadCloud className="text-muted-foreground mb-2 h-10 w-10" />
+        <p className="text-muted-foreground text-center text-sm">{isDragActive ? "Drop files here" : "Drag and drop files here, or click to select"}</p>
+        <p className="text-muted-foreground mt-1 text-center text-xs">{AVAILABLE_FILE_TYPES.map((type) => type.toUpperCase()).join(", ")} (max. 10 files)</p>
       </div>
     </div>
   );

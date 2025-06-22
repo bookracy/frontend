@@ -57,7 +57,7 @@ function Index() {
         <h1 className="text-4xl font-bold">
           Welcome to <span className="text-primary">Bookracy</span> 📚
         </h1>
-        <div className="flex flex-col gap-2 text-muted-foreground">
+        <div className="text-muted-foreground flex flex-col gap-2">
           <p className="text-lg">
             Bookracy is a free and open-source web app that allows you to read and download your favorite books, comics, and manga.
             <br />

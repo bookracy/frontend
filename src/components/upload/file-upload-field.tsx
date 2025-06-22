@@ -74,15 +74,15 @@ export function FileUploadField<T extends FieldValues>({ form, name, label, acce
                         <img src={previewUrl} alt="Preview" className="h-full w-full object-cover" />
                       </div>
                     ) : (
-                      <Icon className="mb-2 h-8 w-8 text-primary" />
+                      <Icon className="text-primary mb-2 h-8 w-8" />
                     )}
-                    <p className="text-center text-sm font-medium text-primary">{label} Uploaded</p>
-                    <p className="text-center text-xs text-muted-foreground">{field.value.name}</p>
+                    <p className="text-primary text-center text-sm font-medium">{label} Uploaded</p>
+                    <p className="text-muted-foreground text-center text-xs">{field.value.name}</p>
                     <Button
                       type="button"
                       variant="destructive"
                       size="icon"
-                      className="absolute right-2 top-2"
+                      className="absolute top-2 right-2"
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
@@ -94,9 +94,9 @@ export function FileUploadField<T extends FieldValues>({ form, name, label, acce
                   </>
                 ) : (
                   <>
-                    <Icon className="mb-2 h-8 w-8 text-muted-foreground" />
-                    <p className="text-center text-sm text-muted-foreground">Click to select {label.toLowerCase()}</p>
-                    <p className="text-center text-xs text-muted-foreground">{fileTypes}</p>
+                    <Icon className="text-muted-foreground mb-2 h-8 w-8" />
+                    <p className="text-muted-foreground text-center text-sm">Click to select {label.toLowerCase()}</p>
+                    <p className="text-muted-foreground text-center text-xs">{fileTypes}</p>
                   </>
                 )}
               </div>

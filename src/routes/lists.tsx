@@ -38,7 +38,7 @@ export function Lists() {
         {bookmarks.length === 0 && (
           <div>
             <h1 className="text-2xl font-bold">No Bookmarks</h1>
-            <p className="flex gap-1 text-sm text-muted-foreground">
+            <p className="text-muted-foreground flex gap-1 text-sm">
               Start adding some books using the bookmark button. Start searching
               <NavLink to={"/?q="}>here</NavLink>
             </p>
@@ -53,7 +53,7 @@ export function Lists() {
         {readingProgress.length === 0 && (
           <div>
             <h1 className="text-2xl font-bold">No Reading Progress</h1>
-            <p className="flex gap-1 text-sm text-muted-foreground">Start reading some books and your progress will show up here.</p>
+            <p className="text-muted-foreground flex gap-1 text-sm">Start reading some books and your progress will show up here.</p>
           </div>
         )}
         {data?.length && data?.length > 0 ? <BookList books={data} /> : null}

@@ -61,7 +61,7 @@ function Register() {
     },
   });
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof profileRegistrationSchema>>({
     resolver: zodResolver(profileRegistrationSchema),
     defaultValues: {
       displayName: data ?? "",

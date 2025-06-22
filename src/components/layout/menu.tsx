@@ -34,12 +34,12 @@ export function Menu({ isOpen, closeSheetMenu }: MenuProps) {
   }, [menuList, routeContext.auth.isLoggedIn]);
 
   return (
-    <ScrollArea className="flex-1 [&>div>div[style]]:!block">
+    <ScrollArea className="flex-1 [&>div>div[style]]:block!">
       <nav className="flex h-full w-full flex-col">
         <ul className="flex flex-1 flex-col items-start space-y-1 px-2">
           {menuListFilteredAuth.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
-              {isOpen && <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-muted-foreground">{groupLabel}</p>}
+              {isOpen && <p className="text-muted-foreground max-w-[248px] truncate px-4 pb-2 text-sm font-medium">{groupLabel}</p>}
               {menus.map(({ href, label, icon: Icon, active, submenus, disabled }, index) =>
                 submenus.length === 0 ? (
                   <div className="w-full" key={index}>
@@ -47,7 +47,7 @@ export function Menu({ isOpen, closeSheetMenu }: MenuProps) {
                       <Tooltip delayDuration={100}>
                         <TooltipTrigger asChild>
                           <Link to={href} disabled={disabled} onClick={() => closeSheetMenu?.()}>
-                            <Button variant={active ? "secondary" : "ghost"} className="!pointer-events-auto mb-1 h-10 w-full justify-start" disabled={disabled}>
+                            <Button variant={active ? "secondary" : "ghost"} className="pointer-events-auto! mb-1 h-10 w-full justify-start" disabled={disabled}>
                               <span
                                 className={cn({
                                   "mr-4": isOpen === true,

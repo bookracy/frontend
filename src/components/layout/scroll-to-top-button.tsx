@@ -23,7 +23,7 @@ export function ScrollToTopButton() {
 
   return (
     <div
-      className={cn("fixed bottom-14 right-4 z-50 transition-opacity duration-300", {
+      className={cn("fixed right-4 bottom-14 z-50 transition-opacity duration-300", {
         "opacity-100": isVisible,
         "pointer-events-none z-0 opacity-0": !isVisible,
       })}

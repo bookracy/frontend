@@ -39,9 +39,9 @@ export type ResultViewOptions = "list" | "grid";
 
 export function ResultViewSelect({ view, setView }: ResultViewSelectProps) {
   return (
-    <div className="relative inline-flex rounded-md bg-background p-1">
+    <div className="bg-background relative inline-flex rounded-md p-1">
       <div
-        className={cn("absolute inset-1 w-[calc(50%-7px)] rounded bg-primary transition-all duration-200 ease-in-out", {
+        className={cn("bg-primary absolute inset-1 w-[calc(50%-7px)] rounded transition-all duration-200 ease-in-out", {
           "translate-x-0": view === "list",
           "translate-x-[calc(100%+6px)]": view === "grid",
         })}

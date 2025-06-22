@@ -46,7 +46,7 @@ export function ImageUploader({ value, onChange, disabled = false, className }: 
   return (
     <div className={cn("space-y-2", className)}>
       {preview ? (
-        <div className="relative flex aspect-video max-h-[240px] w-full items-center justify-center overflow-hidden rounded-md border border-muted">
+        <div className="border-muted relative flex aspect-video max-h-[240px] w-full items-center justify-center overflow-hidden rounded-md border">
           <img
             src={preview || "/placeholder.svg"}
             alt="Profile preview"
@@ -64,7 +64,7 @@ export function ImageUploader({ value, onChange, disabled = false, className }: 
               input.click();
             }}
           />
-          <div className="absolute right-2 top-2 flex gap-2">
+          <div className="absolute top-2 right-2 flex gap-2">
             <Button type="button" variant="destructive" size="icon" onClick={removeImage} disabled={disabled}>
               <X />
               <span className="sr-only">Remove image</span>
@@ -81,9 +81,9 @@ export function ImageUploader({ value, onChange, disabled = false, className }: 
           )}
         >
           <input {...getInputProps()} />
-          <UploadCloud className="mb-2 h-10 w-10 text-muted-foreground" />
-          <p className="text-center text-sm text-muted-foreground">{isDragActive ? "Drop image here" : "Drag and drop an image, or click to select"}</p>
-          <p className="mt-1 text-center text-xs text-muted-foreground">JPG, PNG, GIF or WEBP (max. 1MB)</p>
+          <UploadCloud className="text-muted-foreground mb-2 h-10 w-10" />
+          <p className="text-muted-foreground text-center text-sm">{isDragActive ? "Drop image here" : "Drag and drop an image, or click to select"}</p>
+          <p className="text-muted-foreground mt-1 text-center text-xs">JPG, PNG, GIF or WEBP (max. 1MB)</p>
         </div>
       )}
     </div>

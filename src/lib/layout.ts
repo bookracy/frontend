@@ -14,6 +14,7 @@ type Menu = {
   icon: LucideIcon;
   submenus: Submenu[];
   disabled?: boolean;
+  authRequired?: boolean;
 };
 
 type Group = {
@@ -48,14 +49,6 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta
           submenus: [],
           disabled: import.meta.env.PROD,
         },
-        {
-          href: "/upload",
-          label: "Upload",
-          active: pathname === "/upload",
-          icon: Upload,
-          submenus: [],
-          disabled: import.meta.env.PROD,
-        },
       ],
     },
     {
@@ -68,6 +61,14 @@ export function getMenuList(pathname: FileRouteTypes["fullPaths"] | string, beta
           icon: House,
           submenus: [],
           disabled: import.meta.env.DEV ? false : !beta,
+        },
+        {
+          href: "/upload",
+          label: "Upload",
+          active: pathname === "/upload",
+          icon: Upload,
+          submenus: [],
+          authRequired: true,
         },
         {
           href: "/lists",

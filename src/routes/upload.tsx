@@ -1,6 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
@@ -11,14 +11,14 @@ import { BookForm, BulkUpload, FloatingActions } from "@/components/upload";
 import { useMutation } from "@tanstack/react-query";
 import { uploadBooks } from "@/api/backend/upload";
 import { toast } from "sonner";
+import { useSettingsStore } from "@/stores/settings";
 
 export const Route = createFileRoute("/upload")({
   component: Upload,
-  beforeLoad: () => {
-    // Authentication check commented out for development
-    // if (!ctx.context.auth.isLoggedIn) {
-    //   throw redirect({ to: "/login", search: { q: "" } });
-    // }
+  beforeLoad: (ctx) => {
+    const beta = useSettingsStore.getState().beta;
+    if (import.meta.env.PROD && !beta) throw redirect({ to: "/", search: { q: "" } });
+    if (!ctx.context.auth.isLoggedIn) throw redirect({ to: "/login" });
   },
 });
 

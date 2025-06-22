@@ -8,6 +8,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/comp
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { CollapseMenuButton } from "./collapse-menu-button";
 import { useAuth } from "@/hooks/auth/use-auth";
+import { useMemo } from "react";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -21,11 +22,22 @@ export function Menu({ isOpen, closeSheetMenu }: MenuProps) {
     from: "__root__",
   });
 
+  const menuListFilteredAuth = useMemo(() => {
+    return menuList
+      .map((group) => ({
+        ...group,
+        menus: group.menus.filter((menu) => {
+          return !menu.authRequired || (menu.authRequired && routeContext.auth.isLoggedIn);
+        }),
+      }))
+      .filter((group) => group.menus.length > 0);
+  }, [menuList, routeContext.auth.isLoggedIn]);
+
   return (
     <ScrollArea className="flex-1 [&>div>div[style]]:!block">
       <nav className="flex h-full w-full flex-col">
         <ul className="flex flex-1 flex-col items-start space-y-1 px-2">
-          {menuList.map(({ groupLabel, menus }, index) => (
+          {menuListFilteredAuth.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {isOpen && <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-muted-foreground">{groupLabel}</p>}
               {menus.map(({ href, label, icon: Icon, active, submenus, disabled }, index) =>

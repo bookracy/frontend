@@ -8,6 +8,7 @@ import LogoHeader from "@/assets/logo_header.svg";
 import LogoHeaderDark from "@/assets/logo_header_dark.svg";
 import { useSettingsStore } from "@/stores/settings";
 import { useState } from "react";
+import SnowCoreGif from "@/assets/ads/snowcore-purple.gif";
 
 export function SheetMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,7 @@ export function SheetMenu() {
         <Menu isOpen closeSheetMenu={() => setIsOpen(false)} />
         <div className="flex flex-col items-center justify-center px-3 pt-2">
           <Button variant="outline" className="h-auto w-full overflow-hidden p-0" onClick={() => window.open("https://snowcore.io/ref?bookracy", "_blank")}>
-            <img src="https://raw.githubusercontent.com/bookracy/static/main/ads/snowcore-purple.gif?raw=true" className="h-full w-full object-cover" />
+            <img src={SnowCoreGif} className="h-full w-full object-cover" />
           </Button>
         </div>
       </SheetContent>

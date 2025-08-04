@@ -51,15 +51,12 @@ function Index() {
   });
 
   // Fetch external downloads separately in the background
-  const { data: externalDownloadsData } = useExternalDownloadsForBooksQuery(
-    booksData?.results ?? [],
-    Boolean(booksData?.results?.length)
-  );
+  const { data: externalDownloadsData } = useExternalDownloadsForBooksQuery(booksData?.results ?? [], Boolean(booksData?.results?.length));
 
   // Show books immediately when available, update when external downloads arrive
   const displayBooks: BookItemWithExternalDownloads[] = useMemo(() => {
     if (!booksData?.results) return [];
-    
+
     return booksData.results.map((book) => {
       const externalDownload = externalDownloadsData?.find((ed) => ed.md5 === book.md5);
       return {
@@ -74,14 +71,14 @@ function Index() {
 
   // Fetch trending books immediately
   const { data: trendingBooksData } = useSuspenseQuery(getTrendingBooksQueryOptions);
-  
+
   // Fetch trending external downloads separately in the background
   const { data: trendingExternalDownloadsData } = useQuery(getTrendingExternalDownloadsQueryOptions(trendingBooksData));
 
   // Combine trending books with external downloads when available
   const trendingData = useMemo(() => {
     if (!trendingBooksData) return null;
-    
+
     return Object.fromEntries(
       Object.entries(trendingBooksData).map(([category, books]) => [
         category,
@@ -95,7 +92,7 @@ function Index() {
             externalDownloadsFetched: trendingExternalDownloadsData !== undefined,
           };
         }),
-      ])
+      ]),
     );
   }, [trendingBooksData, trendingExternalDownloadsData]);
 

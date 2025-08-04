@@ -81,7 +81,7 @@ export function BookItemCard(props: BookItemProps) {
                   props.externalDownloads && props.externalDownloads.length > 0 ? (
                     <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />
                   ) : (
-                    <div className="text-muted-foreground text-sm py-2">No downloads available</div>
+                    <div className="text-muted-foreground py-2 text-sm">No downloads available</div>
                   )
                 ) : (
                   <div className="flex items-center gap-2 py-1">
@@ -200,7 +200,7 @@ export function BookItemDialog(props: BookItemProps) {
               props.externalDownloads && props.externalDownloads.length > 0 ? (
                 <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />
               ) : (
-                <div className="text-muted-foreground text-sm py-y">No downloads available</div>
+                <div className="text-muted-foreground py-y text-sm">No downloads available</div>
               )
             ) : (
               <div className="flex items-center gap-2 py-1">

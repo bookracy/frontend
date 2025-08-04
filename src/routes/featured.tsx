@@ -15,14 +15,14 @@ export const Route = createFileRoute("/featured")({
 function Feature() {
   // Fetch trending books immediately
   const { data: trendingBooksData } = useSuspenseQuery(getTrendingBooksQueryOptions);
-  
+
   // Fetch trending external downloads separately in the background
   const { data: trendingExternalDownloadsData } = useQuery(getTrendingExternalDownloadsQueryOptions(trendingBooksData));
 
   // Combine trending books with external downloads when available
   const trendingData = useMemo(() => {
     if (!trendingBooksData) return null;
-    
+
     return Object.fromEntries(
       Object.entries(trendingBooksData).map(([category, books]) => [
         category,
@@ -36,7 +36,7 @@ function Feature() {
             externalDownloadsFetched: trendingExternalDownloadsData !== undefined,
           };
         }),
-      ])
+      ]),
     );
   }, [trendingBooksData, trendingExternalDownloadsData]);
 
@@ -54,11 +54,7 @@ function Feature() {
                 .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(" ")}
             </h1>
-            <div>
-              {trendingBooksData[category].length > 0 ? (
-                <BookList books={trendingData?.[category] ?? trendingBooksData[category]} />
-              ) : null}
-            </div>
+            <div>{trendingBooksData[category].length > 0 ? <BookList books={trendingData?.[category] ?? trendingBooksData[category]} /> : null}</div>
           </div>
         ))}
       </div>

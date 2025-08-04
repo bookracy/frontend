@@ -40,7 +40,14 @@ export const getTrendingBooksQueryOptions = queryOptions({
 
 export const getTrendingExternalDownloadsQueryOptions = (trendingData: Record<string, BookItem[]> | undefined) => {
   return queryOptions({
-    queryKey: ["trending_external_downloads", trendingData ? Object.values(trendingData).flat().map(b => b.md5) : []],
+    queryKey: [
+      "trending_external_downloads",
+      trendingData
+        ? Object.values(trendingData)
+            .flat()
+            .map((b) => b.md5)
+        : [],
+    ],
     queryFn: async () => {
       if (!trendingData) return [];
       const md5s = Object.values(trendingData)

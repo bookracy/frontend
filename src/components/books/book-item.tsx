@@ -12,6 +12,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Progress } from "../ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { useReadingProgressStore } from "@/stores/progress";
+import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;
 
@@ -20,6 +22,7 @@ export function BookItemCard(props: BookItemProps) {
   const findReadingProgress = useReadingProgressStore((state) => state.findReadingProgress);
 
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
+  const hasExternalDownloads = "externalDownloads" in props;
 
   const progress = useMemo(() => {
     const progress = findReadingProgress(props.md5);
@@ -73,7 +76,22 @@ export function BookItemCard(props: BookItemProps) {
               <p className="text-muted-foreground text-sm">MD5: {props.md5}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-5">
-              {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}
+              {hasExternalDownloads ? (
+                props.externalDownloadsFetched ? (
+                  props.externalDownloads && props.externalDownloads.length > 0 ? (
+                    <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />
+                  ) : (
+                    <div className="text-muted-foreground text-sm py-2">No downloads available</div>
+                  )
+                ) : (
+                  <div className="flex items-center gap-2 py-1">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Checking download options...
+                  </div>
+                )
+              ) : (
+                <BookDownloadButton title={props.title} extension={props.book_filetype} primaryLink={props.link} />
+              )}
               {isEpub && <EpubReader title={props.title} md5={props.md5} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
             </div>
           </div>
@@ -131,6 +149,7 @@ export function BookItemDialog(props: BookItemProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
   const isEpub = Boolean(props.link?.toLowerCase().endsWith(".epub"));
+  const hasExternalDownloads = "externalDownloads" in props;
 
   return (
     <Dialog>
@@ -176,7 +195,22 @@ export function BookItemDialog(props: BookItemProps) {
           </div>
         </ScrollArea>
         <DialogFooter className="flex flex-row justify-between md:justify-end">
-          {"externalDownloads" in props && <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />}
+          {hasExternalDownloads ? (
+            props.externalDownloadsFetched ? (
+              props.externalDownloads && props.externalDownloads.length > 0 ? (
+                <BookDownloadButton title={props.title} extension={props.book_filetype} externalDownloads={props.externalDownloads} primaryLink={props.link} />
+              ) : (
+                <div className="text-muted-foreground text-sm py-y">No downloads available</div>
+              )
+            ) : (
+              <div className="flex items-center gap-2 py-1">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Checking download options...
+              </div>
+            )
+          ) : (
+            <BookDownloadButton title={props.title} extension={props.book_filetype} primaryLink={props.link} />
+          )}
 
           {isEpub && <EpubReader title={props.title} md5={props.md5} link={props.link} open={isReaderOpen} setIsOpen={setIsReaderOpen} />}
         </DialogFooter>

@@ -12,7 +12,6 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Progress } from "../ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { useReadingProgressStore } from "@/stores/progress";
-import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 
 type BookItemProps = BookItemWithExternalDownloads | BookItem;

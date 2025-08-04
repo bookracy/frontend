@@ -12,7 +12,7 @@ import { BookList } from "@/components/books/book-list";
 import { BookGallery } from "@/components/books/book-gallery";
 import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { getTrendingBooksQueryOptions, getTrendingExternalDownloadsQueryOptions } from "@/api/backend/trending/trending";
-import { BookItem, BookItemWithExternalDownloads } from "@/api/backend/types";
+import { BookItemWithExternalDownloads } from "@/api/backend/types";
 
 export const Route = createFileRoute("/")({
   component: Index,

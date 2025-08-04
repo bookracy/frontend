@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { getTrendingBooksQueryOptions, getTrendingExternalDownloadsQueryOptions } from "@/api/backend/trending/trending";
 import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { BookList } from "@/components/books/book-list";
-import { BookItemWithExternalDownloads } from "@/api/backend/types";
 
 export const Route = createFileRoute("/featured")({
   component: Feature,

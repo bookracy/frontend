@@ -1,4 +1,4 @@
-import { useGetBooksQueryWithExternalDownloads } from "@/api/backend/search/search";
+import { useGetBooksQuery, useExternalDownloadsForBooksQuery } from "@/api/backend/search/search";
 import { SkeletonBookItem, SkeletonBookItemGrid } from "@/components/books/book-item";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/settings";
@@ -10,8 +10,9 @@ import { useState, useMemo } from "react";
 import { Filters, FilterProps } from "@/components/books/filters";
 import { BookList } from "@/components/books/book-list";
 import { BookGallery } from "@/components/books/book-gallery";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getTrendingQueryOptions } from "@/api/backend/trending/trending";
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
+import { getTrendingBooksQueryOptions, getTrendingExternalDownloadsQueryOptions } from "@/api/backend/trending/trending";
+import { BookItemWithExternalDownloads } from "@/api/backend/types";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -38,18 +39,64 @@ function Index() {
   const language = useSettingsStore((state) => state.language);
   const debouncedQ = useDebounce(q, 500);
 
+  // Fetch books immediately
   const {
-    data: searchData,
+    data: booksData,
     error: searchError,
     isLoading: isSearchLoading,
-  } = useGetBooksQueryWithExternalDownloads({
+  } = useGetBooksQuery({
     query: debouncedQ,
     lang: language,
     limit: filters.perPage,
   });
 
-  const { data: trendingData } = useSuspenseQuery(getTrendingQueryOptions);
-  const categories = useMemo(() => Object.keys(trendingData ?? {}), [trendingData]);
+  // Fetch external downloads separately in the background
+  const { data: externalDownloadsData } = useExternalDownloadsForBooksQuery(booksData?.results ?? [], Boolean(booksData?.results?.length));
+
+  // Show books immediately when available, update when external downloads arrive
+  const displayBooks: BookItemWithExternalDownloads[] = useMemo(() => {
+    if (!booksData?.results) return [];
+
+    return booksData.results.map((book) => {
+      const externalDownload = externalDownloadsData?.find((ed) => ed.md5 === book.md5);
+      return {
+        ...book,
+        externalDownloads: externalDownload?.external_downloads,
+        ipfs: externalDownload?.ipfs,
+        // Add a flag to indicate if external downloads have been fetched for this book
+        externalDownloadsFetched: externalDownloadsData !== undefined,
+      };
+    });
+  }, [booksData?.results, externalDownloadsData]);
+
+  // Fetch trending books immediately
+  const { data: trendingBooksData } = useSuspenseQuery(getTrendingBooksQueryOptions);
+
+  // Fetch trending external downloads separately in the background
+  const { data: trendingExternalDownloadsData } = useQuery(getTrendingExternalDownloadsQueryOptions(trendingBooksData));
+
+  // Combine trending books with external downloads when available
+  const trendingData = useMemo(() => {
+    if (!trendingBooksData) return null;
+
+    return Object.fromEntries(
+      Object.entries(trendingBooksData).map(([category, books]) => [
+        category,
+        books.map((book) => {
+          const externalDownload = trendingExternalDownloadsData?.find((ed) => ed.md5 === book.md5);
+          return {
+            ...book,
+            externalDownloads: externalDownload?.external_downloads,
+            ipfs: externalDownload?.ipfs,
+            // Add a flag to indicate if external downloads have been fetched for this book
+            externalDownloadsFetched: trendingExternalDownloadsData !== undefined,
+          };
+        }),
+      ]),
+    );
+  }, [trendingBooksData, trendingExternalDownloadsData]);
+
+  const categories = useMemo(() => Object.keys(trendingBooksData ?? {}), [trendingBooksData]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -97,12 +144,12 @@ function Index() {
             )}
             {searchError && <p className="text-red-500">Error: {searchError.message}</p>}
 
-            {searchData && filters.view === "list" && <BookList books={searchData.results} />}
-            {searchData && filters.view === "grid" && <BookGallery books={searchData.results} />}
+            {booksData?.results && booksData.results.length > 0 && filters.view === "list" && <BookList books={displayBooks} />}
+            {booksData?.results && booksData.results.length > 0 && filters.view === "grid" && <BookGallery books={displayBooks} />}
           </div>
         )}
 
-        {!q && trendingData && (
+        {!q && trendingBooksData && (
           <div className="flex flex-col gap-8">
             {categories.map((category: string) => (
               <div key={category} className="flex flex-col gap-4">
@@ -113,7 +160,7 @@ function Index() {
                     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
                     .join(" ")}
                 </h2>
-                {trendingData[category].length > 0 && <BookGallery books={trendingData[category]} />}
+                {trendingBooksData[category].length > 0 && <BookGallery books={trendingData?.[category] ?? trendingBooksData[category]} />}
               </div>
             ))}
           </div>

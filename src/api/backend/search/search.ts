@@ -18,6 +18,24 @@ export const useGetBooksQuery = (params: SearchParams) =>
     enabled: params.query !== "",
   });
 
+export const useExternalDownloadsForBooksQuery = (books: BookItem[], enabled: boolean = true) => {
+  return useQuery({
+    queryKey: ["external_downloads_for_books", books.map((b) => b.md5)],
+    queryFn: async () => {
+      if (books.length === 0) return [];
+
+      const externalDownloads: ExternalDownloadResponse = [];
+      for (let i = 0; i < books.length; i += 10) {
+        const batch = books.slice(i, i + 10).map((book) => book.md5);
+        const batchExternalDownloads = await getExternalDownloads(batch);
+        externalDownloads.push(...batchExternalDownloads);
+      }
+      return externalDownloads;
+    },
+    enabled: enabled && books.length > 0,
+  });
+};
+
 export const useGetBooksQueryWithExternalDownloads = (params: SearchParams) => {
   return useQuery({
     queryKey: ["search", params],

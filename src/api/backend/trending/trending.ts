@@ -30,3 +30,31 @@ export const getTrendingQueryOptions = queryOptions({
     );
   },
 });
+
+export const getTrendingBooksQueryOptions = queryOptions({
+  queryKey: ["trending_books"],
+  queryFn: async () => {
+    return await getTrending();
+  },
+});
+
+export const getTrendingExternalDownloadsQueryOptions = (trendingData: Record<string, BookItem[]> | undefined) => {
+  return queryOptions({
+    queryKey: [
+      "trending_external_downloads",
+      trendingData
+        ? Object.values(trendingData)
+            .flat()
+            .map((b) => b.md5)
+        : [],
+    ],
+    queryFn: async () => {
+      if (!trendingData) return [];
+      const md5s = Object.values(trendingData)
+        .flat()
+        .map((book) => book.md5);
+      return await getExternalDownloads(md5s);
+    },
+    enabled: Boolean(trendingData),
+  });
+};

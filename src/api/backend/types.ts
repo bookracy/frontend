@@ -23,4 +23,5 @@ export interface BookItem {
 
 export interface BookItemWithExternalDownloads extends BookItem {
   externalDownloads?: ExternalDownloadLink[];
+  externalDownloadsFetched?: boolean;
 }

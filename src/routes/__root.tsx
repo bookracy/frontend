@@ -2,6 +2,7 @@ import * as React from "react";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Sidebar } from "@/components/layout/sidebar";
+import { SnowcoreModal } from "@/components/layout/snowcore-modal";
 import { cn } from "@/lib/utils";
 import { useLayoutStore } from "@/stores/layout";
 import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
@@ -97,6 +98,7 @@ function Root() {
       <footer className={cn("transition-[margin-left] duration-300 ease-in-out", sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72")}>
         <Footer />
       </footer>
+      <SnowcoreModal />
       <TanStackRouterDevtools />
     </>
   );
